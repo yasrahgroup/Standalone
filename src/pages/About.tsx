@@ -21,6 +21,7 @@ import { ProcessTimeline } from '../components/framework/ProcessTimeline';
 import { FinalCTA } from '../components/home/FinalCTA';
 import { heroWorkspaceImg } from '../assets/images';
 import { useCMS } from '../context/CMSContext';
+import { MediaRenderer } from '../components/common/MediaRenderer';
 
 export const About: React.FC = () => {
   const { pages } = useCMS();
@@ -124,15 +125,11 @@ export const About: React.FC = () => {
                   position: 'relative',
                 }}
               >
-                <img
+                <MediaRenderer
                   src={heroWorkspaceImg}
                   alt="Azaroth Techhive engineering team collaborating on modern systems architecture"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    objectFit: 'cover',
-                  }}
+                  objectFit="cover"
+                  loading="lazy"
                 />
               </div>
 

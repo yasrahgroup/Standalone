@@ -13,6 +13,7 @@ import { PageHeader } from '../components/common/PageHeader';
 import { productsCatalog } from '../data/productsData';
 import { useCMS } from '../context/CMSContext';
 import { ProductStatusBadge } from '../components/common/ProductStatusBadge';
+import { MediaRenderer } from '../components/common/MediaRenderer';
 
 export const Products: React.FC = () => {
   const navigate = useNavigate();
@@ -169,17 +170,16 @@ export const Products: React.FC = () => {
                     backgroundColor: '#0F172A',
                     overflow: 'hidden',
                   }}>
-                    <img
+                    <MediaRenderer
                       src={product.coverImage}
                       alt={product.coverAlt}
+                      objectFit="cover"
                       loading="lazy"
-                      decoding="async"
                       style={{
                         position: 'absolute',
                         inset: 0,
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
                       }}
                     />
                     <div style={{

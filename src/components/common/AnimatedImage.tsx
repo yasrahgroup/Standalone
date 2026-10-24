@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { MediaRenderer } from './MediaRenderer';
 
 interface AnimatedImageProps {
   src: string;
@@ -25,7 +26,6 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -115,16 +115,16 @@ export const AnimatedImage: React.FC<AnimatedImageProps> = ({
         style={{ position: 'relative', overflow: 'hidden', ...style }}
         onMouseMove={handleMouseMove}
       >
-        <img
-          ref={imgRef}
+        <MediaRenderer
           src={src}
           alt={alt}
+          objectFit="cover"
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
             ...getAnimationStyle(),
           }}
+          loading="lazy"
         />
         {overlay && (
           <div

@@ -9,7 +9,7 @@ export interface Product {
   category: ProductCategory;
   badge?: string;
   status?: 'Live' | 'Under Development' | 'PUBLISHED' | 'DRAFT' | string;
-  statusColor?: 'green' | 'blue' | 'amber';
+  statusColor?: 'green' | 'blue' | 'amber' | 'violet';
   tagline: string;
   description: string;
   shortDescription: string;

@@ -6,6 +6,7 @@ import { Card } from '../components/common/Card';
 import { SEOHead } from '../components/common/SEOHead';
 import { PageHeader } from '../components/common/PageHeader';
 import { useCMS } from '../context/CMSContext';
+import { MediaRenderer } from '../components/common/MediaRenderer';
 import {
   insightSystemArchImg,
   insightEnterpriseAiImg,
@@ -192,14 +193,14 @@ export const Insights: React.FC = () => {
                       backgroundColor: '#0a0f1d',
                     }}
                   >
-                    <img
+                    <MediaRenderer
                       src={article.imageUrl || fallbackImages[idx % fallbackImages.length]}
                       alt={article.title}
+                      objectFit="cover"
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
                         transition: 'transform 0.5s ease',
                       }}
                       className="insight-page-thumb"

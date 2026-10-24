@@ -4,7 +4,7 @@ export type ProductStatusType = 'Live' | 'Under Development' | 'PUBLISHED' | 'DR
 
 interface ProductStatusBadgeProps {
   status?: ProductStatusType;
-  colorScheme?: 'green' | 'blue' | 'amber';
+  colorScheme?: 'green' | 'blue' | 'amber' | 'violet';
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   showDot?: boolean;
@@ -15,8 +15,9 @@ interface ProductStatusBadgeProps {
  * ProductStatusBadge
  * Renders consistent, accessible color-coded badges for product statuses:
  * - Green (Live): #DCFCE7 bg, #15803D text, #86EFAC border
- * - Blue (Under Development / E-commerce): #EFF6FF bg, #1D4ED8 text, #BFDBFE border
- * - Amber (Under Development / ProDLMs, Medical): #FFFBEB bg, #B45309 text, #FDE68A border
+ * - Blue (Ready For Deploy): #EFF6FF bg, #1D4ED8 text, #BFDBFE border
+ * - Violet (Staging): #F3E8FF bg, #7E22CE text, #D8B4FE border
+ * - Amber (Under Development): #FFFBEB bg, #B45309 text, #FDE68A border
  */
 export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
   status = 'Under Development',
@@ -29,13 +30,16 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
   const normalized = (status || '').trim().toLowerCase();
   const isLive = normalized === 'live' || normalized === 'published';
   const isReady = normalized === 'ready to deploy' || normalized === 'ready';
+  const isStaging = normalized === 'staging';
 
   // Determine effective color scheme
-  let scheme: 'green' | 'blue' | 'amber' = 'amber';
+  let scheme: 'green' | 'blue' | 'amber' | 'violet' = 'amber';
   if (colorScheme) {
     scheme = colorScheme;
   } else if (isLive) {
     scheme = 'green';
+  } else if (isStaging) {
+    scheme = 'violet';
   } else if (isReady) {
     scheme = 'blue';
   } else {
@@ -62,6 +66,13 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
     text = '#1D4ED8';
     border = '#BFDBFE';
     dotColor = '#2563EB';
+    pulse = true;
+  } else if (scheme === 'violet') {
+    label = isStaging ? 'Staging' : status;
+    bg = '#F3E8FF';
+    text = '#7E22CE';
+    border = '#D8B4FE';
+    dotColor = '#9333EA';
     pulse = true;
   } else {
     // amber

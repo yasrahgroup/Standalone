@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { heroWorkspaceImg } from '../../assets/images';
 import { useCMS } from '../../context/CMSContext';
+import { MediaRenderer } from '../common/MediaRenderer';
 
 export const Hero: React.FC = () => {
   const { pages } = useCMS();
@@ -170,18 +171,14 @@ export const Hero: React.FC = () => {
                 border: '1px solid var(--color-border, rgba(226, 232, 240, 0.9))',
                 maxWidth: '560px',
                 width: '100%',
+                maxHeight: '410px',
               }}
             >
-              <img
+              <MediaRenderer
                 src={heroWorkspaceImg}
                 alt="Azaroth Tech-Hive Enterprise Engineering Workspace"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  maxHeight: '410px',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
+                objectFit="cover"
+                loading="eager"
               />
             </div>
 
