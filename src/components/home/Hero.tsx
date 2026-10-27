@@ -1,63 +1,64 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  Code2, 
-  Smartphone, 
-  Cloud, 
-  PenTool, 
-  BarChart3 
-} from 'lucide-react';
-import { heroWorkspaceImg } from '../../assets/images';
-import { useCMS } from '../../context/CMSContext';
-import { MediaRenderer } from '../common/MediaRenderer';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  Code2,
+  Smartphone,
+  Cloud,
+  PenTool,
+  BarChart3,
+} from "lucide-react";
+import { heroWorkspaceImg } from "../../assets/images";
+import { useCMS } from "../../context/CMSContext";
+import { MediaRenderer } from "../common/MediaRenderer";
 
 export const Hero: React.FC = () => {
   const { pages } = useCMS();
-  const pageData = pages['home'];
+  const pageData = pages["home"];
   const heroContent = pageData?.hero || {};
 
-  const kicker = heroContent.badge || '- DRIVING DIGITAL EXCELLENCE -';
-  const ctaServicesText = heroContent.primaryCtaText || 'Explore Services';
+  // const kicker = heroContent.badge || '- DRIVING DIGITAL EXCELLENCE -';
+  const ctaServicesText = heroContent.primaryCtaText || "Explore Services";
 
   return (
     <section
       style={{
-        backgroundColor: '#FFFFFF',
-        paddingTop: '4.5rem',
-        paddingBottom: '5.5rem',
-        position: 'relative',
-        overflow: 'hidden',
+        backgroundColor: "#FFFFFF",
+        paddingTop: "4.5rem",
+        paddingBottom: "5.5rem",
+        position: "relative",
+        overflow: "hidden",
       }}
       aria-label="Introduction & Primary Value Proposition"
     >
       {/* Subtle Brand Gradient Ambient Backlight */}
       <div
         style={{
-          position: 'absolute',
-          top: '-10%',
-          right: '5%',
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle at center, rgba(73, 36, 63, 0.05) 0%, rgba(201, 155, 82, 0.02) 40%, transparent 70%)',
-          pointerEvents: 'none',
+          position: "absolute",
+          top: "-10%",
+          right: "5%",
+          width: "600px",
+          height: "600px",
+          background:
+            "radial-gradient(circle at center, rgba(73, 36, 63, 0.05) 0%, rgba(201, 155, 82, 0.02) 40%, transparent 70%)",
+          pointerEvents: "none",
           zIndex: 1,
         }}
       />
 
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+      <div className="container" style={{ position: "relative", zIndex: 2 }}>
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '3.5rem',
-            alignItems: 'center',
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "3.5rem",
+            alignItems: "center",
           }}
         >
           {/* Left Column: Typography & CTAs */}
-          <div style={{ maxWidth: '580px' }}>
+          <div style={{ maxWidth: "580px" }}>
             {/* Kicker Pill */}
-            <div
+            {/* <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -71,78 +72,83 @@ export const Hero: React.FC = () => {
               }}
             >
               {kicker}
-            </div>
+            </div> */}
 
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: 'clamp(2.75rem, 5.2vw, 4rem)',
+                fontSize: "clamp(2.75rem, 5.2vw, 4rem)",
                 fontWeight: 800,
-                color: 'var(--color-text-primary, #0F172A)',
+                color: "var(--color-text-primary, #0F172A)",
                 lineHeight: 1.15,
-                letterSpacing: '-0.025em',
-                marginBottom: '1.5rem',
+                letterSpacing: "-0.025em",
+                marginBottom: "1.5rem",
               }}
             >
-              Technology That{' '}
+              Intelligence, Engineered and{" "}
               <span
                 style={{
-                  background: 'var(--gradient-heading)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  display: 'inline-block',
+                  background: "var(--gradient-heading)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
                 }}
               >
-                Empowers
-              </span>{' '}
-              Your Vision
+                Innovation
+              </span>{" "}
+              Unleashed.
             </h1>
 
             {/* Subtitle */}
             <p
               style={{
-                fontSize: '1.125rem',
-                color: 'var(--color-text-secondary, #475569)',
+                fontSize: "1.125rem",
+                color: "var(--color-text-secondary, #475569)",
                 lineHeight: 1.7,
-                marginBottom: '2.5rem',
-                maxWidth: '520px',
+                marginBottom: "2.5rem",
+                maxWidth: "520px",
+                textAlign: "justify",
               }}
             >
-              We design and build innovative digital solutions that help businesses grow, adapt and lead in a digital world.
+              Azaroth Tech-Hive engineers, evolves, and sustains intelligent
+              software solutions, delivering end-to-end engineering excellence
+              that empowers businesses to innovate, adapt, and scale with
+              confidence.
             </p>
 
             {/* CTA Buttons Row */}
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                flexWrap: 'wrap',
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+                flexWrap: "wrap",
               }}
             >
               {/* Primary Action Button (Brand Berry-Plum Gradient) */}
               <Link
                 to="/services"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.625rem',
-                  padding: '0.9rem 1.85rem',
-                  borderRadius: '9999px',
-                  background: 'var(--gradient-button)',
-                  color: '#FFFFFF',
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.625rem",
+                  padding: "0.9rem 1.85rem",
+                  borderRadius: "9999px",
+                  background: "var(--gradient-button)",
+                  color: "#FFFFFF",
                   fontWeight: 600,
-                  fontSize: '0.975rem',
-                  textDecoration: 'none',
-                  boxShadow: '0 6px 20px -2px rgba(73, 36, 63, 0.4)',
-                  transition: 'all 200ms ease-out',
+                  fontSize: "0.975rem",
+                  textDecoration: "none",
+                  boxShadow: "0 6px 20px -2px rgba(73, 36, 63, 0.4)",
+                  transition: "all 200ms ease-out",
                 }}
                 className="hover:scale-105 hover:opacity-95"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--gradient-button-hover)';
+                  e.currentTarget.style.background =
+                    "var(--gradient-button-hover)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--gradient-button)';
+                  e.currentTarget.style.background = "var(--gradient-button)";
                 }}
               >
                 <span>{ctaServicesText}</span>
@@ -154,24 +160,25 @@ export const Hero: React.FC = () => {
           {/* Right Column: Hero Visual with Desk Laptop & Connected Badges */}
           <div
             style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {/* Main Laptop Desk Showcase Image */}
             <div
               style={{
-                position: 'relative',
+                position: "relative",
                 zIndex: 2,
-                borderRadius: '20px',
-                overflow: 'hidden',
-                boxShadow: '0 24px 50px -12px rgba(15, 23, 42, 0.15)',
-                border: '1px solid var(--color-border, rgba(226, 232, 240, 0.9))',
-                maxWidth: '560px',
-                width: '100%',
-                maxHeight: '410px',
+                borderRadius: "20px",
+                overflow: "hidden",
+                boxShadow: "0 24px 50px -12px rgba(15, 23, 42, 0.15)",
+                border:
+                  "1px solid var(--color-border, rgba(226, 232, 240, 0.9))",
+                maxWidth: "560px",
+                width: "100%",
+                maxHeight: "410px",
               }}
             >
               <MediaRenderer
@@ -185,13 +192,13 @@ export const Hero: React.FC = () => {
             {/* SVG Connecting Paths to the Laptop Mockup */}
             <svg
               style={{
-                position: 'absolute',
+                position: "absolute",
                 inset: 0,
-                width: '100%',
-                height: '100%',
+                width: "100%",
+                height: "100%",
                 zIndex: 3,
-                pointerEvents: 'none',
-                overflow: 'visible',
+                pointerEvents: "none",
+                overflow: "visible",
               }}
             >
               <defs>
@@ -235,38 +242,45 @@ export const Hero: React.FC = () => {
             {/* 1. Web Development */}
             <div
               style={{
-                position: 'absolute',
-                top: '-1.5rem',
-                left: '2%',
+                position: "absolute",
+                top: "-1.5rem",
+                left: "2%",
                 zIndex: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.5rem 0.85rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                boxShadow: '0 10px 25px -4px rgba(124, 58, 237, 0.18)',
-                animation: 'heroBadgeFloat1 4.5s ease-in-out infinite',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(226, 232, 240, 0.9)",
+                boxShadow: "0 10px 25px -4px rgba(124, 58, 237, 0.18)",
+                animation: "heroBadgeFloat1 4.5s ease-in-out infinite",
               }}
               className="hero-badge-interactive"
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#7C3AED',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "8px",
+                  backgroundColor: "#7C3AED",
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Code2 size={16} />
               </div>
-              <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1E293B', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: "0.775rem",
+                  fontWeight: 700,
+                  color: "#1E293B",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 Web Development
               </span>
             </div>
@@ -274,38 +288,45 @@ export const Hero: React.FC = () => {
             {/* 2. Mobile Apps - Raised up to -3.25rem and positioned at 34% with zero overlap */}
             <div
               style={{
-                position: 'absolute',
-                top: '-3.25rem',
-                left: '34%',
+                position: "absolute",
+                top: "-3.25rem",
+                left: "34%",
                 zIndex: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.5rem 0.85rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                boxShadow: '0 10px 25px -4px rgba(13, 148, 136, 0.18)',
-                animation: 'heroBadgeFloat2 5s ease-in-out infinite 0.6s',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(226, 232, 240, 0.9)",
+                boxShadow: "0 10px 25px -4px rgba(13, 148, 136, 0.18)",
+                animation: "heroBadgeFloat2 5s ease-in-out infinite 0.6s",
               }}
               className="hero-badge-interactive"
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#0D9488',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "8px",
+                  backgroundColor: "#0D9488",
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Smartphone size={16} />
               </div>
-              <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1E293B', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: "0.775rem",
+                  fontWeight: 700,
+                  color: "#1E293B",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 Mobile Apps
               </span>
             </div>
@@ -313,38 +334,45 @@ export const Hero: React.FC = () => {
             {/* 3. Cloud Solutions - Placed at right: 2% */}
             <div
               style={{
-                position: 'absolute',
-                top: '-1.5rem',
-                right: '2%',
+                position: "absolute",
+                top: "-1.5rem",
+                right: "2%",
                 zIndex: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.5rem 0.85rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                boxShadow: '0 10px 25px -4px rgba(2, 132, 199, 0.18)',
-                animation: 'heroBadgeFloat3 4.2s ease-in-out infinite 1.2s',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(226, 232, 240, 0.9)",
+                boxShadow: "0 10px 25px -4px rgba(2, 132, 199, 0.18)",
+                animation: "heroBadgeFloat3 4.2s ease-in-out infinite 1.2s",
               }}
               className="hero-badge-interactive"
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#0284C7',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "8px",
+                  backgroundColor: "#0284C7",
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Cloud size={16} />
               </div>
-              <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1E293B', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: "0.775rem",
+                  fontWeight: 700,
+                  color: "#1E293B",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 Cloud Solutions
               </span>
             </div>
@@ -352,38 +380,45 @@ export const Hero: React.FC = () => {
             {/* 4. UI/UX Design */}
             <div
               style={{
-                position: 'absolute',
-                top: '28%',
-                right: '-1.25rem',
+                position: "absolute",
+                top: "28%",
+                right: "-1.25rem",
                 zIndex: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.5rem 0.85rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                boxShadow: '0 10px 25px -4px rgba(73, 36, 63, 0.18)',
-                animation: 'heroBadgeFloat1 4.8s ease-in-out infinite 1.8s',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(226, 232, 240, 0.9)",
+                boxShadow: "0 10px 25px -4px rgba(73, 36, 63, 0.18)",
+                animation: "heroBadgeFloat1 4.8s ease-in-out infinite 1.8s",
               }}
               className="hero-badge-interactive"
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#49243F',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "8px",
+                  backgroundColor: "#49243F",
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <PenTool size={16} />
               </div>
-              <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1E293B', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: "0.775rem",
+                  fontWeight: 700,
+                  color: "#1E293B",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 UI/UX Design
               </span>
             </div>
@@ -391,38 +426,45 @@ export const Hero: React.FC = () => {
             {/* 5. Analytics Mini Card */}
             <div
               style={{
-                position: 'absolute',
-                top: '65%',
-                right: '-0.75rem',
+                position: "absolute",
+                top: "65%",
+                right: "-0.75rem",
                 zIndex: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.5rem 0.85rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(226, 232, 240, 0.9)',
-                boxShadow: '0 10px 25px -4px rgba(6, 182, 212, 0.18)',
-                animation: 'heroBadgeFloat2 4.4s ease-in-out infinite 2.2s',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(226, 232, 240, 0.9)",
+                boxShadow: "0 10px 25px -4px rgba(6, 182, 212, 0.18)",
+                animation: "heroBadgeFloat2 4.4s ease-in-out infinite 2.2s",
               }}
               className="hero-badge-interactive"
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#06B6D4',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "8px",
+                  backgroundColor: "#06B6D4",
+                  color: "#FFFFFF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <BarChart3 size={16} />
               </div>
-              <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1E293B', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: "0.775rem",
+                  fontWeight: 700,
+                  color: "#1E293B",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 Analytics
               </span>
             </div>

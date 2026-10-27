@@ -397,7 +397,7 @@ async function initCmsDatabase() {
         title: 'Home Page Content',
         data: {
           hero: {
-            badge: 'Engineering Tomorrow’s Autonomous Enterprise',
+            // badge: 'Engineering Tomorrow’s Autonomous Enterprise',
             title: 'Enterprise Software Engineering for Complex Systems',
             subtitle: 'We engineer mission-critical digital systems, resilient microservice ecosystems, high-availability software platforms, and dedicated engineering pods for global enterprises.',
             primaryCtaText: 'Explore Our Portfolio',
@@ -543,7 +543,8 @@ async function initCmsDatabase() {
         title: 'Privacy Policy',
         data: {
           effectiveDate: 'October 16, 2026',
-          contactEmail: 'privacy@azaroth-techhive.com',
+          contactEmail: 'support@azaroth-techhive.com'
+',
           introduction: 'Azaroth Tech-Hive is dedicated to protecting the privacy and personal data of our website visitors, clients, and partners. This policy outlines how we collect, process, and safeguard information.',
           sections: [
             {
@@ -560,7 +561,8 @@ async function initCmsDatabase() {
             },
             {
               heading: '4. Your Rights (GDPR & International Laws)',
-              body: 'You retain the right to request access to, rectification of, or erasure of your personal data stored within our systems. Contact our privacy team at privacy@azaroth-techhive.com for all requests.'
+              body: 'You retain the right to request access to, rectification of, or erasure of your personal data stored within our systems. Contact our privacy team at support@azaroth-techhive.com
+ for all requests.'
             }
           ]
         }

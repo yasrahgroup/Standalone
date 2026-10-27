@@ -214,11 +214,11 @@ export const Products: React.FC = () => {
                         letterSpacing: '0.12em',
                         color: product.status === 'Live' ? '#A7F3D0' : product.status === 'Ready For Deploy' ? '#BFDBFE' : '#FECDD3',
                       }}>
-                        {product.status === 'Live'
+                        {/* {product.status === 'Live'
                           ? 'Production Live Platform'
                           : product.status === 'Ready For Deploy'
                             ? 'Ready for Enterprise Deployment'
-                            : 'Platform In Active Development'}
+                            : 'Platform In Active Development'} */}
                       </span>
                       <h2 style={{
                         fontSize: '1.375rem',

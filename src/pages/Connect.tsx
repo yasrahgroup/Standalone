@@ -310,9 +310,6 @@ export const Connect: React.FC = () => {
                 <Badge variant="gold" style={{ marginBottom: '0.5rem' }}>
                   Online Inquiry Portal
                 </Badge>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-forest, #012411)' }}>
-                  Submit Project Inquiries
-                </h3>
               </div>
 
               <ContactForm />
