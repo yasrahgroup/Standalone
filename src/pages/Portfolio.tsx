@@ -10,8 +10,6 @@ import {
   Lightbulb,
   Maximize2,
   ShieldCheck,
-  Sparkles,
-  Target,
   TrendingUp,
   Users,
   Workflow,
@@ -29,16 +27,6 @@ import { ourValuesPrinciples } from "../data/companyData";
 
 const featuredProduct = productsCatalog[0];
 const ongoingProducts = productsCatalog.slice(1);
-
-const projectCategoryLabels: Record<string, string> = {
-  "fitness-management-platform": "Enterprise Solutions",
-  "omnichannel-commerce-platform": "Digital Commerce",
-  "learning-management-platform": "Digital Learning",
-  "healthcare-management-system": "Healthcare",
-};
-
-const projectCategory = (slug: string, fallback?: string) =>
-  projectCategoryLabels[slug] || fallback || "Platform";
 
 const serviceIcon = (name: string) => {
   switch (name) {
@@ -163,7 +151,7 @@ export const Portfolio: React.FC = () => {
                     value: `${serviceOfferings.length} core services`,
                   },
                   {
-                    icon: <Target size={18} />,
+                    icon: <Building2 size={18} />,
                     label: "Delivery framework",
                     value: `${deliveryStages.length} defined stages`,
                   },
@@ -424,7 +412,7 @@ export const Portfolio: React.FC = () => {
           <Reveal className="portfolio-section-head">
             <div className="portfolio-section-heading">
               <div className="portfolio-kicker">
-                <Target size={16} />
+                <Building2 size={16} />
                 <span>Our Approach</span>
               </div>
               <h2 className="portfolio-section-title">
