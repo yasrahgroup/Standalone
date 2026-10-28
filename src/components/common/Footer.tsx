@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Linkedin, Cookie } from "lucide-react";
-import faviconImg from "../../assets/Favicon.png";
+import logoImg from "../../assets/Logo.png";
 import { useCMS } from "../../context/CMSContext";
 
 export const Footer: React.FC = () => {
   const { settings } = useCMS();
 
-  // Ignore the legacy "/Logo.png" override so the new favicon mark is used.
+  // Ignore the legacy "/Logo.png" override so the bundled brand logo is used.
   const cmsLogo = settings?.logoUrl;
-  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : faviconImg;
+  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : logoImg;
 
   const phone = settings?.phone || settings?.primary_phone || "+974 1234 5678";
   const email =

@@ -12,7 +12,7 @@ import {
   Layers,
   Cpu,
 } from "lucide-react";
-import faviconImg from "../../assets/Favicon.png";
+import logoImg from "../../assets/Logo.png";
 import { useCMS } from "../../context/CMSContext";
 
 export interface SubNavItem {
@@ -136,9 +136,9 @@ export const Header: React.FC = () => {
   const location = useLocation();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Ignore the legacy "/Logo.png" override so the new favicon mark is used.
+  // Ignore the legacy "/Logo.png" override so the bundled brand logo is used.
   const cmsLogo = settings?.logoUrl;
-  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : faviconImg;
+  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : logoImg;
 
   // Close menus on route change
   useEffect(() => {
