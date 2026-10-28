@@ -1,4 +1,12 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+
+const revealProps = (delay: number) => ({
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: false, margin: '-80px' },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+});
 
 interface PageHeaderProps {
   kicker?: string;
@@ -47,13 +55,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     <section
       style={{
         backgroundColor: 'var(--color-canvas-bg, #FFFFFF)',
-        paddingTop: '12rem',
-        paddingBottom: actions ? '4rem' : '5rem',
         position: 'relative',
         overflow: 'hidden',
         borderBottom: '1px solid var(--color-border, #E2E8F0)',
       }}
-      className="page-header-section"
+      className={`page-header-section${actions ? ' page-header-section--with-actions' : ''}`}
     >
       {/* Decorative architectural background pattern */}
       <div
@@ -120,11 +126,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       <div
         className="page-header-content"
         style={{
-          width: "100%",
-          maxWidth: "1500px",
-          margin: "0 auto",
-          padding: "0 4rem",
-          textAlign: "left",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         {/* <div
@@ -163,26 +166,26 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         )} */}
 
         {/* Main title */}
-        <h1
+        <motion.h1
+          {...revealProps(0.1)}
           style={{
             fontSize: 'clamp(2.5rem, 5vw, 3.75rem)',
             fontWeight: 800,
             color: '#0F172A',
             lineHeight: 1.2,
             marginBottom: '1.25rem',
-            animation: 'fadeInUp 1s ease-out 0.5s forwards',
-            opacity: 0,
           }}
           className="page-header-title"
         >
           {renderTitle()}
-        </h1>
+        </motion.h1>
 
         {/* Subtitle if provided */}
 
 {/* Subtitle if provided */}
 {subtitle && (
-  <p
+  <motion.p
+    {...revealProps(0.2)}
     style={{
       fontSize: "1.1875rem",
       color: "#334155",
@@ -191,35 +194,63 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       maxWidth: "none",
       margin: "0",
       textAlign: "left",
-      animation: "fadeInUp 1s ease-out 0.7s forwards",
-      opacity: 0,
     }}
     className="page-header-subtitle"
   >
     {subtitle}
-  </p>
+  </motion.p>
 )}
 
 
 
         {/* Actions if provided */}
         {actions && (
-          <div
+          <motion.div
+            {...revealProps(0.3)}
             style={{
               marginTop: '2rem',
               display: 'flex',
               justifyContent: 'center',
               gap: '1rem',
               flexWrap: 'wrap',
-              animation: 'fadeInUp 1s ease-out 0.9s forwards',
-              opacity: 0,
             }}
             className="page-header-actions"
           >
             {actions}
-          </div>
+          </motion.div>
         )}
       </div>
+
+      <style>{`
+        .page-header-section {
+          padding-top: 9rem;
+          padding-bottom: 5rem;
+        }
+        .page-header-section--with-actions {
+          padding-bottom: 4rem;
+        }
+        .page-header-content {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          text-align: left;
+        }
+        @media (min-width: 768px) {
+          .page-header-content {
+            padding: 0 4rem;
+          }
+        }
+        @media (max-width: 640px) {
+          .page-header-section {
+            padding-top: 7.5rem;
+            padding-bottom: 3.5rem;
+          }
+          .page-header-section--with-actions {
+            padding-bottom: 3rem;
+          }
+        }
+      `}</style>
     </section>
   );
 };

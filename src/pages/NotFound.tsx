@@ -3,15 +3,19 @@ import { Home, BookOpen } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
 import { SEOHead } from '../components/common/SEOHead';
+import { FinalCTA } from '../components/home/FinalCTA';
+import { Reveal } from '../components/common/Reveal';
 
 export const NotFound: React.FC = () => {
   return (
+    <>
     <div className="section" style={{ padding: '6rem 1.5rem', textAlign: 'center', minHeight: '65vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <SEOHead
         title="Page Not Found — Azaroth Tech-Hive"
         description="The page you are looking for does not exist or has been moved. Browse our homepage, products, services, and engineering insights instead."
         robots="noindex, follow"
       />
+      <Reveal>
       <Badge variant="emerald" style={{ marginBottom: '1.25rem' }}>
         Status 404
       </Badge>
@@ -20,7 +24,7 @@ export const NotFound: React.FC = () => {
         Route Not Found
       </h1>
 
-      <p style={{ maxWidth: '520px', color: 'var(--color-text-secondary)', fontSize: '1.125rem', marginBottom: '2.5rem', lineHeight: 1.6 }}>
+      <p style={{ maxWidth: '520px', color: 'var(--color-text-secondary)', fontSize: '1.125rem', marginBottom: '2.5rem', lineHeight: 1.6, marginLeft: 'auto', marginRight: 'auto' }}>
         The path you navigated to does not exist or has been relocated within our enterprise architecture.
       </p>
 
@@ -32,6 +36,10 @@ export const NotFound: React.FC = () => {
           Browse Resource Hub
         </Button>
       </div>
+      </Reveal>
     </div>
+
+    <FinalCTA />
+    </>
   );
 };

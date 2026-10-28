@@ -1,395 +1,1049 @@
 import React from 'react';
 import {
-  Cpu,
+  ArrowRight,
+  Check,
   Compass,
+  Cpu,
+  FileText,
+  GraduationCap,
+  HeartPulse,
+  Layers,
+  MessageSquare,
+  ShieldCheck,
+  ShoppingBag,
+  Target,
+  Truck,
   Users,
   Workflow,
-  CheckCircle2,
-  ArrowRight,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { SlaMatrix } from '../components/services/SlaMatrix';
 import { Button } from '../components/common/Button';
 import { SEOHead } from '../components/common/SEOHead';
-import { PageHeader } from '../components/common/PageHeader';
-import { Link } from 'react-router-dom';
+import { Reveal } from '../components/common/Reveal';
+import { FinalCTA } from '../components/home/FinalCTA';
+import { serviceOfferings } from '../data/servicesData';
+import { deliveryStages } from '../data/deliveryData';
+import { industryExpertiseData } from '../data/industryData';
 
-interface ServiceDetail {
-  id: string;
-  title: string;
-  category: string;
-  icon: React.ReactNode;
-  iconBg: string;
-  iconColor: string;
-  description: string;
-  deliverables: string[];
-  sla: string;
-}
+const serviceIcon = (name: string) => {
+  switch (name) {
+    case 'Compass':
+      return <Compass size={24} />;
+    case 'Users':
+      return <Users size={24} />;
+    case 'Workflow':
+      return <Workflow size={24} />;
+    default:
+      return <Cpu size={24} />;
+  }
+};
 
-const detailedServices: ServiceDetail[] = [
-  {
-    id: 'digital-transformation-technology-solutions',
-    title: 'Enterprise Digital Transformation & Technology Solutions',
-    category: 'Enterprise Engineering',
-    sla: 'Standard Enterprise SLA',
-    icon: <Cpu size={24} />,
-    iconBg: 'rgba(73, 36, 63, 0.08)',
-    iconColor: '#49243F',
-    description:
-      'Azaroth Tech-Hive empowers enterprises to build, modernize, and scale their software ecosystems through strategic engineering and architectural expertise. We transform complex applications, streamline system integrations, strengthen data management, and optimize critical business systems through disciplined engineering practices—delivering secure, resilient, and adaptable software designed for operational continuity and long-term growth.',
-    deliverables: [
-      'Technology Strategy & Solution Architecture',
-      'Application Modernization & Software Evolution',
-      'End-to-End Software Engineering & Modernization',
-      'Enterprise Applications & Systems Integration',
-      'Intelligent Automation & Data Solutions',
-    ],
-  },
-  {
-    id: 'strategic-partnership-consulting',
-    title: 'Strategic Partnership & Consulting',
-    category: 'Enterprise Engineering',
-    sla: 'Standard Enterprise SLA',
-    icon: <Compass size={24} />,
-    iconBg: 'rgba(73, 36, 63, 0.08)',
-    iconColor: '#49243F',
-    description:
-      'Build a stronger technology foundation with strategic guidance and hands-on engineering collaboration. We work alongside your team to clarify technical direction, improve software architecture, strengthen development practices, and turn business priorities into actionable technology initiatives. From evaluating technology choices to evolving existing products and addressing security risks, we help you make informed decisions, improve delivery, and create lasting value from your software investments.',
-    deliverables: [
-      'Strategic Technology Advisory & Roadmap Planning',
-      'Software Architecture & Engineering Guidance',
-      'Collaborative Engineering Partnership',
-      'Application Modernisation & Continuous Improvement',
-      'Product Innovation, Prototyping & R&D Support',
-      'Software Security & Risk Management',
-    ],
-  },
-  {
-    id: 'on-demand-workforce-solutions',
-    title: 'On-Demand Engineering Workforce Solutions',
-    category: 'Enterprise Engineering',
-    sla: 'Standard Enterprise SLA',
-    icon: <Users size={24} />,
-    iconBg: 'rgba(73, 36, 63, 0.08)',
-    iconColor: '#49243F',
-    description:
-      'Strengthen your software development capabilities with experienced engineers, solution architects, and quality specialists across diverse technologies and platforms. Our flexible engagement models, structured onboarding, and transparent delivery practices help teams overcome technical challenges, accelerate development, improve software quality, and bring ideas to life efficiently.',
-    deliverables: [
-      'Dedicated Specialist Teams',
-      'Flexible Team Scaling & Staff Augmentation',
-      'Precision Skills & Expertise Matching',
-      'Rapid Team Mobilisation & Onboarding',
-    ],
-  },
-  {
-    id: 'business-process-management-operations',
-    title: 'Business Process Management & Operations',
-    category: 'Enterprise Engineering',
-    sla: 'Standard Enterprise SLA',
-    icon: <Workflow size={24} />,
-    iconBg: 'rgba(201, 155, 82, 0.08)',
-    iconColor: '#49243F',
-    description:
-      'Transform complex workflows into streamlined digital processes with intelligent automation, integrated applications, and actionable real-time insights. From reducing manual effort to connecting fragmented systems, we engineer practical software solutions that improve efficiency, enhance visibility, and help businesses operate smarter.',
-    deliverables: [
-      'Workflow Optimisation & Process Re-engineering',
-      'Intelligent Automation & API Integration',
-      'Application Monitoring, Reliability & Operational Support',
-      'Document Digitisation & Approval Workflow Automation',
-      'Operational Analytics, Performance Insights & Continuous Improvement',
-    ],
-  },
-];
+const industryIcon = (name: string) => {
+  switch (name) {
+    case 'ShoppingBag':
+      return <ShoppingBag size={22} />;
+    case 'GraduationCap':
+      return <GraduationCap size={22} />;
+    case 'HeartPulse':
+      return <HeartPulse size={22} />;
+    case 'Truck':
+      return <Truck size={22} />;
+    default:
+      return <Layers size={22} />;
+  }
+};
 
 export const Services: React.FC = () => {
   return (
     <div>
       <SEOHead
-        title="Enterprise Engineering Services &amp; Practices — Azaroth Tech-Hive"
-        description="Explore Azaroth Tech-Hive's 4 core enterprise engineering practices: Digital Transformation, Strategic Consulting, On-Demand Workforce, and Business Process Management."
+        title="Engineering Services — Digital Transformation, Consulting & Engineering Teams | Azaroth Tech-Hive"
+        description="Explore Azaroth Tech-Hive's four engineering practices: digital transformation, strategic consulting, on-demand engineering teams, and business process automation."
         canonicalPath="/services"
       />
 
-      {/* Page Hero Banner */}
-      <PageHeader
-        kicker="- OUR SERVICES -"
-        title="Comprehensive Digital Solutions"
-        gradientWords={['Digital', 'Solutions']}
-        subtitle="We offer end-to-end technology services to help you build, optimize and scale your digital presence with enterprise performance guarantees."
-        actions={
-          <>
-            <Button to="/connect-with-us" variant="primary" size="lg" icon={<ArrowRight size={16} />}>
-              Schedule Technical Discovery
-            </Button>
-            <Button to="/connect-with-us" variant="outline" size="lg">
-              Book Architecture Discovery
-            </Button>
-          </>
-        }
-      />
+      {/* HERO */}
+      <section className="services-hero">
+        <div className="services-hero-grid-bg" aria-hidden="true" />
+        <div className="services-hero-glow" aria-hidden="true" />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="services-hero-grid">
+            <Reveal>
+              <div className="services-kicker">
+                <Workflow size={16} />
+                <span>Our Services</span>
+              </div>
 
-      {/* Services Grid (Organized in 2x2 Grid with Justified Content) */}
-      <section style={{ backgroundColor: '#F8FAFC', padding: '5.5rem 0' }} id="services-catalog">
-        <style>{`
-          .services-grid-2x2 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.25rem;
-            max-width: 1240px;
-            margin: 0 auto;
-          }
-          @media (min-width: 900px) {
-            .services-grid-2x2 {
-              grid-template-columns: repeat(2, 1fr);
-              gap: 2.5rem;
-            }
-          }
-        `}</style>
+              <h1 className="services-hero-title">
+                Engineering Services Built Around{' '}
+                <span
+                  style={{
+                    background: 'var(--gradient-heading)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  Your Business Goals.
+                </span>
+              </h1>
 
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem auto' }}>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.8vw, 2.75rem)', fontWeight: 800, color: '#1E293B', marginBottom: '1rem' }}>
-              Specialized Engineering Practices
-            </h2>
-            <p style={{ color: '#64748B', fontSize: '1.0625rem', lineHeight: 1.6 }}>
-              Each practice is staffed with senior domain specialists, modern toolchains, and verifiable deliverables.
-            </p>
-          </div>
+              <p className="services-hero-copy">
+                Four focused practices covering digital transformation,
+                strategic consulting, on-demand engineering teams, and process
+                automation. Each engagement begins with a clear problem
+                statement, an agreed scope, and a practical delivery plan.
+              </p>
 
-          {/* 2x2 Responsive Grid */}
-          <div className="services-grid-2x2">
-            {detailedServices.map((service) => (
-              <div
-                key={service.id}
-                id={service.id}
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '1.5rem',
-                  padding: '2.5rem 2.25rem',
-                  border: '1px solid rgba(226, 232, 240, 0.9)',
-                  boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  height: '100%',
-                  transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  scrollMarginTop: '7rem',
-                }}
-                className="hover:-translate-y-1.5 hover:shadow-xl hover:border-rose-200"
-              >
-                {/* Top Section: Icon, SLA Badge, Category, Title, Description */}
-                <div>
-                  {/* Header Icon & Tag */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                    <div
-                      style={{
-                        width: '3.5rem',
-                        height: '3.5rem',
-                        borderRadius: '14px',
-                        backgroundColor: service.iconBg,
-                        color: service.iconColor,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '1px solid rgba(73, 36, 63, 0.15)',
-                      }}
-                    >
-                      {service.icon}
-                    </div>
-                    <span
-                      style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: '#059669',
-                        backgroundColor: '#ECFDF5',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '9999px',
-                        border: '1px solid #A7F3D0',
-                      }}
-                    >
-                      {service.sla}
-                    </span>
-                  </div>
+              <div className="services-actions">
+                <Button
+                  to="/connect-with-us"
+                  variant="primary"
+                  size="lg"
+                  icon={<ArrowRight size={18} />}
+                >
+                  Discuss Your Requirements
+                </Button>
+                <Button to="#engagement-models" variant="outline" size="lg">
+                  Compare Engagement Models
+                </Button>
+              </div>
 
-                  <div
-                    style={{
-                      fontSize: '0.8125rem',
-                      fontWeight: 700,
-                      color: '#49243F',
-                      marginBottom: '0.45rem',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {service.category}
-                  </div>
+              <div className="services-hero-note">
+                <ShieldCheck size={15} />
+                <span>
+                  Scope, deliverables, and commercial terms are agreed in
+                  writing before work begins.
+                </span>
+              </div>
+            </Reveal>
 
-                  <h3
-                    style={{
-                      fontSize: '1.375rem',
-                      fontWeight: 800,
-                      color: '#1E293B',
-                      marginBottom: '1rem',
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {service.title}
-                  </h3>
-
-                  {/* Justified Description */}
-                  <p
-                    style={{
-                      fontSize: '0.9375rem',
-                      color: '#475569',
-                      lineHeight: 1.7,
-                      textAlign: 'justify',
-                      textJustify: 'inter-word',
-                      marginBottom: '2rem',
-                    }}
-                  >
-                    {service.description}
-                  </p>
+            <Reveal delay={0.12}>
+              <div className="services-start-card">
+                <div className="services-start-title">
+                  <Target size={18} />
+                  <span>Start with where you are</span>
                 </div>
+                <p className="services-start-copy">
+                  Choose the situation that sounds closest to yours. Each one
+                  leads to the practice built for it.
+                </p>
 
-                {/* Bottom Section: Key Deliverables & Action Links */}
-                <div>
-                  {/* Deliverables Checklist */}
-                  <div style={{ marginBottom: '2rem' }}>
-                    <div
-                      style={{
-                        fontSize: '0.8125rem',
-                        fontWeight: 700,
-                        color: '#334155',
-                        marginBottom: '0.875rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                      }}
+                <div className="services-start-list">
+                  {serviceOfferings.map((service) => (
+                    <a
+                      key={service.id}
+                      href={`#${service.slug}`}
+                      className="services-start-row"
                     >
-                      Key Deliverables:
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                      {service.deliverables.map((item, idx) => (
-                        <div
-                          key={idx}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '0.625rem',
-                            fontSize: '0.84375rem',
-                            color: '#334155',
-                            lineHeight: 1.5,
-                          }}
-                        >
-                          <CheckCircle2
-                            size={16}
-                            style={{ color: '#059669', flexShrink: 0, marginTop: '0.15rem' }}
-                          />
-                          <span>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Deploy Practice CTA */}
-                  <div
-                    style={{
-                      paddingTop: '1.25rem',
-                      borderTop: '1px solid #E2E8F0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '1rem',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <Link
-                      to="/connect-with-us"
-                      style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 700,
-                        color: '#49243F',
-                        textDecoration: 'none',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.4rem',
-                        transition: 'all 160ms ease',
-                      }}
-                      className="hover:gap-2.5"
-                    >
-                      <span>Deploy Practice</span>
-                      <ArrowRight size={15} />
-                    </Link>
-
-                    <Button to="/connect-with-us" variant="outline" size="sm">
-                      Inquire
-                    </Button>
-                  </div>
+                      <span className="services-start-icon">
+                        {serviceIcon(service.iconName)}
+                      </span>
+                      <span className="services-start-text">
+                        <strong>{service.title}</strong>
+                        <span>{service.bestFor}</span>
+                      </span>
+                      <ArrowRight size={16} className="services-start-arrow" />
+                    </a>
+                  ))}
                 </div>
               </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* PRACTICES */}
+      <section id="practices" className="services-section services-section--muted">
+        <div className="container">
+          <Reveal className="services-section-head">
+            <div>
+              <div className="services-kicker">
+                <Layers size={16} />
+                <span>Our Practices</span>
+              </div>
+              <h2 className="services-section-title">
+                Four focused ways we can help
+              </h2>
+              <p className="services-section-copy">
+                Each practice has its own scope, deliverables, and intended
+                outcomes. Review the details below, then start a conversation
+                about the one that matches your situation.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="services-practice-grid">
+            {serviceOfferings.map((service, index) => (
+              <Reveal
+                key={service.id}
+                id={service.slug}
+                delay={index * 0.05}
+                className="practice-card"
+              >
+                <div className="practice-card-top">
+                  <span className="practice-card-icon">
+                    {serviceIcon(service.iconName)}
+                  </span>
+                  <span className="practice-card-number">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <div className="practice-card-category">{service.category}</div>
+                <h3>{service.title}</h3>
+                <p className="practice-card-desc">{service.description}</p>
+
+                <ul className="practice-card-list">
+                  {(service.capabilities || []).slice(0, 3).map((capability) => (
+                    <li key={capability}>
+                      <Check size={15} />
+                      <span>{capability}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="practice-card-best">
+                  <span>Best for</span>
+                  <p>{service.bestFor}</p>
+                </div>
+
+                <div className="practice-card-actions">
+                  <Link to="/connect-with-us" className="practice-card-link">
+                    <span>Discuss This Service</span>
+                    <ArrowRight size={15} />
+                  </Link>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SLA Tier Matrix Section */}
-      <SlaMatrix />
+      {/* HOW WE WORK */}
+      <section id="how-we-work" className="services-section">
+        <div className="container">
+          <Reveal className="services-section-head">
+            <div>
+              <div className="services-kicker">
+                <Workflow size={16} />
+                <span>How We Work</span>
+              </div>
+              <h2 className="services-section-title">
+                A six-stage path from brief to support
+              </h2>
+              <p className="services-section-copy">
+                Every engagement follows the same delivery framework. The depth
+                of each stage is agreed up front, so responsibilities and
+                decision points stay visible.
+              </p>
+            </div>
+        
+          </Reveal>
 
-      {/* Bottom CTA */}
-      <section
-        style={{
-          backgroundColor: 'var(--color-surface-muted, #FAFAFA)',
-          padding: '5rem 0',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          borderTop: '1px solid rgba(226, 232, 240, 0.8)',
-        }}
-      >
-        {/* Ambient Glow */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-150px',
-            right: '20%',
-            width: '450px',
-            height: '450px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at center, rgba(73, 36, 63, 0.08) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
-
-        <div className="container" style={{ maxWidth: '720px', position: 'relative', zIndex: 1 }}>
-          <h2
-            style={{
-              fontSize: 'clamp(2rem, 4vw, 2.75rem)',
-              fontWeight: 800,
-              color: 'var(--color-text-primary, #1E293B)',
-              marginBottom: '1.25rem',
-              lineHeight: 1.2,
-            }}
-          >
-            Ready to Accelerate Your Digital Transformation?
-          </h2>
-          <p
-            style={{
-              fontSize: '1.125rem',
-              color: 'var(--color-text-secondary, #64748B)',
-              lineHeight: 1.6,
-              marginBottom: '2.25rem',
-            }}
-          >
-            Talk to an Azaroth Techhive engineering architect today. We provide fixed-scope estimates, technology audits, and rapid pod kickoffs.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <Button to="/connect-with-us" variant="primary" size="lg" icon={<ArrowRight size={16} />}>
-              Schedule Consultation
-            </Button>
-            <Button to="/connect-with-us" variant="outline" size="lg">
-              Contact Sales Team
-            </Button>
+          <div className="services-process-grid">
+            {deliveryStages.map((stage, index) => (
+              <Reveal
+                key={stage.stageNumber}
+                delay={index * 0.05}
+                className="services-process-card"
+              >
+                <div className="services-process-number">
+                  {String(stage.stageNumber).padStart(2, '0')}
+                </div>
+                <h3>{stage.title}</h3>
+                <div className="services-process-tagline">{stage.tagline}</div>
+                <p>{stage.description}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* ENGAGEMENT MODELS */}
+      <SlaMatrix />
+
+      {/* DOMAINS */}
+      <section id="domains" className="services-section">
+        <div className="container">
+          <Reveal className="services-section-head">
+            <div>
+              <div className="services-kicker">
+                <Layers size={16} />
+                <span>Domains</span>
+              </div>
+              <h2 className="services-section-title">
+                Where our engineering applies
+              </h2>
+              <p className="services-section-copy">
+                Our platforms and practices are shaped around the operational
+                realities of these domains. Each area has its own constraints,
+                data considerations, and delivery expectations.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="services-domain-grid">
+            {industryExpertiseData.map((industry, index) => (
+              <Reveal
+                key={industry.id}
+                delay={index * 0.05}
+                className="services-domain-card"
+              >
+                <div className="services-domain-head">
+                  <span className="services-domain-icon">
+                    {industryIcon(industry.iconName)}
+                  </span>
+                  <div>
+                    <h3>{industry.industry}</h3>
+                    <p>{industry.subtitle}</p>
+                  </div>
+                </div>
+                <div className="services-domain-block">
+                  <span>Challenge</span>
+                  <p>{industry.challenge}</p>
+                </div>
+                <div className="services-domain-block">
+                  <span>Our approach</span>
+                  <p>{industry.architecture}</p>
+                </div>
+                <div className="services-domain-outcome">
+                  <Target size={15} />
+                  <span>{industry.outcome}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEXT STEPS */}
+      <section id="next-steps" className="services-section services-section--muted">
+        <div className="container">
+          <Reveal className="services-section-head">
+            <div>
+              <div className="services-kicker">
+                <MessageSquare size={16} />
+                <span>What Happens Next</span>
+              </div>
+              <h2 className="services-section-title">
+                A clear path from first message to next step
+              </h2>
+              <p className="services-section-copy">
+                You do not need a complete specification to start. Share what
+                you know, and we will help you frame the decision.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="services-next-grid">
+            {[
+              {
+                step: '01',
+                icon: <MessageSquare size={22} />,
+                title: 'Share your context',
+                description:
+                  'Tell us about your goals, current systems, constraints, and what prompted the conversation.',
+              },
+              {
+                step: '02',
+                icon: <Compass size={22} />,
+                title: 'Discovery conversation',
+                description:
+                  'We discuss priorities, architecture, options, and the practical trade-offs involved.',
+              },
+              {
+                step: '03',
+                icon: <FileText size={22} />,
+                title: 'Written next step',
+                description:
+                  'If there is a fit, we provide a scope summary, a recommended engagement model, and clear next actions.',
+              },
+            ].map((item, index) => (
+              <Reveal
+                key={item.step}
+                delay={index * 0.06}
+                className="services-next-card"
+              >
+                <div className="services-next-top">
+                  <span className="services-next-icon">{item.icon}</span>
+                  <span className="services-next-step">{item.step}</span>
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </Reveal>
+            ))}
+          </div>
+
+
+        </div>
+      </section>
+
+      <FinalCTA />
+
+      <style>{`
+        .services-hero {
+          background-color: #FFFFFF;
+          border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+          padding-top: clamp(3.25rem, 7vw, 5.5rem);
+          padding-bottom: clamp(3rem, 6vw, 4.75rem);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .services-hero-grid-bg {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(73, 36, 63, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(73, 36, 63, 0.035) 1px, transparent 1px);
+          background-size: 44px 44px;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent 85%);
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent 85%);
+          pointer-events: none;
+        }
+
+        .services-hero-glow {
+          position: absolute;
+          top: -20%;
+          left: 8%;
+          width: 620px;
+          height: 520px;
+          background: radial-gradient(circle at center, rgba(73, 36, 63, 0.09) 0%, rgba(201, 155, 82, 0.05) 45%, transparent 72%);
+          pointer-events: none;
+        }
+
+        .services-hero-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+          gap: clamp(2rem, 5vw, 4rem);
+          align-items: center;
+        }
+
+        .services-kicker {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.8125rem;
+          font-weight: 700;
+          color: #49243F;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          margin-bottom: 0.9rem;
+        }
+
+        .services-hero-title {
+          font-size: clamp(2.3rem, 4.5vw, 3.4rem);
+          font-weight: 800;
+          color: #1E293B;
+          line-height: 1.14;
+          letter-spacing: -0.025em;
+          margin-bottom: 1.25rem;
+        }
+
+        .services-hero-copy {
+          font-size: 1.125rem;
+          color: #475569;
+          line-height: 1.72;
+          max-width: 620px;
+          margin-bottom: 1.75rem;
+        }
+
+        .services-actions {
+          display: flex;
+          align-items: center;
+          gap: 0.875rem;
+          flex-wrap: wrap;
+          margin-bottom: 1.5rem;
+        }
+
+        .services-inline-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          color: #49243F;
+          font-size: 0.9rem;
+          font-weight: 700;
+          text-decoration: none;
+          transition: gap 160ms ease, color 160ms ease;
+        }
+
+        .services-inline-link:hover {
+          gap: 0.6rem;
+          color: #8A315D;
+        }
+
+        .services-hero-note {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5rem;
+          color: #64748B;
+          font-size: 0.8125rem;
+          line-height: 1.55;
+          max-width: 540px;
+        }
+
+        .services-hero-note svg {
+          color: #49243F;
+          flex-shrink: 0;
+          margin-top: 0.1rem;
+        }
+
+        .services-start-card {
+          background: linear-gradient(180deg, #FFFFFF 0%, #FBF7F2 100%);
+          border: 1px solid rgba(227, 218, 207, 0.95);
+          border-radius: 1.5rem;
+          padding: 1.5rem;
+          box-shadow: 0 24px 55px -28px rgba(73, 36, 63, 0.35);
+        }
+
+        .services-start-title {
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          font-size: 0.8125rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #49243F;
+          margin-bottom: 0.5rem;
+        }
+
+        .services-start-copy {
+          font-size: 0.8125rem;
+          color: #64748B;
+          line-height: 1.55;
+          margin-bottom: 0.9rem;
+        }
+
+        .services-start-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+        }
+
+        .services-start-row {
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+          padding: 0.7rem 0.65rem;
+          border-radius: 0.8rem;
+          text-decoration: none;
+          border: 1px solid transparent;
+          transition: background-color 160ms ease, border-color 160ms ease;
+        }
+
+        .services-start-row:hover {
+          background-color: rgba(73, 36, 63, 0.05);
+          border-color: rgba(73, 36, 63, 0.14);
+        }
+
+        .services-start-icon {
+          width: 2.35rem;
+          height: 2.35rem;
+          border-radius: 0.65rem;
+          background: rgba(73, 36, 63, 0.08);
+          color: #49243F;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .services-start-text {
+          display: flex;
+          flex-direction: column;
+          gap: 0.15rem;
+          min-width: 0;
+          flex: 1;
+        }
+
+        .services-start-text strong {
+          font-size: 0.8125rem;
+          font-weight: 800;
+          color: #1E293B;
+          line-height: 1.35;
+        }
+
+        .services-start-text span {
+          font-size: 0.75rem;
+          color: #64748B;
+          line-height: 1.4;
+        }
+
+        .services-start-arrow {
+          color: #49243F;
+          flex-shrink: 0;
+        }
+
+        .services-start-foot {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.6rem;
+          margin-top: 0.9rem;
+          padding-top: 0.9rem;
+          border-top: 1px solid rgba(227, 218, 207, 0.9);
+          color: #49243F;
+          font-size: 0.75rem;
+          font-weight: 700;
+          line-height: 1.45;
+          text-decoration: none;
+        }
+
+        .services-section {
+          padding: clamp(3rem, 7vw, 5rem) 0;
+          background-color: #FFFFFF;
+        }
+
+        .services-section--muted {
+          background-color: #F8FAFC;
+        }
+
+        .services-section-head {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+          margin-bottom: 2.5rem;
+        }
+
+        .services-section-title {
+          font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+          font-weight: 800;
+          color: #1E293B;
+          background-image: var(--gradient-heading);
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          line-height: 1.18;
+          letter-spacing: -0.02em;
+          margin-bottom: 0.85rem;
+        }
+
+        .services-section-copy {
+          color: #64748B;
+          font-size: 1.0625rem;
+          line-height: 1.7;
+          max-width: none;
+        }
+
+        .services-practice-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1.5rem;
+          align-items: stretch;
+        }
+
+        .practice-card {
+          display: flex;
+          flex-direction: column;
+          background-color: #FFFFFF;
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-radius: 1.25rem;
+          padding: clamp(1.5rem, 2.5vw, 2rem);
+          box-shadow: 0 8px 26px -18px rgba(15, 23, 42, 0.18);
+          scroll-margin-top: 6.5rem;
+          transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+        }
+
+        .practice-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 20px 40px -22px rgba(73, 36, 63, 0.24);
+          border-color: rgba(73, 36, 63, 0.2);
+        }
+
+        .practice-card-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-bottom: 1.1rem;
+        }
+
+        .practice-card-icon {
+          width: 2.85rem;
+          height: 2.85rem;
+          border-radius: 0.8rem;
+          background: rgba(73, 36, 63, 0.08);
+          color: #49243F;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .practice-card-number {
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #94A3B8;
+        }
+
+        .practice-card-category {
+          font-size: 0.6875rem;
+          font-weight: 800;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          color: #7A5422;
+          margin-bottom: 0.4rem;
+        }
+
+        .practice-card h3 {
+          font-size: 1.3rem;
+          font-weight: 800;
+          color: #1E293B;
+          line-height: 1.3;
+          margin-bottom: 0.65rem;
+        }
+
+        .practice-card-desc {
+          font-size: 0.9rem;
+          color: #64748B;
+          line-height: 1.68;
+          margin-bottom: 1.15rem;
+        }
+
+        .practice-card-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          flex: 1;
+        }
+
+        .practice-card-list li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5rem;
+          font-size: 0.8125rem;
+          color: #334155;
+          line-height: 1.5;
+        }
+
+        .practice-card-list svg {
+          color: #1F5132;
+          flex-shrink: 0;
+          margin-top: 0.15rem;
+        }
+
+        .practice-card-best {
+          background-color: #FBF7F2;
+          border: 1px solid rgba(227, 218, 207, 0.95);
+          border-radius: 0.75rem;
+          padding: 0.8rem 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .practice-card-best > span {
+          display: block;
+          font-size: 0.625rem;
+          font-weight: 800;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          color: #7A5422;
+          margin-bottom: 0.2rem;
+        }
+
+        .practice-card-best p {
+          font-size: 0.8125rem;
+          color: #334155;
+          line-height: 1.5;
+        }
+
+        .practice-card-actions {
+          display: flex;
+          align-items: center;
+          padding-top: 1rem;
+          border-top: 1px solid #E2E8F0;
+        }
+
+        .practice-card-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          color: #49243F;
+          font-size: 0.875rem;
+          font-weight: 700;
+          text-decoration: none;
+          transition: gap 160ms ease, color 160ms ease;
+        }
+
+        .practice-card-link:hover {
+          gap: 0.6rem;
+          color: #8A315D;
+        }
+
+        .services-process-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1.25rem;
+        }
+
+        .services-process-card {
+          background-color: #F8FAFC;
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-radius: 1.2rem;
+          padding: 1.4rem 1.35rem;
+          transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+
+        .services-process-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 18px 34px -20px rgba(73, 36, 63, 0.22);
+          border-color: rgba(73, 36, 63, 0.2);
+        }
+
+        .services-process-number {
+          font-size: 1.9rem;
+          font-weight: 800;
+          line-height: 1;
+          color: rgba(73, 36, 63, 0.16);
+          margin-bottom: 0.55rem;
+          letter-spacing: -0.03em;
+        }
+
+        .services-process-card h3 {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #1E293B;
+          margin-bottom: 0.25rem;
+        }
+
+        .services-process-tagline {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #49243F;
+          line-height: 1.4;
+          margin-bottom: 0.65rem;
+        }
+
+        .services-process-card p {
+          font-size: 0.84375rem;
+          color: #64748B;
+          line-height: 1.6;
+        }
+
+        .services-domain-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1.25rem;
+        }
+
+        .services-domain-card {
+          background-color: #F8FAFC;
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-radius: 1.2rem;
+          padding: 1.5rem 1.4rem;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .services-domain-head {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.85rem;
+          margin-bottom: 1rem;
+        }
+
+        .services-domain-icon {
+          width: 2.7rem;
+          height: 2.7rem;
+          border-radius: 0.75rem;
+          background: rgba(73, 36, 63, 0.08);
+          color: #49243F;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .services-domain-head h3 {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #1E293B;
+          margin-bottom: 0.2rem;
+        }
+
+        .services-domain-head p {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #64748B;
+          line-height: 1.45;
+        }
+
+        .services-domain-block {
+          margin-bottom: 0.85rem;
+        }
+
+        .services-domain-block span {
+          display: block;
+          font-size: 0.6875rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #7A5422;
+          margin-bottom: 0.25rem;
+        }
+
+        .services-domain-block p {
+          font-size: 0.8125rem;
+          color: #475569;
+          line-height: 1.6;
+        }
+
+        .services-domain-outcome {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5rem;
+          margin-top: auto;
+          padding-top: 0.8rem;
+          border-top: 1px solid #E2E8F0;
+          font-size: 0.8125rem;
+          color: #334155;
+          line-height: 1.55;
+        }
+
+        .services-domain-outcome svg {
+          color: #1F5132;
+          flex-shrink: 0;
+          margin-top: 0.15rem;
+        }
+
+        .services-next-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1.25rem;
+        }
+
+        .services-next-card {
+          background-color: #FFFFFF;
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-radius: 1.2rem;
+          padding: 1.5rem 1.4rem;
+          box-shadow: 0 6px 22px -10px rgba(15, 23, 42, 0.08);
+        }
+
+        .services-next-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+        }
+
+        .services-next-icon {
+          width: 2.7rem;
+          height: 2.7rem;
+          border-radius: 0.75rem;
+          background: rgba(73, 36, 63, 0.08);
+          color: #49243F;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .services-next-step {
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #94A3B8;
+        }
+
+        .services-next-card h3 {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #1E293B;
+          margin-bottom: 0.45rem;
+        }
+
+        .services-next-card p {
+          font-size: 0.84375rem;
+          color: #64748B;
+          line-height: 1.6;
+        }
+
+        .services-next-cta {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          margin-top: 2rem;
+          text-align: center;
+        }
+
+        .services-next-cta > span {
+          font-size: 0.84375rem;
+          color: #64748B;
+        }
+
+        .services-next-cta a {
+          color: #49243F;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        @media (max-width: 960px) {
+          .services-hero-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .services-start-card {
+            max-width: 620px;
+          }
+
+          .services-process-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 820px) {
+          .services-practice-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .services-domain-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .services-next-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .services-process-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .services-actions {
+            align-items: stretch;
+          }
+
+          .services-actions .btn {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .services-hero-title {
+            font-size: clamp(2rem, 9vw, 2.6rem);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .practice-card,
+          .services-process-card,
+          .services-start-row,
+          .services-faq-plus {
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

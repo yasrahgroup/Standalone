@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Clock, ArrowRight, Inbox } from 'lucide-react';
+import { Clock, ArrowRight, Inbox } from 'lucide-react';
 import { insightsArticles } from '../data/insightsData';
 import { Card } from '../components/common/Card';
 import { SEOHead } from '../components/common/SEOHead';
@@ -12,10 +12,12 @@ import {
   insightEnterpriseAiImg,
   insightCloudModImg,
 } from '../assets/images';
+import { FinalCTA } from "../components/home/FinalCTA";
+import { Reveal } from '../components/common/Reveal';
 
 export const Insights: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedCategory] = useState<string>('All');
+  const [searchQuery] = useState<string>('');
   const [debouncedQuery, setDebouncedQuery] = useState<string>('');
   const { insights: cmsInsights } = useCMS();
   const fallbackImages = [insightSystemArchImg, insightEnterpriseAiImg, insightCloudModImg];
@@ -47,9 +49,9 @@ export const Insights: React.FC = () => {
         }));
   }, [cmsInsights]);
 
-  const categories = useMemo(() => {
-    return ['All', ...new Set(effectiveArticles.map(a => a.category))];
-  }, [effectiveArticles]);
+  // const categories = useMemo(() => {
+  //   return ['All', ...new Set(effectiveArticles.map(a => a.category))];
+  // }, [effectiveArticles]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -82,7 +84,7 @@ export const Insights: React.FC = () => {
       <PageHeader
         kicker="- RESOURCE HUB -"
         title="Engineering Insights That Move Ideas Forward"
-        gradientWords={['Engineering', 'Insights', 'Ideas', 'Forward']}
+        gradientWords={['Move', 'Ideas', 'Forward']}
         subtitle="Explore software engineering insights, architecture principles, implementation strategies, and technical guidance to help you make informed technology decisions and build better systems."
       />
 
@@ -90,64 +92,10 @@ export const Insights: React.FC = () => {
       <section className="section" style={{ backgroundColor: '#ffffff' }}>
         <div className="container">
           
-          {/* Search & Category Filter Controls */}
-          <div role="search" style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1.5rem',
-            marginBottom: '3rem',
-            paddingBottom: '2rem',
-            borderBottom: '1px solid var(--color-border-subtle)',
-          }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  aria-pressed={selectedCategory === cat}
-                  style={{
-                    padding: '0.5rem 1rem',
-                    borderRadius: 'var(--radius-full)',
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 180ms ease-out',
-                    border: '1px solid',
-                    backgroundColor: selectedCategory === cat ? 'var(--color-brand-gold)' : 'rgba(255, 255, 255, 0.8)',
-                    borderColor: selectedCategory === cat ? 'var(--color-brand-gold)' : 'var(--color-border)',
-                    color: selectedCategory === cat ? '#ffffff' : 'var(--color-text-primary)',
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
-            <div style={{ position: 'relative', width: '280px' }}>
-              <Search size={16} style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
-              <input
-                type="text"
-                placeholder="Search articles and whitepapers..."
-                aria-label="Search resources"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.5rem 0.875rem 0.5rem 2.25rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border-medium)',
-                  fontSize: '0.875rem',
-                  outline: 'none',
-                }}
-              />
-            </div>
-          </div>
 
           {/* Articles Grid */}
           {filteredArticles.length === 0 ? (
-            <div style={{
+            <Reveal style={{
               padding: '3rem 1.5rem',
               borderRadius: 'var(--radius-xl)',
               border: '1px dashed var(--color-border)',
@@ -160,16 +108,12 @@ export const Insights: React.FC = () => {
               </div>
               <h2 style={{ margin: '0 0 0.5rem', color: 'var(--color-text-primary)' }}>No resources match your search</h2>
               <p style={{ margin: 0 }}>Try a different keyword or switch back to another category.</p>
-            </div>
+            </Reveal>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '2.5rem',
-            }}>
+            <div className="grid-layout-4x4">
               {filteredArticles.map((article, idx) => (
+                <Reveal key={article.id} delay={idx * 0.06} style={{ display: 'flex', flexDirection: 'column' }}>
                 <Card
-                  key={article.id}
                   variant="solid"
                   padding="none"
                   style={{
@@ -181,6 +125,7 @@ export const Insights: React.FC = () => {
                     overflow: 'hidden',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
                     transition: 'all 240ms ease-out',
+                    flex: 1,
                   }}
                   className="insight-page-card"
                 >
@@ -213,30 +158,6 @@ export const Insights: React.FC = () => {
                         pointerEvents: 'none',
                       }}
                     />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.4rem',
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        backdropFilter: 'blur(8px)',
-                        color: '#49243F',
-                        padding: '0.35rem 0.85rem',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 800,
-                        letterSpacing: '0.07em',
-                        textTransform: 'uppercase',
-                        border: '1px solid rgba(73, 36, 63, 0.18)',
-                        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.15)',
-                      }}
-                    >
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#49243F' }} />
-                      {article.category}
-                    </div>
                   </div>
 
                   {/* Card Body */}
@@ -310,12 +231,16 @@ export const Insights: React.FC = () => {
                     </div>
                   </div>
                 </Card>
+                </Reveal>
               ))}
             </div>
           )}
 
         </div>
       </section>
+
+          {/* Global Conversion Portal */}
+              <FinalCTA />
 
       <style>{`
         .article-title-link:hover {

@@ -402,8 +402,8 @@ export const AboutSection: React.FC = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "4rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+            gap: "clamp(2rem, 5vw, 4rem)",
             alignItems: "center",
             marginBottom: "4.5rem",
           }}
@@ -586,6 +586,7 @@ export const AboutSection: React.FC = () => {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             column-gap: 20px;
             row-gap: 20px;
+            padding-left: 0 !important;
           }
         }
 

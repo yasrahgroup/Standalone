@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, User } from 'lucide-react';
 import { insightsArticles } from '../data/insightsData';
-import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { Card } from '../components/common/Card';
 import { SEOHead } from '../components/common/SEOHead';
+import { Reveal } from '../components/common/Reveal';
+import { FinalCTA } from '../components/home/FinalCTA';
 
 export const InsightDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -73,7 +74,7 @@ export const InsightDetail: React.FC = () => {
       />
       {/* Article Header */}
       <section className="section" style={{ backgroundColor: 'var(--color-canvas-bg)', borderBottom: '1px solid var(--color-border-subtle)', paddingBottom: '3.5rem' }}>
-        <div className="container-prose">
+        <Reveal className="container-prose">
           <Link
             to="/technology-insights"
             style={{
@@ -92,7 +93,6 @@ export const InsightDetail: React.FC = () => {
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-            <Badge variant="emerald">{article.category}</Badge>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--color-text-muted)', fontSize: '0.8125rem' }}>
               <Clock size={14} />
               <span>{article.readTime}</span>
@@ -134,13 +134,13 @@ export const InsightDetail: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Article Body */}
       <section className="section" style={{ backgroundColor: '#ffffff' }}>
         <div className="container-prose">
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 220px) minmax(0, 1fr)', gap: '2rem', alignItems: 'start' }}>
+          <div className="insight-body-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 220px) minmax(0, 1fr)', gap: '2rem', alignItems: 'start' }}>
             <aside style={{ position: 'sticky', top: '6.5rem' }}>
               <div style={{
                 backgroundColor: 'rgba(250, 250, 247, 0.8)',
@@ -175,7 +175,7 @@ export const InsightDetail: React.FC = () => {
               </div>
             </aside>
 
-            <div style={{ minWidth: 0 }}>
+            <Reveal style={{ minWidth: 0 }}>
               <div style={{ fontSize: '1.0625rem', lineHeight: 1.8, color: 'var(--color-text-primary)' }}>
                 {sectionBlocks.map((section) => (
                   <section key={section.id} id={section.id} style={{ scrollMarginTop: '7rem', marginBottom: '2.5rem' }}>
@@ -219,9 +219,10 @@ export const InsightDetail: React.FC = () => {
                   </span>
                 ))}
               </div>
-            </div>
+            </Reveal>
           </div>
 
+          <Reveal>
           <Card
             variant="solid"
             padding="md"
@@ -240,14 +241,36 @@ export const InsightDetail: React.FC = () => {
               <strong>{article.author.name}</strong> — {article.author.role}. Insights by our {article.author.role.toLowerCase()} team at Azaroth Tech-Hive.
             </p>
           </Card>
+          </Reveal>
 
-          <div style={{ marginTop: '3.5rem', textAlign: 'center' }}>
+          <Reveal style={{ marginTop: '3.5rem', textAlign: 'center' }}>
             <Button to="/connect-with-us" variant="primary" size="md">
               Consult with Our Principal Architects on Your Architecture
             </Button>
-          </div>
+          </Reveal>
         </div>
       </section>
+
+      <style>{`
+        .insight-body-grid aside {
+          position: sticky;
+          top: 6.5rem;
+        }
+
+        @media (max-width: 900px) {
+          .insight-body-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 1.5rem !important;
+          }
+
+          .insight-body-grid aside {
+            position: static !important;
+          }
+        }
+      `}</style>
+
+      {/* Common Final CTA */}
+      <FinalCTA />
     </div>
   );
 };

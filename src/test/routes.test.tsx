@@ -12,6 +12,7 @@ const routes: Array<{ path: string }> = [
   { path: '/products/fitness-management-platform' },
   { path: '/products/not-a-real-product' },
   { path: '/services' },
+  { path: '/service' },
   { path: '/portfolio' },
   { path: '/technology-insights' },
   { path: '/technology-insights/scaling-event-streaming-zero-data-loss' },

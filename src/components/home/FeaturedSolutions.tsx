@@ -139,9 +139,6 @@ export const FeaturedSolutions: React.FC = () => {
         <div
           className="featured-services-grid"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-            gap: "1.25rem",
             alignItems: "stretch",
             width: "100%",
           }}

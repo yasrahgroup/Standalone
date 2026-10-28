@@ -660,8 +660,7 @@ import {
   Users,
   TrendingUp,
 } from "lucide-react";
-import { companyVisionMission, ourValuesPrinciples } from "../data/companyData";
-import { Button } from "../components/common/Button";
+import { ourValuesPrinciples } from "../data/companyData";
 import { Card } from "../components/common/Card";
 import { SEOHead } from "../components/common/SEOHead";
 import { PageHeader } from "../components/common/PageHeader";
@@ -728,13 +727,13 @@ export const About: React.FC = () => {
     }
   };
 
-  const scrollToAnchor = (id: string) => {
-    const elem = document.getElementById(id);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.pushState(null, "", `#${id}`);
-    }
-  };
+  // const scrollToAnchor = (id: string) => {
+  //   const elem = document.getElementById(id);
+  //   if (elem) {
+  //     elem.scrollIntoView({ behavior: "smooth", block: "start" });
+  //     window.history.pushState(null, "", `#${id}`);
+  //   }
+  // };
 
   // Smooth scroll to anchor on initial load or location hash updates
   useEffect(() => {
@@ -835,6 +834,10 @@ export const About: React.FC = () => {
                   fontSize: "clamp(2rem, 3.5vw, 2.875rem)",
                   fontWeight: 800,
                   color: "var(--color-text-primary, #1E293B)",
+                  background: "var(--gradient-heading)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
                   letterSpacing: "-0.03em",
                   lineHeight: 1.15,
                   margin: "0 0 1.5rem",
@@ -872,6 +875,7 @@ export const About: React.FC = () => {
               {/* Company highlights */}
 
               <div
+                className="about-highlights"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -911,6 +915,7 @@ export const About: React.FC = () => {
                     }}
                   >
                     <div
+                      className="about-highlight-title"
                       style={{
                         fontSize: "1rem",
                         fontWeight: 800,
@@ -925,6 +930,7 @@ export const About: React.FC = () => {
                     </div>
 
                     <div
+                      className="about-highlight-subtitle"
                       style={{
                         fontSize: "0.8125rem",
                         color: "var(--color-text-secondary, #64748B)",
@@ -938,22 +944,6 @@ export const About: React.FC = () => {
                   </div>
                 ))}
               </div>
-
-              {/* CTA Buttons */}
-              {/* <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "2rem" }}>
-                <Button
-                  onClick={() => scrollToAnchor("delivery-framework")}
-                  variant="primary"
-                >
-                  Explore Delivery Framework
-                </Button>
-                <Button
-                  onClick={() => scrollToAnchor("our-values")}
-                  variant="outline"
-                >
-                  Our Engineering Values
-                </Button>
-              </div> */}
             </div>
 
             {/* RIGHT: Workspace image and uptime badge */}
@@ -1079,7 +1069,7 @@ export const About: React.FC = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={{
               textAlign: "left",
-              maxWidth: "780px",
+              maxWidth: "1300px",
               margin: "0 0 3.5rem 0",
             }}
           >
@@ -1127,6 +1117,7 @@ export const About: React.FC = () => {
                 color: "var(--color-text-secondary, #64748B)",
                 lineHeight: 1.7,
                 margin: 0,
+                textAlign: "justify",
                 fontFamily: "var(--font-body)",
               }}
             >
@@ -1142,7 +1133,7 @@ export const About: React.FC = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
               gap: "2.25rem",
             }}
           >
@@ -1270,7 +1261,7 @@ export const About: React.FC = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={{
               textAlign: "left",
-              maxWidth: "780px",
+              maxWidth: "1300px",
               margin: "0 0 3.5rem 0",
             }}
           >
@@ -1301,7 +1292,7 @@ export const About: React.FC = () => {
                 fontFamily: "var(--font-heading)",
               }}
             >
-              Our Delivery Framework &mdash;{" "}
+              {/* Our Delivery Framework &mdash;{" "} */}
               <span
                 style={{
                   background: "var(--gradient-heading)",
@@ -1340,6 +1331,37 @@ export const About: React.FC = () => {
           </motion.div>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .about-story-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 2.5rem !important;
+          }
+
+          .about-highlights {
+            flex-wrap: wrap;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .about-highlights {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem !important;
+            padding: 1.25rem !important;
+          }
+
+          .about-highlight-title,
+          .about-highlight-subtitle {
+            white-space: normal !important;
+          }
+
+          .about-story-image {
+            height: 260px !important;
+          }
+        }
+      `}</style>
 
       {/* Global Conversion Portal */}
       <FinalCTA />

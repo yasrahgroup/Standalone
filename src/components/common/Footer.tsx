@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Linkedin, Cookie } from "lucide-react";
-import logoImg from "../../assets/Logo.png";
+import faviconImg from "../../assets/Favicon.png";
 import { useCMS } from "../../context/CMSContext";
 
 export const Footer: React.FC = () => {
   const { settings } = useCMS();
+
+  // Ignore the legacy "/Logo.png" override so the new favicon mark is used.
+  const cmsLogo = settings?.logoUrl;
+  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : faviconImg;
 
   const phone = settings?.phone || settings?.primary_phone || "+974 1234 5678";
   const email =
@@ -15,8 +19,7 @@ export const Footer: React.FC = () => {
   const address =
     settings?.headquarters || settings?.headquarters_address || "Doha, Qatar";
   const copyright =
-    settings?.copyright_text ||
-    "All rights reserved © 2026 Azaroth Tech-Hive Inc";
+    settings?.copyright_text || "All rights reserved © 2026 Azaroth Tech-Hive ";
   const isReversed = (settings?.footerLayout || "reversed") === "reversed";
 
   // Social Icons Component
@@ -167,7 +170,7 @@ export const Footer: React.FC = () => {
         }}
       >
         <img
-          src={settings?.logoUrl || logoImg}
+          src={brandIcon}
           alt={settings?.companyName || "Azaroth Techhive Logo"}
           style={{
             maxHeight: "2.5rem",
@@ -192,8 +195,8 @@ export const Footer: React.FC = () => {
             style={{
               fontSize: "0.625rem",
               fontWeight: 700,
-              color: "#49243F",
-              letterSpacing: "0.22em",
+            color: "var(--color-brand-gold, #C99B52)",
+            letterSpacing: "0.22em",
               textTransform: "uppercase",
             }}
           >
@@ -243,6 +246,20 @@ export const Footer: React.FC = () => {
       >
         <li>
           <Link
+            to="/portfolio"
+            style={{
+              color: "#94A3B8",
+              textDecoration: "none",
+              fontSize: "0.875rem",
+              transition: "color 160ms",
+            }}
+            className="hover:text-rose-400"
+          >
+            Our Portfolio
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/products"
             style={{
               color: "#94A3B8",
@@ -257,7 +274,7 @@ export const Footer: React.FC = () => {
         </li>
         <li>
           <Link
-            to="/services"
+            to="/service"
             style={{
               color: "#94A3B8",
               textDecoration: "none",
@@ -399,7 +416,7 @@ export const Footer: React.FC = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
             gap: "3rem",
             marginBottom: "3.5rem",
           }}

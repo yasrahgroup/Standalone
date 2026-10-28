@@ -47,7 +47,7 @@ export const IndustryExpertise: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'left', width: '104%', margin: '0 0 2rem 0' }}
+          style={{ textAlign: 'left', width: '100%', margin: '0 0 2rem 0' }}
         >
           {/* <spantextAlign: 'left'
             style={{
@@ -190,7 +190,10 @@ export const IndustryExpertise: React.FC = () => {
             })}
           </motion.div>
 
+          {/* The key remounts this panel whenever the selected industry changes,
+              so the fade-up animation plays again for every selection. */}
           <motion.div
+            key={industry.id}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: '-100px' }}

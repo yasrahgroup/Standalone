@@ -35,6 +35,7 @@ export interface ServiceOffering {
   category: string;
   badge?: string;
   description: string;
+  bestFor?: string;
   outcomes: string[];
   deliverables: string[];
   capabilities?: string[];

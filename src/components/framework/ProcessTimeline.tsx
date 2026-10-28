@@ -20,17 +20,14 @@ export const ProcessTimeline: React.FC = () => {
         @media (max-width: 640px) {
           .process-pill-button {
             padding: 0.5rem 0.875rem !important;
-            fontSize: 0.8rem !important;
-          }
-          .process-pill-button span:nth-child(3) {
-            display: none !important;
+            font-size: 0.8rem !important;
           }
         }
       `}</style>
       <div
         style={{
           display: "flex",
-          // flexWrap: "wrap",
+          flexWrap: "wrap",
           gap: "0.75rem",
           justifyContent: "center",
           padding: "0.75rem",
@@ -182,7 +179,7 @@ export const ProcessTimeline: React.FC = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
                 gap: "2rem",
               }}
             >

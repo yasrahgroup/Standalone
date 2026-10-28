@@ -3,6 +3,8 @@ import { Badge } from "../components/common/Badge";
 import { Card } from "../components/common/Card";
 import { SEOHead } from "../components/common/SEOHead";
 import { useCMS } from "../context/CMSContext";
+import { FinalCTA } from "../components/home/FinalCTA";
+import { Reveal } from "../components/common/Reveal";
 
 export const PrivacyPolicy: React.FC = () => {
   const { pages } = useCMS();
@@ -12,7 +14,7 @@ export const PrivacyPolicy: React.FC = () => {
   const title = pageData?.title || "Enterprise Privacy Policy";
   const effectiveDate =
     content.effectiveDate ||
-    "Effective Date: October 2026 • Azaroth Tech-Hive Inc.";
+    "Effective Date: October 2026 • Azaroth Tech-Hive .";
   const bodyMarkdown = content.bodyMarkdown;
 
   return (
@@ -33,7 +35,7 @@ export const PrivacyPolicy: React.FC = () => {
           paddingBottom: "3.5rem",
         }}
       >
-        <div className="container-prose" style={{ textAlign: "center" }}>
+        <Reveal className="container-prose" style={{ textAlign: "center" }}>
           <Badge variant="emerald" style={{ marginBottom: "1rem" }}>
             Statutory Compliance
           </Badge>
@@ -50,11 +52,11 @@ export const PrivacyPolicy: React.FC = () => {
           <p style={{ color: "var(--color-text-secondary)" }}>
             {effectiveDate}
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="section" style={{ backgroundColor: "#ffffff" }}>
-        <div className="container-prose">
+        <Reveal className="container-prose">
           <Card
             variant="solid"
             padding="lg"
@@ -116,17 +118,15 @@ export const PrivacyPolicy: React.FC = () => {
                 <p style={{ lineHeight: 1.7 }}>
                   For data protection officer (DPO) inquiries, contact:
                   <br />
-                  <strong>Azaroth Tech-Hive Data Governance Office</strong>
-                  <br />
-                  24, Malaviya Avenue, Thiruvanmiyur, Chennai, India
-                  <br />
                   Email: <code>support@azaroth-techhive.com</code>
                 </p>
               </>
             )}
           </Card>
-        </div>
+        </Reveal>
       </section>
+
+      <FinalCTA />
     </div>
   );
 };

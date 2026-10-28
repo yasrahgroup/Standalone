@@ -151,7 +151,7 @@ test.describe('Azaroth Tech-Hive Comprehensive Playwright Suite', () => {
     await expect(footer).toContainText('24, Malaviya Avenue, Thiruvanmiyur, Chennai, India');
     await expect(footer).toContainText('+91 6379480931');
     await expect(footer).toContainText('hello@azaroth-techhive.com');
-    await expect(footer).toContainText('All rights reserved © 2026 Azaroth Tech-Hive Inc');
+    await expect(footer).toContainText('All rights reserved © 2026 Azaroth Tech-Hive ');
 
     // Check Privacy Policy link and page
     await page.goto('/privacy-policy');

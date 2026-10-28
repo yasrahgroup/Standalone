@@ -2,7 +2,7 @@ import { DeliveryStage } from '../types';
 
 export const deliveryFrameworkMeta = {
   title: 'Our Delivery Framework',
-  subtitle: 'A Clear Path from Idea to Impact',
+  subtitle: 'AOur Approach to Engineering Excellence',
   description: 'A structured, collaborative approach that brings clarity to every stage of software development, ensuring solutions remain aligned with project goals, built on sound engineering practices, and adaptable to evolving needs.',
 };
 

@@ -26,7 +26,7 @@ const projects: ProjectItem[] = [
     image: ecommercePlatformImg,
     description:
       "High-concurrency headless digital storefront with sub-second checkout and real-time inventory synchronization.",
-    link: "/portfolio#e-commerce-platform",
+    link: "/products?product=omnichannel-commerce-platform",
   },
   {
     id: "mobile-banking-app",
@@ -35,7 +35,7 @@ const projects: ProjectItem[] = [
     image: mobileBankingAppImg,
     description:
       "Biometric-secured iOS and Android banking app featuring instant payments, budget analytics, and multi-currency accounts.",
-    link: "/portfolio#mobile-banking-app",
+    link: "/portfolio#capabilities",
   },
   {
     id: "analytics-dashboard",
@@ -44,7 +44,7 @@ const projects: ProjectItem[] = [
     image: analyticsDashboardImg,
     description:
       "Real-time telemetry and executive data warehouse dashboard processing millions of events per minute.",
-    link: "/portfolio#analytics-dashboard",
+    link: "/portfolio#capabilities",
   },
   {
     id: "creative-portfolio",
@@ -53,7 +53,7 @@ const projects: ProjectItem[] = [
     image: creativePortfolioImg,
     description:
       "Bespoke design portfolio and digital asset exhibition engineered with fluid micro-interactions and spatial design.",
-    link: "/portfolio#creative-portfolio",
+    link: "/portfolio#capabilities",
   },
 ];
 
@@ -717,10 +717,10 @@ export const StrategicSolutions: React.FC = () => {
         }
         @media (min-width: 640px) {
           .slider-nav-btn-prev {
-            left: -1.25rem !important;
+            left: 0.25rem !important;
           }
           .slider-nav-btn-next {
-            right: -1.25rem !important;
+            right: 0.25rem !important;
           }
         }
         @media (max-width: 767px) {

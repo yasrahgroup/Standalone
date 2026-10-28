@@ -1,347 +1,4 @@
-// import React, { useState } from 'react';
-// import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
-// import { ContactFormData } from '../../types';
-// import { Button } from '../common/Button';
-// import { apiService, ContactSubmission } from '../../services/api';
-// import { companyInfo } from '../../data/companyData';
-
-// const WHATSAPP_URL = `https://wa.me/${companyInfo.headquarters.whatsapp.replace(/[^0-9]/g, '')}`;
-// const FALLBACK_EMAIL = 'hello@azaroth-techhive.com';
-// const FALLBACK_PHONE = '+916379480931';
-
-// export const ContactForm: React.FC = () => {
-//   const [formData, setFormData] = useState<ContactFormData>({
-//     fullName: '',
-//     workEmail: '',
-//     phone: '',
-//     companyName: '',
-//     enquiryAbout: 'General',
-//     message: '',
-//     consent: false,
-//     website_url: '', // Honeypot field
-//   });
-
-//   const [errors, setErrors] = useState<Record<string, string>>({});
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const [submitted, setSubmitted] = useState(false);
-//   const [submissionError, setSubmissionError] = useState<string | null>(null);
-
-//   const validate = () => {
-//     const errs: Record<string, string> = {};
-//     if (!formData.fullName.trim()) errs.fullName = 'Full Name is required.';
-//     if (!formData.workEmail.trim()) {
-//       errs.workEmail = 'Work Email is required.';
-//     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.workEmail)) {
-//       errs.workEmail = 'Please provide a valid email address.';
-//     }
-//     if (!formData.companyName.trim()) errs.companyName = 'Company name is required.';
-//     if (!formData.enquiryAbout || formData.enquiryAbout.trim() === '') {
-//       errs.enquiryAbout = 'Please select an enquiry type.';
-//     }
-//     if (!formData.message.trim() || formData.message.length < 10) {
-//       errs.message = 'Please provide at least a brief summary of your requirements (min 10 characters).';
-//     }
-//     if (!formData.consent) {
-//       errs.consent = 'Please confirm you agree to be contacted about your enquiry.';
-//     }
-//     setErrors(errs);
-//     return Object.keys(errs).length === 0;
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     // Bot check
-//     if (formData.website_url) {
-//       return;
-//     }
-
-//     if (!validate()) return;
-
-//     setIsSubmitting(true);
-//     setSubmissionError(null);
-
-//     try {
-//       const submissionData: ContactSubmission = {
-//         fullName: formData.fullName,
-//         workEmail: formData.workEmail,
-//         phone: formData.phone,
-//         companyName: formData.companyName,
-//         enquiryAbout: formData.enquiryAbout,
-//         message: formData.message,
-//         consent: formData.consent,
-//       };
-
-//       const response = await apiService.submitContactForm(submissionData);
-
-//       if (response.success) {
-//         setSubmitted(true);
-//       } else {
-//         setSubmissionError(response.error || 'Failed to submit form. Please try again.');
-//       }
-//     } catch (error) {
-//       setSubmissionError('An unexpected error occurred. Please try again.');
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   if (submitted) {
-//     return (
-//       <div aria-live="polite" style={{
-//         padding: '3rem 2rem',
-//         borderRadius: 'var(--radius-xl)',
-//         backgroundColor: '#ffffff',
-//         border: '1px solid var(--color-success-border, #A7F3D0)',
-//         textAlign: 'center',
-//         boxShadow: '0 20px 40px -15px rgba(4, 120, 87, 0.12)',
-//       }}>
-//         <div style={{
-//           width: '4rem',
-//           height: '4rem',
-//           borderRadius: '50%',
-//           backgroundColor: 'var(--color-success-light, #ECFDF5)',
-//           color: 'var(--color-success, #047857)',
-//           display: 'flex',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//           margin: '0 auto 1.5rem auto',
-//         }}>
-//           <CheckCircle2 size={36} />
-//         </div>
-
-//         <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-text-primary, #1F2937)', marginBottom: '0.75rem' }}>
-//           Message Received
-//         </h3>
-
-//         <p style={{ maxWidth: '480px', margin: '0 auto 2rem auto', color: 'var(--color-text-secondary, #4B5563)', lineHeight: 1.6 }}>
-//           Thank you, <strong>{formData.fullName}</strong>. We have received your enquiry and will respond soon.
-//         </p>
-
-//         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-//           <Button
-//             onClick={() => {
-//               setSubmitted(false);
-//               setFormData({
-//                 fullName: '',
-//                 workEmail: '',
-//                 phone: '',
-//                 companyName: '',
-//                 enquiryAbout: 'General',
-//                 message: '',
-//                 consent: false,
-//                 website_url: '',
-//               });
-//               setErrors({});
-//             }}
-//             variant="outline"
-//             size="sm"
-//           >
-//             Send Another Enquiry
-//           </Button>
-
-//           <Button
-//             href={WHATSAPP_URL}
-//             variant="primary"
-//             size="sm"
-//           >
-//             Instant WhatsApp Chat
-//           </Button>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <form onSubmit={handleSubmit} style={{
-//       backgroundColor: '#ffffff',
-//       padding: '2.5rem',
-//       borderRadius: 'var(--radius-xl)',
-//       border: '1px solid var(--color-border-subtle)',
-//       boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.06)',
-//     }}>
-//       {/* Honeypot Input */}
-//       <input
-//         type="text"
-//         name="website_url"
-//         value={formData.website_url}
-//         onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
-//         style={{ display: 'none' }}
-//         tabIndex={-1}
-//         autoComplete="off"
-//       />
-
-//       <div style={{
-//         display: 'grid',
-//         gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-//         gap: '1.25rem',
-//       }}>
-
-//         {/* Full Name */}
-//         <div className="form-group">
-//           <label className="form-label" htmlFor="fullName">Full Name *</label>
-//           <input
-//             id="fullName"
-//             type="text"
-//             className="form-input"
-//             placeholder="Enter your full name"
-//             value={formData.fullName}
-//             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-//             aria-invalid={Boolean(errors.fullName)}
-//             aria-describedby={errors.fullName ? 'contact-fullName-error' : undefined}
-//           />
-//           {errors.fullName && <span id="contact-fullName-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.fullName}</span>}
-//         </div>
-
-//         {/* Work Email */}
-//         <div className="form-group">
-//           <label className="form-label" htmlFor="workEmail">Work Email *</label>
-//           <input
-//             id="workEmail"
-//             type="email"
-//             className="form-input"
-//             placeholder="Enter your business email"
-//             value={formData.workEmail}
-//             onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
-//             aria-invalid={Boolean(errors.workEmail)}
-//             aria-describedby={errors.workEmail ? 'contact-workEmail-error' : undefined}
-//           />
-//           {errors.workEmail && <span id="contact-workEmail-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.workEmail}</span>}
-//         </div>
-
-//         {/* Company Name */}
-//         <div className="form-group">
-//           <label className="form-label" htmlFor="companyName">Company / Organization *</label>
-//           <input
-//             id="companyName"
-//             type="text"
-//             className="form-input"
-//             placeholder="Enter your company name"
-//             value={formData.companyName}
-//             onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-//             aria-invalid={Boolean(errors.companyName)}
-//             aria-describedby={errors.companyName ? 'contact-companyName-error' : undefined}
-//           />
-//           {errors.companyName && <span id="contact-companyName-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.companyName}</span>}
-//         </div>
-
-//         {/* Phone */}
-//         <div className="form-group">
-//           <label className="form-label" htmlFor="phone">Phone / WhatsApp Number</label>
-//           <input
-//             id="phone"
-//             type="tel"
-//             className="form-input"
-//             placeholder="Enter your phone number"
-//             value={formData.phone}
-//             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-//             aria-invalid={Boolean(errors.phone)}
-//             aria-describedby={errors.phone ? 'contact-phone-error' : undefined}
-//           />
-//           {errors.phone && <span id="contact-phone-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.phone}</span>}
-//         </div>
-
-//       </div>
-
-//       {/* Enquiry About */}
-//       <div className="form-group" style={{ marginTop: '0.5rem' }}>
-//           <label className="form-label" htmlFor="enquiryAbout">Enquiry About *</label>
-//           <select
-//             id="enquiryAbout"
-//             className="form-select"
-//             value={formData.enquiryAbout}
-//             onChange={(e) => setFormData({ ...formData, enquiryAbout: e.target.value })}
-//             aria-invalid={Boolean(errors.enquiryAbout)}
-//             aria-describedby={errors.enquiryAbout ? 'contact-enquiryAbout-error' : undefined}
-//           >
-//             <option value="" disabled>Select an option</option>
-//             <option value="General">General</option>
-//             <option value="Products">Products</option>
-//             <option value="Services">Services</option>
-//             <option value="Enquiries">Enquiries</option>
-//             <option value="Request for Quote">Request for Quote</option>
-//           </select>
-//           {errors.enquiryAbout && <span id="contact-enquiryAbout-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.enquiryAbout}</span>}
-//         </div>
-
-//       {/* How Can We Help */}
-//       <div className="form-group" style={{ marginTop: '0.5rem' }}>
-//         <label className="form-label" htmlFor="message">How Can We Help? *</label>
-//         <textarea
-//           id="message"
-//           rows={4}
-//           className="form-textarea"
-//           placeholder="Describe your requirements or questions in detail..."
-//           value={formData.message}
-//           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-//           aria-invalid={Boolean(errors.message)}
-//           aria-describedby={errors.message ? 'contact-message-error' : undefined}
-//         />
-//         {errors.message && <span id="contact-message-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.message}</span>}
-//       </div>
-
-//       {/* Consent Checkbox */}
-//       <div className="form-group" style={{ marginTop: '1rem' }}>
-//         <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.875rem', color: 'var(--color-text-secondary)', cursor: 'pointer' }}>
-//           <input
-//             type="checkbox"
-//             checked={formData.consent}
-//             onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
-//             style={{ marginTop: '0.2rem' }}
-//             aria-invalid={Boolean(errors.consent)}
-//             aria-describedby={errors.consent ? 'contact-consent-error' : undefined}
-//           />
-//           <span>
-//             I agree that Azaroth Tech-Hive may contact me about this enquiry in accordance with the{' '}
-//             <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-link-main, #4338CA)', textDecoration: 'underline' }}>
-//               Privacy Policy
-//             </a>.
-//           </span>
-//         </label>
-//         {errors.consent && <span id="contact-consent-error" role="alert" className="form-error"><AlertCircle size={13} /> {errors.consent}</span>}
-//       </div>
-
-//       {/* Submission Error */}
-//       {submissionError && (
-//         <div role="alert" style={{
-//           marginTop: '1rem',
-//           padding: '0.75rem',
-//           backgroundColor: 'var(--color-alert-light, #FFE4E6)',
-//           border: '1px solid var(--color-alert-border, #FECDD3)',
-//           borderRadius: 'var(--radius-md)',
-//           color: 'var(--color-alert, #E11D48)',
-//           fontSize: '0.875rem',
-//         }}>
-//           <div>
-//             <AlertCircle size={14} style={{ display: 'inline', marginRight: '0.5rem' }} />
-//             {submissionError}
-//           </div>
-//           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.5rem' }}>
-//             <a href={`mailto:${FALLBACK_EMAIL}`} style={{ color: 'var(--color-alert, #E11D48)', fontWeight: 600 }}>
-//               Email us directly
-//             </a>
-//             <a href={`tel:${FALLBACK_PHONE}`} style={{ color: 'var(--color-alert, #E11D48)', fontWeight: 600 }}>
-//               Call +91 6379480931
-//             </a>
-//           </div>
-//         </div>
-//       )}
-
-//       <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
-//         <Button
-//           type="submit"
-//           variant="primary"
-//           size="lg"
-//           disabled={isSubmitting}
-//           icon={<Send size={16} />}
-//         >
-//           {isSubmitting ? 'Submitting...' : 'Submit'}
-//         </Button>
-//       </div>
-//     </form>
-//   );
-// };
-
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Send,
   CheckCircle2,
@@ -350,7 +7,7 @@ import {
   FileText,
   X,
 } from "lucide-react";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { getCountryCallingCode, type Country } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { ContactFormData } from "../../types";
 import { Button } from "../common/Button";
@@ -366,8 +23,6 @@ const ALLOWED_FILE_EXTENSIONS = /\.(pdf|docx|xlsx|png|jpe?g|zip)$/i;
 type ProjectContactFormData = ContactFormData & {
   country: string;
   projectScope: string;
-  projectTimeline: string;
-  estimatedBudget: string;
 };
 
 const initialFormData: ProjectContactFormData = {
@@ -381,8 +36,6 @@ const initialFormData: ProjectContactFormData = {
   website_url: "",
   country: "",
   projectScope: "",
-  projectTimeline: "",
-  estimatedBudget: "",
 };
 
 const countryOptions = [
@@ -456,6 +109,88 @@ const countryOptions = [
   "Other",
 ];
 
+interface CountryOption {
+  value?: string;
+  label: string;
+  divider?: boolean;
+}
+
+interface CountrySelectProps {
+  value?: string;
+  options: CountryOption[];
+  onChange: (value?: string) => void;
+  iconComponent: React.ComponentType<{
+    country?: string;
+    label: string;
+    "aria-hidden"?: React.AriaAttributes["aria-hidden"];
+  }>;
+  className?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+  name?: string;
+  onFocus?: React.FocusEventHandler<HTMLSelectElement>;
+  onBlur?: React.FocusEventHandler<HTMLSelectElement>;
+  "aria-label"?: string;
+}
+
+/**
+ * Compact country selector: flag, country code, and code share one control.
+ * The native <select> stays invisible on top so keyboard and screen-reader
+ * behaviour is unchanged.
+ */
+const CountrySelect: React.FC<CountrySelectProps> = ({
+  value,
+  options,
+  onChange,
+  iconComponent: CountryIcon,
+  className = "",
+  ...selectProps
+}) => {
+  const selectedOption = options.find(
+    (option) => !option.divider && option.value === value,
+  );
+
+  return (
+    <div className={`PhoneInputCountry ${className}`.trim()}>
+      <select
+        {...selectProps}
+        className="PhoneInputCountrySelect"
+        value={value ?? "ZZ"}
+        onChange={(event) =>
+          onChange(event.target.value === "ZZ" ? undefined : event.target.value)
+        }
+      >
+        {options.map((option) => {
+          const optionValue = option.divider ? "|" : option.value ?? "ZZ";
+          return (
+            <option
+              key={optionValue}
+              value={optionValue}
+              disabled={option.divider}
+            >
+              {option.label}
+            </option>
+          );
+        })}
+      </select>
+
+      <CountryIcon
+        aria-hidden="true"
+        country={value}
+        label={selectedOption?.label ?? "Country"}
+      />
+
+      {value && (
+        <span className="PhoneInputCountryCode" aria-hidden="true">
+          +{getCountryCallingCode(value as Country)}
+        </span>
+      )}
+
+      <div className="PhoneInputCountrySelectArrow" />
+    </div>
+  );
+};
+
 export const ContactForm: React.FC = () => {
   const [formData, setFormData] =
     useState<ProjectContactFormData>(initialFormData);
@@ -466,12 +201,70 @@ export const ContactForm: React.FC = () => {
   const [projectDocuments, setProjectDocuments] = useState<File[]>([]);
   const [documentError, setDocumentError] = useState("");
 
+  // Custom country dropdown state (native datalist cannot be themed).
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [activeCountryIndex, setActiveCountryIndex] = useState(-1);
+  const countryFieldRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        countryFieldRef.current &&
+        !countryFieldRef.current.contains(event.target as Node)
+      ) {
+        setCountryOpen(false);
+        setActiveCountryIndex(-1);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const updateField = <K extends keyof ProjectContactFormData>(
     field: K,
     value: ProjectContactFormData[K],
   ) => {
     setFormData((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: "" }));
+  };
+
+  const countryQuery = formData.country.trim().toLowerCase();
+  const hasExactCountryMatch = countryOptions.some(
+    (country) => country.toLowerCase() === countryQuery,
+  );
+  const filteredCountries =
+    !countryQuery || hasExactCountryMatch
+      ? countryOptions
+      : countryOptions.filter((country) =>
+          country.toLowerCase().includes(countryQuery),
+        );
+
+  const selectCountry = (country: string) => {
+    updateField("country", country);
+    setCountryOpen(false);
+    setActiveCountryIndex(-1);
+  };
+
+  const handleCountryKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setCountryOpen(true);
+      setActiveCountryIndex((current) =>
+        Math.min(current + 1, filteredCountries.length - 1),
+      );
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveCountryIndex((current) => Math.max(current - 1, 0));
+    } else if (event.key === "Enter" && countryOpen && activeCountryIndex >= 0) {
+      event.preventDefault();
+      selectCountry(filteredCountries[activeCountryIndex]);
+    } else if (event.key === "Escape") {
+      setCountryOpen(false);
+      setActiveCountryIndex(-1);
+    }
   };
 
   const validate = () => {
@@ -503,15 +296,6 @@ export const ContactForm: React.FC = () => {
         "Project scope and technical requirements are required.";
     } else if (formData.projectScope.trim().length < 10) {
       nextErrors.projectScope = "Please provide at least 10 characters.";
-    }
-
-    if (!formData.projectTimeline) {
-      nextErrors.projectTimeline =
-        "Please select an expected project timeline.";
-    }
-
-    if (!formData.estimatedBudget) {
-      nextErrors.estimatedBudget = "Please select an estimated budget range.";
     }
 
     if (!formData.consent) {
@@ -574,8 +358,6 @@ export const ContactForm: React.FC = () => {
         "PROJECT ENQUIRY",
         "",
         `Country / Region: ${formData.country.trim()}`,
-        `Expected Project Timeline: ${formData.projectTimeline}`,
-        `Estimated Budget Range: ${formData.estimatedBudget}`,
         "",
         "Project Scope & Technical Requirements:",
         formData.projectScope.trim(),
@@ -613,64 +395,19 @@ export const ContactForm: React.FC = () => {
 
   if (submitted) {
     return (
-      <div
-        aria-live="polite"
-        style={{
-          padding: "3rem 2rem",
-          borderRadius: "var(--radius-xl)",
-          backgroundColor: "#ffffff",
-          border: "1px solid var(--color-success-border, #A7F3D0)",
-          textAlign: "center",
-          boxShadow: "0 20px 40px -15px rgba(4, 120, 87, 0.12)",
-        }}
-      >
-        <div
-          style={{
-            width: "4rem",
-            height: "4rem",
-            borderRadius: "50%",
-            backgroundColor: "var(--color-success-light, #ECFDF5)",
-            color: "var(--color-success, #047857)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 1.5rem",
-          }}
-        >
-          <CheckCircle2 size={36} />
+      <div aria-live="polite" className="project-enquiry-success">
+        <div className="project-enquiry-success-icon">
+          <CheckCircle2 size={36} aria-hidden="true" />
         </div>
 
-        <h3
-          style={{
-            fontSize: "1.75rem",
-            fontWeight: 800,
-            color: "var(--color-text-primary, #1F2937)",
-            marginBottom: "0.75rem",
-          }}
-        >
-          Project Enquiry Received
-        </h3>
+        <h3>Project Enquiry Received</h3>
 
-        <p
-          style={{
-            maxWidth: "480px",
-            margin: "0 auto 2rem",
-            color: "var(--color-text-secondary, #4B5563)",
-            lineHeight: 1.6,
-          }}
-        >
-          Thank you, <strong>{formData.fullName}</strong>. We have received your
-          project enquiry and will respond soon.
+        <p>
+          Thank you, <strong>{formData.fullName}</strong>. A solution architect
+          will review your brief and reply within one business day.
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="project-enquiry-success-actions">
           <Button
             onClick={() => {
               setSubmitted(false);
@@ -695,35 +432,64 @@ export const ContactForm: React.FC = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      style={{
-        backgroundColor: "#ffffff",
-        padding: "2.5rem",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--color-border-subtle)",
-        boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.06)",
-      }}
-    >
+    <form onSubmit={handleSubmit} noValidate className="project-enquiry-form">
       <style>{`
 /* Project enquiry form */
+.project-enquiry-form {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #ece5ef;
+  border-radius: var(--radius-xl, 20px);
+  box-shadow: 0 24px 48px -28px rgba(48, 32, 57, 0.22);
+}
+
+/* Header band: sets the "solution architect" context before the fields. */
+.project-form-intro {
+  padding: 2rem 2.5rem 1.75rem;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(201, 155, 82, 0.14) 0%, rgba(201, 155, 82, 0) 55%),
+    linear-gradient(135deg, #fbf8fc 0%, #fdfbf7 60%, #ffffff 100%);
+  border-bottom: 1px solid #f1eaf3;
+}
+
+.project-form-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: #8a6a3f;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-form-title {
+  margin: 0;
+  color: #302039;
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.project-enquiry-body {
+  padding: 2rem 2.5rem 2.5rem;
+}
+
 .project-enquiry-section {
   margin-top: 2rem;
 }
 
-.project-enquiry-heading {
-  margin: 0 0 0.5rem;
-  color: #302039;
-  font-size: 1.25rem;
-  font-weight: 700;
+.project-enquiry-section:first-of-type {
+  margin-top: 0;
 }
 
-.project-enquiry-subtitle {
-  margin: 0 0 1.25rem;
-  color: #64748b;
-  font-size: 0.9rem;
-  line-height: 1.6;
+.project-enquiry-heading {
+  margin: 0 0 1rem;
+  color: #302039;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .project-enquiry-grid {
@@ -732,14 +498,12 @@ export const ContactForm: React.FC = () => {
   gap: 1.25rem;
 }
 
-@media (max-width: 768px) {
-  .project-enquiry-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .project-enquiry-section .form-group {
   min-width: 0;
+}
+
+.project-country-field {
+  grid-column: 1 / -1;
 }
 
 .project-enquiry-section .form-input,
@@ -752,13 +516,81 @@ export const ContactForm: React.FC = () => {
   box-sizing: border-box;
 }
 
-/* Keep Country / Region aligned with the other fields. */
+/* Country / Region uses the shared input styles plus a full-width slot. */
 .country-input {
   display: block;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+}
+
+.country-select {
+  position: relative;
+}
+
+.country-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 240px;
+  margin: 0;
+  padding: 0.35rem;
+  overflow-y: auto;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 14px 32px -12px rgba(15, 23, 42, 0.25);
+}
+
+.country-options li {
+  margin: 0;
+}
+
+.country-option {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #334155;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.country-option:hover,
+.country-option.is-active {
+  background: rgba(73, 36, 63, 0.07);
+  color: #49243f;
+}
+
+.country-option[aria-selected="true"] {
+  color: #49243f;
+  font-weight: 700;
+}
+
+.country-empty {
+  padding: 0.75rem 0.7rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.project-enquiry-body .form-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .optional-label {
@@ -842,13 +674,6 @@ export const ContactForm: React.FC = () => {
   color: #9f1239;
 }
 
-.project-upload-note {
-  margin: 0.75rem 0 0;
-  color: #92400e;
-  font-size: 0.8rem;
-  line-height: 1.5;
-}
-
 .project-consent-label {
   display: flex;
   align-items: flex-start;
@@ -899,25 +724,85 @@ export const ContactForm: React.FC = () => {
 
 .project-form-submit {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1.75rem;
+}
+
+.project-form-submit .btn {
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+/* Success state shown after a successful submission. */
+.project-enquiry-success {
+  padding: 3rem 2rem;
+  border-radius: var(--radius-xl, 20px);
+  background: #ffffff;
+  border: 1px solid var(--color-success-border, #a7f3d0);
+  text-align: center;
+  box-shadow: 0 20px 40px -15px rgba(4, 120, 87, 0.12);
+}
+
+.project-enquiry-success-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: var(--color-success-light, #ecfdf5);
+  color: var(--color-success, #047857);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-enquiry-success h3 {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-primary, #1f2937);
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.project-enquiry-success p {
+  max-width: 460px;
+  margin: 0 auto 2rem;
+  color: var(--color-text-secondary, #4b5563);
+  line-height: 1.6;
+}
+
+.project-enquiry-success-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 640px) {
+  .project-form-intro {
+    padding: 1.75rem 1.25rem 1.5rem;
+  }
+
+  .project-enquiry-body {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+
   .project-enquiry-grid {
     grid-template-columns: 1fr;
   }
 
   .project-enquiry-heading {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
-  .project-form-submit {
-    justify-content: stretch;
+  .project-enquiry-success {
+    padding: 2.5rem 1.25rem;
   }
 
-  .project-form-submit > * {
-    width: 100%;
+  .project-enquiry-success h3 {
+    font-size: 1.5rem;
   }
 }
 
@@ -927,32 +812,57 @@ export const ContactForm: React.FC = () => {
   }
 }
 
-/* Phone input with country selector */
+/* Required field marker */
+.required-mark {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* Phone input with compact country selector */
 .phone-input {
+  --PhoneInput-color--focus: #c99b52;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   width: 100%;
   min-height: 46px;
   padding: 0 12px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
   box-sizing: border-box;
   font-family: var(--font-body);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.phone-input:hover {
+  border-color: #cbd5e1;
 }
 
 .phone-input:focus-within {
-  border-color: var(--color-primary, #4338ca);
-  outline: 2px solid rgba(67, 56, 202, 0.2);
+  border-color: #c99b52;
+  box-shadow: 0 0 0 3px rgba(201, 155, 82, 0.14);
+}
+
+/* Keep flag, country code, and arrow tight together. */
+.phone-input .PhoneInputCountry {
+  gap: 4px;
+  margin-right: 2px;
+}
+
+.phone-input .PhoneInputCountryCode {
+  color: #475569;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.phone-input .PhoneInputCountrySelectArrow {
+  margin-left: 2px;
 }
 
 .phone-input select {
-  border: none;
-  outline: none;
-  background: transparent;
-  cursor: pointer;
-  max-width: 120px;
   font-family: var(--font-body);
 }
 
@@ -962,6 +872,7 @@ export const ContactForm: React.FC = () => {
   border: none;
   outline: none;
   background: transparent;
+  color: #1e293b;
   font-size: 16px;
   font-family: var(--font-body);
 }
@@ -970,457 +881,394 @@ export const ContactForm: React.FC = () => {
   outline: none;
 }
 
-@media (max-width: 480px) {
-  .phone-input {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 8px;
-  }
-  .phone-input select {
-    max-width: 100%;
-  }
-  .phone-input input {
-    width: 100%;
-  }
+.phone-input input::placeholder {
+  color: #94a3b8;
 }
 
+@media (max-width: 480px) {
+  .phone-input {
+    padding: 0 10px;
+  }
+}
       `}</style>
-      {/* Honeypot field: hidden from genuine users. */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          width: 1,
-          height: 1,
-          overflow: "hidden",
-          clip: "rect(0, 0, 0, 0)",
-        }}
-      >
-        <label htmlFor="website_url">Leave this field empty</label>
-        <input
-          id="website_url"
-          type="text"
-          name="website_url"
-          value={formData.website_url}
-          onChange={(event) => updateField("website_url", event.target.value)}
-          tabIndex={-1}
-          autoComplete="off"
-        />
-      </div>
 
-      {/* Contact Information */}
-      <section className="project-enquiry-section">
-        <h3 className="project-enquiry-heading">Contact Information</h3>
-        <p className="project-enquiry-subtitle">
-          Tell us how to reach you about your project.
-        </p>
+      <header className="project-form-intro">
+        {/* <span className="project-form-eyebrow">Solution Architect Review</span> */}
+        <h3 className="project-form-title">Tell us what you are building</h3>
+      </header>
 
-        <div className="project-enquiry-grid">
-          <div className="form-group">
-            <label className="form-label" htmlFor="fullName">
-              Contact Person Name *
-            </label>
-            <input
-              id="fullName"
-              type="text"
-              className="form-input"
-              placeholder="Enter your full name"
-              autoComplete="name"
-              value={formData.fullName}
-              onChange={(event) => updateField("fullName", event.target.value)}
-              aria-invalid={Boolean(errors.fullName)}
-              aria-describedby={
-                errors.fullName ? "contact-fullName-error" : undefined
-              }
-            />
-            {errors.fullName && (
-              <span
-                id="contact-fullName-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.fullName}
-              </span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="companyName">
-              Organization Name
-            </label>
-            <input
-              id="companyName"
-              type="text"
-              className="form-input"
-              placeholder="Enter your company or organization"
-              autoComplete="organization"
-              value={formData.companyName}
-              onChange={(event) =>
-                updateField("companyName", event.target.value)
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="workEmail">
-              Business Email *
-            </label>
-            <input
-              id="workEmail"
-              type="email"
-              className="form-input"
-              placeholder="name@company.com"
-              autoComplete="email"
-              value={formData.workEmail}
-              onChange={(event) => updateField("workEmail", event.target.value)}
-              aria-invalid={Boolean(errors.workEmail)}
-              aria-describedby={
-                errors.workEmail ? "contact-workEmail-error" : undefined
-              }
-            />
-            {errors.workEmail && (
-              <span
-                id="contact-workEmail-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.workEmail}
-              </span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="phone">
-              Contact Number *
-            </label>
-            <PhoneInput
-              id="phone"
-              international
-              defaultCountry="IN"
-              countryCallingCodeEditable={false}
-              placeholder="Enter phone number"
-              value={formData.phone}
-              onChange={(value) => updateField("phone", value || "")}
-              className="phone-input"
-              aria-invalid={Boolean(errors.phone)}
-              aria-describedby={
-                errors.phone ? "contact-phone-error" : undefined
-              }
-            />
-            {errors.phone && (
-              <span
-                id="contact-phone-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.phone}
-              </span>
-            )}
-          </div>
-
-          <div
-            className="form-group"
-            style={{
-              gridColumn: "1 / -1",
-              width: "100%",
-              minWidth: 0,
-              justifySelf: "stretch",
-              alignSelf: "stretch",
-            }}
-          >
-            <label className="form-label" htmlFor="country">
-              Country / Region *
-            </label>
-
-            <input
-              id="country"
-              type="text"
-              className="form-input"
-              style={{
-                width: "100%",
-                minWidth: 0,
-                maxWidth: "100%",
-                display: "block",
-                boxSizing: "border-box",
-                justifySelf: "stretch",
-              }}
-              list="country-region-options"
-              placeholder="Search or enter your country"
-              autoComplete="country-name"
-              value={formData.country}
-              onChange={(event) => updateField("country", event.target.value)}
-              aria-invalid={Boolean(errors.country)}
-              aria-describedby={
-                errors.country ? "contact-country-error" : undefined
-              }
-            />
-
-            <datalist id="country-region-options">
-              {countryOptions.map((country) => (
-                <option value={country} key={country} />
-              ))}
-            </datalist>
-
-            {errors.country && (
-              <span
-                id="contact-country-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.country}
-              </span>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Project Overview & Requirements */}
-      <section className="project-enquiry-section">
-        <h3 className="project-enquiry-heading">
-          Project Overview &amp; Requirements
-        </h3>
-        <p className="project-enquiry-subtitle">
-          Share your objectives, technical requirements, and expectations.
-        </p>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="projectScope">
-            Project Scope &amp; Technical Requirements *
-          </label>
-          <textarea
-            id="projectScope"
-            className="form-textarea"
-            rows={6}
-            placeholder="Describe your objectives, existing systems, technical requirements, integrations, expected outcomes, and performance needs..."
-            value={formData.projectScope}
-            onChange={(event) =>
-              updateField("projectScope", event.target.value)
-            }
-            aria-invalid={Boolean(errors.projectScope)}
-            aria-describedby={
-              errors.projectScope ? "contact-projectScope-error" : undefined
-            }
+      <div className="project-enquiry-body">
+        {/* Honeypot field: hidden from genuine users. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            width: 1,
+            height: 1,
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+          }}
+        >
+          <label htmlFor="website_url">Leave this field empty</label>
+          <input
+            id="website_url"
+            type="text"
+            name="website_url"
+            value={formData.website_url}
+            onChange={(event) => updateField("website_url", event.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
           />
-          {errors.projectScope && (
-            <span
-              id="contact-projectScope-error"
-              role="alert"
-              className="form-error"
-            >
-              <AlertCircle size={13} /> {errors.projectScope}
+        </div>
+
+        {/* 1. Contact details */}
+        <section className="project-enquiry-section">
+          <h4 className="project-enquiry-heading">1. Your contact details</h4>
+
+          <div className="project-enquiry-grid">
+            <div className="form-group">
+              <label className="form-label" htmlFor="fullName">
+                Contact Person Name{" "}
+                <span className="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                className="form-input"
+                placeholder="Enter your full name"
+                autoComplete="name"
+                aria-required="true"
+                value={formData.fullName}
+                onChange={(event) =>
+                  updateField("fullName", event.target.value)
+                }
+                aria-invalid={Boolean(errors.fullName)}
+                aria-describedby={
+                  errors.fullName ? "contact-fullName-error" : undefined
+                }
+              />
+              {errors.fullName && (
+                <span
+                  id="contact-fullName-error"
+                  role="alert"
+                  className="form-error"
+                >
+                  <AlertCircle size={13} /> {errors.fullName}
+                </span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="companyName">
+                Organization Name
+              </label>
+              <input
+                id="companyName"
+                type="text"
+                className="form-input"
+                placeholder="Enter your company or organization"
+                autoComplete="organization"
+                value={formData.companyName}
+                onChange={(event) =>
+                  updateField("companyName", event.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="workEmail">
+                Business Email{" "}
+                <span className="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="workEmail"
+                type="email"
+                className="form-input"
+                placeholder="name@company.com"
+                autoComplete="email"
+                aria-required="true"
+                value={formData.workEmail}
+                onChange={(event) =>
+                  updateField("workEmail", event.target.value)
+                }
+                aria-invalid={Boolean(errors.workEmail)}
+                aria-describedby={
+                  errors.workEmail ? "contact-workEmail-error" : undefined
+                }
+              />
+              {errors.workEmail && (
+                <span
+                  id="contact-workEmail-error"
+                  role="alert"
+                  className="form-error"
+                >
+                  <AlertCircle size={13} /> {errors.workEmail}
+                </span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="phone">
+                Contact Number{" "}
+                <span className="required-mark" aria-hidden="true">*</span>
+              </label>
+              <PhoneInput
+                id="phone"
+                defaultCountry="IN"
+                countrySelectComponent={CountrySelect}
+                placeholder="Enter mobile number"
+                value={formData.phone}
+                onChange={(value) => updateField("phone", value || "")}
+                className="phone-input"
+                aria-required="true"
+                aria-invalid={Boolean(errors.phone)}
+                aria-describedby={
+                  errors.phone ? "contact-phone-error" : undefined
+                }
+              />
+              {errors.phone && (
+                <span
+                  id="contact-phone-error"
+                  role="alert"
+                  className="form-error"
+                >
+                  <AlertCircle size={13} /> {errors.phone}
+                </span>
+              )}
+            </div>
+
+            <div className="form-group project-country-field" ref={countryFieldRef}>
+              <label className="form-label" htmlFor="country">
+                Country / Region{" "}
+                <span className="required-mark" aria-hidden="true">*</span>
+              </label>
+
+              <div className="country-select">
+                <input
+                  id="country"
+                  type="text"
+                  className="form-input country-input"
+                  placeholder="Search or enter your country"
+                  autoComplete="off"
+                  role="combobox"
+                  aria-required="true"
+                  aria-expanded={countryOpen}
+                  aria-controls="country-region-listbox"
+                  aria-autocomplete="list"
+                  aria-activedescendant={
+                    countryOpen && activeCountryIndex >= 0
+                      ? `country-option-${activeCountryIndex}`
+                      : undefined
+                  }
+                  value={formData.country}
+                  onChange={(event) => {
+                    updateField("country", event.target.value);
+                    setCountryOpen(true);
+                    setActiveCountryIndex(-1);
+                  }}
+                  onFocus={() => setCountryOpen(true)}
+                  onKeyDown={handleCountryKeyDown}
+                  aria-invalid={Boolean(errors.country)}
+                  aria-describedby={
+                    errors.country ? "contact-country-error" : undefined
+                  }
+                />
+
+                {countryOpen && (
+                  <ul
+                    id="country-region-listbox"
+                    role="listbox"
+                    className="country-options"
+                  >
+                    {filteredCountries.length > 0 ? (
+                      filteredCountries.map((country, index) => (
+                        <li key={country}>
+                          <button
+                            type="button"
+                            role="option"
+                            id={`country-option-${index}`}
+                            aria-selected={formData.country === country}
+                            className={`country-option ${
+                              index === activeCountryIndex ? "is-active" : ""
+                            }`}
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() => selectCountry(country)}
+                          >
+                            {country}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="country-empty">No matching country found</li>
+                    )}
+                  </ul>
+                )}
+              </div>
+
+              {errors.country && (
+                <span
+                  id="contact-country-error"
+                  role="alert"
+                  className="form-error"
+                >
+                  <AlertCircle size={13} /> {errors.country}
+                </span>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* 2. Project requirements */}
+        <section className="project-enquiry-section">
+          <h4 className="project-enquiry-heading">
+            2. Project requirements
+          </h4>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="projectScope">
+              Project Scope &amp; Technical Requirements{" "}
+              <span className="required-mark" aria-hidden="true">*</span>
+            </label>
+            <textarea
+              id="projectScope"
+              className="form-textarea"
+              rows={6}
+              placeholder="Describe your objectives, existing systems, technical requirements, integrations, expected outcomes, and performance needs..."
+              aria-required="true"
+              value={formData.projectScope}
+              onChange={(event) =>
+                updateField("projectScope", event.target.value)
+              }
+              aria-invalid={Boolean(errors.projectScope)}
+              aria-describedby={
+                errors.projectScope ? "contact-projectScope-error" : undefined
+              }
+            />
+            {errors.projectScope && (
+              <span
+                id="contact-projectScope-error"
+                role="alert"
+                className="form-error"
+              >
+                <AlertCircle size={13} /> {errors.projectScope}
+              </span>
+            )}
+          </div>
+        </section>
+
+        {/* 3. Supporting documents */}
+        <section className="project-enquiry-section">
+          <h4 className="project-enquiry-heading">
+            3. Supporting documents{" "}
+            {/* <span className="optional-label">(Optional)</span> */}
+          </h4>
+
+          <label className="project-upload-zone" htmlFor="projectDocuments">
+            <Upload size={25} aria-hidden="true" />
+            <strong>Choose files to upload</strong>
+            <span>PDF, DOCX, XLSX, PNG, JPG, ZIP &middot; 15 MB max each</span>
+            <input
+              id="projectDocuments"
+              type="file"
+              multiple
+              accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.zip"
+              onChange={handleFilesChange}
+            />
+          </label>
+
+          {projectDocuments.length > 0 && (
+            <ul className="project-upload-file-list">
+              {projectDocuments.map((file, index) => (
+                <li key={`${file.name}-${index}`}>
+                  <FileText size={15} aria-hidden="true" />
+                  <span>
+                    {file.name} — {(file.size / (1024 * 1024)).toFixed(2)} MB
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    aria-label={`Remove ${file.name}`}
+                  >
+                    <X size={15} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {documentError && (
+            <span className="form-error" role="alert">
+              {documentError}
+            </span>
+          )}
+        </section>
+
+        {/* Consent */}
+        <div className="form-group" style={{ marginTop: "1.5rem" }}>
+          <label className="project-consent-label">
+            <input
+              type="checkbox"
+              checked={formData.consent}
+              onChange={(event) =>
+                updateField("consent", event.target.checked)
+              }
+              aria-invalid={Boolean(errors.consent)}
+              aria-describedby={
+                errors.consent ? "contact-consent-error" : undefined
+              }
+            />
+            <span>
+              I agree that Azaroth Tech-Hive may contact me about this project
+              enquiry in accordance with the{" "}
+              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                Privacy Policy
+              </a>
+              .
+            </span>
+          </label>
+          {errors.consent && (
+            <span id="contact-consent-error" role="alert" className="form-error">
+              <AlertCircle size={13} /> {errors.consent}
             </span>
           )}
         </div>
 
-        <div className="project-enquiry-grid">
-          <div className="form-group">
-            <label className="form-label" htmlFor="projectTimeline">
-              Expected Project Timeline *
-            </label>
-            <select
-              id="projectTimeline"
-              className="form-select"
-              value={formData.projectTimeline}
-              onChange={(event) =>
-                updateField("projectTimeline", event.target.value)
-              }
-              aria-invalid={Boolean(errors.projectTimeline)}
-              aria-describedby={
-                errors.projectTimeline
-                  ? "contact-projectTimeline-error"
-                  : undefined
-              }
-            >
-              <option value="">Select expected timeline</option>
-              <option value="Within 1 month">Within 1 month</option>
-              <option value="1–3 months">1–3 months</option>
-              <option value="3–6 months">3–6 months</option>
-              <option value="6–12 months">6–12 months</option>
-              <option value="More than 12 months">More than 12 months</option>
-              <option value="Flexible / To be discussed">
-                Flexible / To be discussed
-              </option>
-            </select>
-            {errors.projectTimeline && (
-              <span
-                id="contact-projectTimeline-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.projectTimeline}
-              </span>
-            )}
+        {/* Submission error */}
+        {submissionError && (
+          <div role="alert" className="project-submission-error">
+            <div>
+              <AlertCircle size={14} aria-hidden="true" /> {submissionError}
+            </div>
+            <div className="project-submission-fallbacks">
+              <a href={`mailto:${FALLBACK_EMAIL}`}>Email us directly</a>
+              <a href={`tel:${FALLBACK_PHONE}`}>Call +91 6379480931</a>
+            </div>
           </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="estimatedBudget">
-              Estimated Budget Range *
-            </label>
-            <select
-              id="estimatedBudget"
-              className="form-select"
-              value={formData.estimatedBudget}
-              onChange={(event) =>
-                updateField("estimatedBudget", event.target.value)
-              }
-              aria-invalid={Boolean(errors.estimatedBudget)}
-              aria-describedby={
-                errors.estimatedBudget
-                  ? "contact-estimatedBudget-error"
-                  : undefined
-              }
-            >
-              <option value="">Select estimated budget</option>
-              <option value="Under $1,000">Under $1,000</option>
-              <option value="$1,000–$5,000">$1,000–$5,000</option>
-              <option value="$5,000–$10,000">$5,000–$10,000</option>
-              <option value="$10,000–$25,000">$10,000–$25,000</option>
-              <option value="$25,000+">$25,000+</option>
-              <option value="To be discussed">To be discussed</option>
-            </select>
-            {errors.estimatedBudget && (
-              <span
-                id="contact-estimatedBudget-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.estimatedBudget}
-              </span>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Supporting Documents */}
-      <section className="project-enquiry-section">
-        <h3 className="project-enquiry-heading">
-          Supporting Documents{" "}
-          <span className="optional-label">(Optional)</span>
-        </h3>
-        <p className="project-enquiry-subtitle">
-          Share your RFP, RFQ, technical specifications, architecture diagrams,
-          or supporting files.
-        </p>
-
-        <label className="project-upload-zone" htmlFor="projectDocuments">
-          <Upload size={25} aria-hidden="true" />
-          <strong>Choose files to upload</strong>
-          <span>PDF, DOCX, XLSX, PNG, JPG, ZIP</span>
-          <span>Maximum file size: 15 MB per file</span>
-          <input
-            id="projectDocuments"
-            type="file"
-            multiple
-            accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.zip"
-            onChange={handleFilesChange}
-          />
-        </label>
-
-        {projectDocuments.length > 0 && (
-          <ul className="project-upload-file-list">
-            {projectDocuments.map((file, index) => (
-              <li key={`${file.name}-${index}`}>
-                <FileText size={15} aria-hidden="true" />
-                <span>
-                  {file.name} — {(file.size / (1024 * 1024)).toFixed(2)} MB
-                </span>
-                <button
-                  type="button"
-                  onClick={() => removeFile(index)}
-                  aria-label={`Remove ${file.name}`}
-                >
-                  <X size={15} />
-                </button>
-              </li>
-            ))}
-          </ul>
         )}
 
-        {documentError && (
-          <span className="form-error" role="alert">
-            {documentError}
-          </span>
-        )}
-        {projectDocuments.length > 0 && (
-          <p className="project-upload-note">
-            Note: your current contact API does not upload file contents. The
-            selected filenames will be included with the enquiry, but the files
-            themselves require backend upload support.
-          </p>
-        )}
-      </section>
-
-      {/* Consent */}
-      <div className="form-group" style={{ marginTop: "1.5rem" }}>
-        <label className="project-consent-label">
-          <input
-            type="checkbox"
-            checked={formData.consent}
-            onChange={(event) => updateField("consent", event.target.checked)}
-            aria-invalid={Boolean(errors.consent)}
-            aria-describedby={
-              errors.consent ? "contact-consent-error" : undefined
-            }
-          />
-          <span>
-            I agree that Azaroth Tech-Hive may contact me about this project
-            enquiry in accordance with the{" "}
-            <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
-              Privacy Policy
-            </a>
-            .
-          </span>
-        </label>
-        {errors.consent && (
-          <span id="contact-consent-error" role="alert" className="form-error">
-            <AlertCircle size={13} /> {errors.consent}
-          </span>
-        )}
-      </div>
-
-      {/* Submission error */}
-      {submissionError && (
-        <div role="alert" className="project-submission-error">
-          <div>
-            <AlertCircle size={14} aria-hidden="true" /> {submissionError}
-          </div>
-          <div className="project-submission-fallbacks">
-            <a href={`mailto:${FALLBACK_EMAIL}`}>Email us directly</a>
-            <a href={`tel:${FALLBACK_PHONE}`}>Call +91 6379480931</a>
-          </div>
-        </div>
-      )}
-
-      <div
-        className="project-form-submit"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-          marginTop: "1.5rem",
-        }}
-      >
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          disabled={isSubmitting}
-        >
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              lineHeight: 1.2,
-            }}
+        <div className="project-form-submit">
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            disabled={isSubmitting}
           >
-            <Send size={18} aria-hidden="true" />
-            <span>
-              {isSubmitting ? "Submitting..." : "Submit Project Enquiry"}
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                lineHeight: 1.2,
+              }}
+            >
+              <Send size={18} aria-hidden="true" />
+              <span>
+                {isSubmitting ? "Submitting..." : "Submit Project Enquiry"}
+              </span>
             </span>
-          </span>
-        </Button>
+          </Button>
+        </div>
       </div>
     </form>
   );

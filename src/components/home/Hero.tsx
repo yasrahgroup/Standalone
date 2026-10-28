@@ -11,6 +11,7 @@ import {
 import { heroWorkspaceImg } from "../../assets/images";
 import { useCMS } from "../../context/CMSContext";
 import { MediaRenderer } from "../common/MediaRenderer";
+import { Reveal } from "../common/Reveal";
 
 export const Hero: React.FC = () => {
   const { pages } = useCMS();
@@ -24,8 +25,8 @@ export const Hero: React.FC = () => {
     <section
       style={{
         backgroundColor: "#FFFFFF",
-        paddingTop: "4.5rem",
-        paddingBottom: "4rem",
+        paddingTop: "clamp(2.5rem, 6vw, 4.5rem)",
+        paddingBottom: "clamp(3rem, 6vw, 4rem)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -50,13 +51,13 @@ export const Hero: React.FC = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "3.5rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+            gap: "clamp(2rem, 5vw, 3.5rem)",
             alignItems: "center",
           }}
         >
           {/* Left Column: Typography & CTAs */}
-          <div style={{ maxWidth: "580px" }}>
+          <Reveal style={{ maxWidth: "580px" }}>
             {/* Kicker Pill */}
             {/* <div
               style={{
@@ -77,7 +78,7 @@ export const Hero: React.FC = () => {
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: "clamp(2.75rem, 5.2vw, 1rem)",
+                fontSize: "clamp(2.25rem, 5.2vw, 3.5rem)",
                 fontWeight: 800,
                 color: "var(--color-text-primary, #0F172A)",
                 lineHeight: 1.15,
@@ -100,6 +101,7 @@ export const Hero: React.FC = () => {
 
             {/* Subtitle */}
             <p
+              className="hero-subtitle"
               style={{
                 fontSize: "1.125rem",
                 color: "var(--color-text-secondary, #475569)",
@@ -154,10 +156,11 @@ export const Hero: React.FC = () => {
                 <ArrowRight size={17} />
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right Column: Hero Visual with Desk Laptop & Connected Badges */}
-          <div
+          <Reveal
+            delay={0.15}
             style={{
               position: "relative",
               display: "flex",
@@ -190,6 +193,7 @@ export const Hero: React.FC = () => {
 
             {/* SVG Connecting Paths to the Laptop Mockup */}
             <svg
+              className="hero-badge-traces"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -483,7 +487,7 @@ export const Hero: React.FC = () => {
                 Analytics
               </span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
 
@@ -520,6 +524,18 @@ export const Hero: React.FC = () => {
           .hero-badge-3 { top: -0.5rem !important; right: 1% !important; }
           .hero-badge-4 { top: 20% !important; right: -0.5rem !important; }
           .hero-badge-5 { top: 58% !important; right: -0.25rem !important; }
+        }
+
+        /* Phones: remove decorative overlays that can crowd the image. */
+        @media (max-width: 640px) {
+          .hero-badge-interactive,
+          .hero-badge-traces {
+            display: none !important;
+          }
+
+          .hero-subtitle {
+            text-align: left !important;
+          }
         }
       `}</style>
     </section>

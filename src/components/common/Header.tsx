@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import {
   Menu,
@@ -11,7 +12,7 @@ import {
   Layers,
   Cpu,
 } from "lucide-react";
-import logoImg from "../../assets/Logo.png";
+import faviconImg from "../../assets/Favicon.png";
 import { useCMS } from "../../context/CMSContext";
 
 export interface SubNavItem {
@@ -66,6 +67,7 @@ export const siteNavItems: NavItem[] = [
       p.startsWith("/portfolio") ||
       p.startsWith("/products") ||
       p.startsWith("/services") ||
+      p.startsWith("/service") ||
       p.startsWith("/projects"),
     children: [
       {
@@ -75,7 +77,7 @@ export const siteNavItems: NavItem[] = [
       },
       {
         name: "Explore Services",
-        href: "/services",
+        href: "/service",
         icon: <Cpu size={18} style={{ color: "#49243F" }} />,
       },
     ],
@@ -126,19 +128,33 @@ export const Header: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>(
     {
-      "Who we are": true,
-      "Our Portfolio": true,
+      "Who we are": false,
+      "Our Portfolio": false,
     },
   );
 
   const location = useLocation();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Ignore the legacy "/Logo.png" override so the new favicon mark is used.
+  const cmsLogo = settings?.logoUrl;
+  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : faviconImg;
+
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
   }, [location.pathname]);
+
+  // Close the mobile drawer when the viewport grows to desktop.
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setMobileMenuOpen(false);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Scroll detection
   useEffect(() => {
@@ -239,8 +255,9 @@ export const Header: React.FC = () => {
           }}
         >
           <img
-            src={settings?.logoUrl || logoImg}
+            src={brandIcon}
             alt={settings?.companyName || "Azaroth Tech-Hive Logo"}
+            className="header-brand-logo"
             style={{
               maxHeight: "2.5rem",
               maxWidth: "8rem",
@@ -252,10 +269,11 @@ export const Header: React.FC = () => {
 
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span
+              className="header-brand-name"
               style={{
                 fontSize: "1.25rem",
                 fontWeight: 800,
-                color: CRIMSON_DEEP,
+                color: "var(--color-primary, #49243F)",
                 fontFamily: "serif",
                 letterSpacing: "0.04em",
                 lineHeight: 1.1,
@@ -265,10 +283,11 @@ export const Header: React.FC = () => {
             </span>
 
             <span
+              className="header-brand-sub"
               style={{
                 fontSize: "0.625rem",
                 fontWeight: 700,
-                color: "#000000",
+                color: "var(--color-brand-gold, #C99B52)",
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
               }}
@@ -281,7 +300,7 @@ export const Header: React.FC = () => {
         {/* Desktop Navigation */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex flex-1 items-center justify-end gap-4 lg:gap-6"
+          className="hidden lg:flex flex-1 items-center justify-end gap-4 lg:gap-6"
         >
           {siteNavItems.map((item) => {
             const active = item.isActive(location.pathname);
@@ -516,7 +535,7 @@ export const Header: React.FC = () => {
           <Link
             to="/connect-with-us"
             style={getStartedButtonStyle}
-            className="hover:opacity-95 hover:shadow-lg hover:scale-105"
+            className="hidden sm:flex header-connect-cta hover:opacity-95 hover:shadow-lg hover:scale-105"
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--gradient-button-hover)";
             }}
@@ -535,7 +554,25 @@ export const Header: React.FC = () => {
             aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-rose-200 bg-white text-rose-950"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: "2.5rem",
+              height: "2.5rem",
+              borderRadius: "0.75rem",
+              border: "1px solid #FECDD3",
+              backgroundColor: "#FFFFFF",
+              color: "#49243F",
+              cursor: "pointer",
+              transition: "all 200ms ease-out",
+            }}
+            className="flex lg:hidden"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "rgba(73, 36, 63, 0.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#FFFFFF";
+            }}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -543,33 +580,47 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Mobile Navigation Drawer */}
-      {mobileMenuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            top: "4.75rem",
-            backgroundColor: "rgba(31, 41, 55, 0.45)",
-            backdropFilter: "blur(4px)",
-            zIndex: 99,
-            display: "flex",
-            flexDirection: "column",
-          }}
-          onClick={() => setMobileMenuOpen(false)}
-        >
+      {mobileMenuOpen &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
+            style={{
+              position: "fixed",
+              inset: 0,
+              top: "4.75rem",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(31, 41, 55, 0.5)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              zIndex: 9999,
+              display: "flex",
+              flexDirection: "column",
+              overscrollBehavior: "contain",
+            }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
           <nav
             id="mobile-navigation"
             aria-label="Mobile Navigation"
             style={{
               backgroundColor: "#FFFFFF",
-              padding: "1.25rem",
+              padding: "1.5rem 1.25rem",
               borderBottom: `2px solid ${CRIMSON_VIBRANT}`,
               boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.12)",
               display: "flex",
               flexDirection: "column",
-              gap: "0.4rem",
+              gap: "0.5rem",
               maxHeight: "calc(100vh - 4.75rem)",
               overflowY: "auto",
+              WebkitOverflowScrolling: "touch",
+              position: "relative",
+              zIndex: 10000,
+              color: "#1F2937",
+              width: "100%",
             }}
             onClick={(event) => event.stopPropagation()}
           >
@@ -582,14 +633,14 @@ export const Header: React.FC = () => {
                 return (
                   <div
                     key={item.name}
-                    style={{ display: "flex", flexDirection: "column" }}
+                    style={{ display: "flex", flexDirection: "column", color: "#1F2937" }}
                   >
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        padding: "0.75rem 1rem",
+                        padding: "0.875rem 1rem",
                         borderRadius: "8px",
                         backgroundColor: active
                           ? "rgba(73, 36, 63, 0.06)"
@@ -608,6 +659,9 @@ export const Header: React.FC = () => {
                           color: active ? CRIMSON_DEEP : "#1F2937",
                           textDecoration: "none",
                           flex: 1,
+                          position: "relative",
+                          zIndex: 1,
+                          display: "block",
                         }}
                       >
                         {item.name}
@@ -623,6 +677,8 @@ export const Header: React.FC = () => {
                           color: "#64748B",
                           display: "flex",
                           alignItems: "center",
+                          position: "relative",
+                          zIndex: 1,
                         }}
                         aria-label={`Toggle ${item.name} submenu`}
                       >
@@ -638,7 +694,6 @@ export const Header: React.FC = () => {
                       </button>
                     </div>
 
-                    {/* Accordion Sub-items */}
                     {isExpanded && (
                       <div
                         style={{
@@ -650,6 +705,9 @@ export const Header: React.FC = () => {
                           paddingBottom: "0.35rem",
                           borderLeft: "2px dashed #FECDD3",
                           marginLeft: "1.25rem",
+                          position: "relative",
+                          zIndex: 1,
+                          color: "#1F2937",
                         }}
                       >
                         {item.children?.map((sub) => {
@@ -686,24 +744,46 @@ export const Header: React.FC = () => {
                                 }
                               }}
                               style={{
-                                padding: "0.55rem 0.75rem",
-                                borderRadius: "6px",
-                                textDecoration: "none",
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.625rem",
+                                gap: "0.75rem",
+                                padding: "0.75rem 1rem",
+                                borderRadius: "8px",
+                                textDecoration: "none",
                                 backgroundColor: isSubActive
-                                  ? "rgba(73, 36, 63, 0.1)"
+                                  ? "rgba(73, 36, 63, 0.08)"
                                   : "transparent",
-                                color: isSubActive
-                                  ? CRIMSON_VIBRANT
-                                  : "#4B5563",
-                                fontWeight: isSubActive ? 700 : 500,
-                                fontSize: "0.90rem",
+                                transition: "background-color 160ms ease-out",
+                                position: "relative",
+                                zIndex: 1,
                               }}
                             >
-                              {sub.icon}
-                              <span>{sub.name}</span>
+                              <div
+                                style={{
+                                  width: "2rem",
+                                  height: "2rem",
+                                  borderRadius: "8px",
+                                  backgroundColor: isSubActive
+                                    ? "rgba(73, 36, 63, 0.16)"
+                                    : "#FDF2F4",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                {sub.icon}
+                              </div>
+                              <span
+                                style={{
+                                  fontSize: "0.9rem",
+                                  fontWeight: 600,
+                                  color: isSubActive ? CRIMSON_DEEP : "#18181B",
+                                  lineHeight: 1.4,
+                                }}
+                              >
+                                {sub.name}
+                              </span>
                             </Link>
                           );
                         })}
@@ -717,70 +797,71 @@ export const Header: React.FC = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  aria-current={active ? "page" : undefined}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
-                    padding: "0.8rem 1rem",
-                    borderRadius: "8px",
                     fontWeight: active ? 700 : 600,
                     fontSize: "1rem",
-                    color: active ? CRIMSON_DEEP : "#374151",
+                    color: active ? CRIMSON_DEEP : "#1F2937",
+                    textDecoration: "none",
+                    padding: "0.875rem 1rem",
+                    borderRadius: "8px",
                     backgroundColor: active
                       ? "rgba(73, 36, 63, 0.06)"
                       : "transparent",
-                    textDecoration: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
                     borderLeft: active
                       ? `3px solid ${CRIMSON_ACCENT}`
                       : "3px solid transparent",
+                    position: "relative",
+                    zIndex: 1,
+                    display: "block",
                   }}
                 >
-                  <span>{item.name}</span>
-
-                  {active && (
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        width: "7px",
-                        height: "7px",
-                        borderRadius: "50%",
-                        backgroundColor: CRIMSON_DEEP,
-                      }}
-                    />
-                  )}
+                  {item.name}
                 </Link>
               );
             })}
 
-            <div
-              style={{
-                height: "1px",
-                backgroundColor: "var(--color-border, #E4E4E7)",
-                margin: "0.75rem 0",
-              }}
-            />
-
-            <Link
-              to="/connect-with-us"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{
-                ...getStartedButtonStyle,
-                width: "100%",
-                boxSizing: "border-box",
-              }}
-              className="hover:opacity-90"
-            >
-              <span>Connect With Us</span>
-              <ArrowRight size={16} />
-            </Link>
+            <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #E5E7EB", position: "relative", zIndex: 1 }}>
+              <Link
+                to="/connect-with-us"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  ...getStartedButtonStyle,
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+                className="hover:opacity-90"
+              >
+                <span>Connect With Us</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </nav>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
 
       {/* Theme-matched hover and keyboard focus styles */}
       <style>{`
+        @media (max-width: 640px) {
+          .header-connect-cta {
+            display: none !important;
+          }
+
+          .header-brand-logo {
+            max-height: 2.25rem !important;
+          }
+
+          .header-brand-name {
+            font-size: 1.0625rem !important;
+          }
+
+          .header-brand-sub {
+            font-size: 0.5625rem !important;
+            letter-spacing: 0.16em !important;
+          }
+        }
+
         .azaroth-nav-link:hover {
           color: ${CRIMSON_DEEP} !important;
         }

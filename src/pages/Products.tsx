@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
   ArrowRight,
   CheckCircle2,
@@ -14,6 +14,8 @@ import { productsCatalog } from '../data/productsData';
 import { useCMS } from '../context/CMSContext';
 import { ProductStatusBadge } from '../components/common/ProductStatusBadge';
 import { MediaRenderer } from '../components/common/MediaRenderer';
+import { Reveal } from '../components/common/Reveal';
+import { FinalCTA } from '../components/home/FinalCTA';
 
 export const Products: React.FC = () => {
   const navigate = useNavigate();
@@ -83,7 +85,7 @@ export const Products: React.FC = () => {
         subtitle="Four platforms in active development, each available for scoped early builds. They give your teams a practical starting point for the roadmap while keeping scope, branding, and operational ownership clear."
         actions={
           <>
-            <Link
+            {/* <Link
               to="/connect-with-us"
               style={{
                 padding: '0.875rem 1.75rem',
@@ -120,7 +122,7 @@ export const Products: React.FC = () => {
               className="hover:bg-slate-50"
             >
               See engineering practices
-            </Link>
+            </Link> */}
           </>
         }
       />
@@ -144,11 +146,12 @@ export const Products: React.FC = () => {
           )}
 
           {filteredProducts.length > 0 && (
-            <div className="grid-layout-2x2">
-              {filteredProducts.filter((p) => p.isEnabled !== false).map((product) => (
-                <div
+            <div className="grid-layout-3x3">
+              {filteredProducts.filter((p) => p.isEnabled !== false).map((product, productIndex) => (
+                <Reveal
                   key={product.id}
                   id={product.slug}
+                  delay={productIndex * 0.08}
                   style={{
                     scrollMarginTop: '7rem',
                     backgroundColor: '#ffffff',
@@ -337,12 +340,15 @@ export const Products: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           )}
         </div>
       </section>
+
+      {/* Common Final CTA */}
+      <FinalCTA />
 
       {/* Product Details Popup Modal (Requirement 5) */}
       {selectedProduct && (
@@ -417,18 +423,6 @@ export const Products: React.FC = () => {
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
-                <span
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    color: '#FFFFFF',
-                    padding: '0.2rem 0.65rem',
-                    borderRadius: '9999px',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                  }}
-                >
-                  {selectedProduct.category}
-                </span>
                 <ProductStatusBadge
                   status={selectedProduct.status || 'Under Development'}
                   colorScheme={selectedProduct.statusColor}
@@ -481,7 +475,7 @@ export const Products: React.FC = () => {
                     <Layers size={16} color="#49243F" />
                     <span>Key Capabilities &amp; Architecture Modules</span>
                   </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.625rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.625rem' }}>
                     {selectedProduct.keyCapabilities.map((cap: string, i: number) => (
                       <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', color: '#334155' }}>
                         <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '0.15rem' }} />
@@ -498,7 +492,7 @@ export const Products: React.FC = () => {
                   <Zap size={16} color="#49243F" />
                   <span>Platform Deliverables &amp; Ownership</span>
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.625rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.625rem' }}>
                   {(selectedProduct.benefits || []).map((benefit: string, i: number) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', color: '#334155' }}>
                       <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '0.15rem' }} />
@@ -568,7 +562,7 @@ export const Products: React.FC = () => {
                 Close
               </button>
 
-              <button
+              {/* <button
                 type="button"
                 onClick={() => {
                   const slug = selectedProduct.slug;
@@ -594,7 +588,8 @@ export const Products: React.FC = () => {
               >
                 <span>Schedule Platform Discovery</span>
                 <ArrowRight size={15} />
-              </button>
+              </button> */}
+
             </div>
           </div>
         </div>

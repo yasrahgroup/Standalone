@@ -8,6 +8,7 @@ export const serviceOfferings: ServiceOffering[] = [
     category: 'Architecture & Modernization',
     badge: 'Enterprise Core',
     description: 'Azaroth Tech-Hive empowers enterprises to build, modernize, and scale their software ecosystems through strategic engineering and architectural expertise. We transform complex applications, streamline system integrations, strengthen data management, and optimize critical business systems through disciplined engineering practices—delivering secure, resilient, and adaptable software designed for operational continuity and long-term growth.',
+    bestFor: 'Teams modernising legacy systems, integrating critical applications, or rebuilding a platform foundation.',
     capabilities: [
       'Technology Strategy & Solution Architecture',
       'Application Modernization & Software Evolution',
@@ -39,6 +40,7 @@ export const serviceOfferings: ServiceOffering[] = [
     category: 'Advisory & Continuous Improvement',
     badge: 'Executive Advisory',
     description: 'Build a stronger technology foundation with strategic guidance and hands-on engineering collaboration. We work alongside your team to clarify technical direction, improve software architecture, strengthen development practices, and turn business priorities into actionable technology initiatives. From evaluating technology choices to evolving existing products and addressing security risks, we help you make informed decisions, improve delivery, and create lasting value from your software investments.',
+    bestFor: 'Organisations that need a clearer technical direction before committing to a build or platform investment.',
     capabilities: [
       'Strategic Technology Advisory & Roadmap Planning',
       'Software Architecture & Engineering Guidance',
@@ -66,6 +68,7 @@ export const serviceOfferings: ServiceOffering[] = [
     category: 'Dedicated Teams & Staff Augmentation',
     badge: 'Rapid Mobilization',
     description: 'Strengthen your software development capabilities with experienced engineers, solution architects, and quality specialists across diverse technologies and platforms. Our flexible engagement models, structured onboarding, and transparent delivery practices help teams overcome technical challenges, accelerate development, improve software quality, and bring ideas to life efficiently.',
+    bestFor: 'Teams that need additional engineering capacity, specialist skills, or a dedicated delivery pod.',
     capabilities: [
       'Dedicated Specialist Teams',
       'Flexible Team Scaling & Staff Augmentation',
@@ -96,6 +99,7 @@ export const serviceOfferings: ServiceOffering[] = [
     category: 'Process Automation & Real-Time Insights',
     badge: 'Efficiency Engine',
     description: 'Transform complex workflows into streamlined digital processes with intelligent automation, integrated applications, and actionable real-time insights. From reducing manual effort to connecting fragmented systems, we engineer practical software solutions that improve efficiency, enhance visibility, and help businesses operate smarter.',
+    bestFor: 'Operations teams working with manual handoffs, fragmented systems, or limited process visibility.',
     capabilities: [
       'Workflow Optimisation & Process Re-engineering',
       'Intelligent Automation & API Integration',
@@ -114,6 +118,62 @@ export const serviceOfferings: ServiceOffering[] = [
       'Real-Time Operational Analytics & Executive Dashboards',
     ],
     iconName: 'Workflow',
+  },
+];
+
+export interface EngagementModel {
+  id: string;
+  name: string;
+  summary: string;
+  bestFor: string;
+  structure: string;
+  team: string;
+  governance: string;
+  support: string;
+  highlight?: boolean;
+}
+
+export const engagementModels: EngagementModel[] = [
+  {
+    id: 'project-delivery',
+    name: 'Project Delivery',
+    summary:
+      'A defined scope, planned in milestones and delivered against agreed acceptance criteria.',
+    bestFor: 'A clear outcome with a bounded scope.',
+    structure:
+      'Milestone-based delivery with a written scope and acceptance criteria.',
+    team: 'A focused project team assembled around the required skills.',
+    governance:
+      'Scope reviews, milestone demonstrations, and delivery checkpoints.',
+    support:
+      'Handover and post-release support as defined in the written agreement.',
+  },
+  {
+    id: 'dedicated-engineering-pod',
+    name: 'Dedicated Engineering Pod',
+    summary:
+      'An ongoing engineering team that works inside your delivery rhythm and priorities.',
+    bestFor:
+      'Continuous product development or additional engineering capacity.',
+    structure: 'Sprint-based engagement with a role-matched team.',
+    team: 'Engineers, QA, and architecture support matched to your stack.',
+    governance:
+      'Sprint planning, demonstrations, and transparent progress reporting.',
+    support: 'Ongoing development and support as agreed for the engagement.',
+    highlight: true,
+  },
+  {
+    id: 'advisory-architecture-retainer',
+    name: 'Advisory & Architecture Retainer',
+    summary:
+      'Technical guidance for direction, architecture, and delivery decisions.',
+    bestFor:
+      'Teams that need experienced guidance without a full build engagement.',
+    structure: 'Scheduled advisory sessions and architecture reviews.',
+    team: 'Architecture and engineering guidance from our practice leads.',
+    governance:
+      'Roadmaps, architecture recommendations, and written review notes.',
+    support: 'Periodic check-ins and follow-up guidance as agreed.',
   },
 ];
 

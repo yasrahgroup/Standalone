@@ -18,6 +18,8 @@ import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { SEOHead } from '../components/common/SEOHead';
 import { ProductStatusBadge } from '../components/common/ProductStatusBadge';
+import { Reveal } from '../components/common/Reveal';
+import { FinalCTA } from '../components/home/FinalCTA';
 
 export const ProductDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -64,7 +66,7 @@ export const ProductDetail: React.FC = () => {
       />
       {/* Product Hero */}
       <section className="section" style={{ backgroundColor: 'var(--color-background)', borderBottom: '1px solid var(--color-border)' }}>
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        <Reveal className="container" style={{ position: 'relative', zIndex: 1 }}>
           <Link
             to="/products"
             style={{
@@ -137,12 +139,12 @@ export const ProductDetail: React.FC = () => {
               Speak with Solution Architect
             </Button>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Technical Specifications Deep-Dive */}
       <section className="section" style={{ backgroundColor: '#ffffff' }}>
-        <div className="container">
+        <Reveal className="container">
           
           <h2 style={{ fontSize: '2rem', marginBottom: '0.75rem', color: 'var(--color-text-primary)' }}>
             Architecture design goals
@@ -153,7 +155,7 @@ export const ProductDetail: React.FC = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
             gap: '1.5rem',
             marginBottom: '3.5rem',
           }}>
@@ -201,7 +203,7 @@ export const ProductDetail: React.FC = () => {
           {/* Core Capabilities Detailed List */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
             gap: '3rem',
           }}>
             <div>
@@ -233,8 +235,11 @@ export const ProductDetail: React.FC = () => {
             </div>
           </div>
 
-        </div>
+        </Reveal>
       </section>
+
+      {/* Common Final CTA */}
+      <FinalCTA />
     </div>
   );
 };

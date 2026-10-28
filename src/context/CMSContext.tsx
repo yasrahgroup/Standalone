@@ -177,7 +177,7 @@ const defaultSettings: WebsiteSettings = {
   primary_email: companyInfo.headquarters.email,
   whatsapp_number: companyInfo.headquarters.whatsapp,
   linkedin_url: "https://linkedin.com/company/azaroth-tech-hive",
-  copyright_text: "All rights reserved © 2026 Azaroth Tech-Hive Inc",
+  copyright_text: "All rights reserved © 2026 Azaroth Tech-Hive ",
   footerLayout: "reversed",
 };
 

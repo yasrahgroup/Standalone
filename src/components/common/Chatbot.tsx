@@ -206,8 +206,8 @@ export const Chatbot: React.FC = () => {
           aria-label={`Open the ${botDisplayName}`}
           style={{
             position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
+            bottom: 'clamp(1rem, 4vw, 2rem)',
+            right: 'clamp(1rem, 4vw, 2rem)',
             width: '3.5rem',
             height: '3.5rem',
             borderRadius: '50%',
@@ -245,11 +245,11 @@ export const Chatbot: React.FC = () => {
           aria-describedby="chat-assistant-note"
           style={{
             position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            width: isMinimized ? '300px' : '400px',
-            maxWidth: 'calc(100vw - 4rem)',
-            maxHeight: isMinimized ? 'auto' : '600px',
+            bottom: 'clamp(1rem, 4vw, 2rem)',
+            right: 'clamp(1rem, 4vw, 2rem)',
+            width: isMinimized ? 'min(300px, calc(100vw - 2rem))' : 'min(400px, calc(100vw - 2rem))',
+            maxWidth: 'calc(100vw - 2rem)',
+            maxHeight: isMinimized ? 'auto' : 'min(600px, calc(100vh - 6rem))',
             backgroundColor: '#FFFFFF',
             borderRadius: '16px',
             boxShadow: '0 20px 50px rgba(15, 23, 42, 0.25), 0 0 1px rgba(73, 36, 63, 0.4)',
