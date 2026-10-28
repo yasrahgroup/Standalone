@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { productsCatalog } from "../../data/productsData";
@@ -26,31 +26,6 @@ export const ProductsSection: React.FC = () => {
     };
   });
 
-  // Fade in cards
-  const productsGridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const grid = productsGridRef.current;
-    if (!grid) return;
-
-    const cards = grid.querySelectorAll(".featured-product-card");
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          entry.target.classList.toggle("is-visible", entry.isIntersecting);
-        });
-      },
-      {
-        threshold: 0.2,
-      },
-    );
-
-    cards.forEach((card) => observer.observe(card));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
       id="software-solutions"
@@ -65,12 +40,17 @@ export const ProductsSection: React.FC = () => {
     >
       <div className="container">
         {/* Section Header */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{
             textAlign: "left",
-            maxWidth: "780px",
+            maxWidth: "1200px",
             margin: "0 0 3.5rem 0",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <AnimatedImage
@@ -120,10 +100,12 @@ export const ProductsSection: React.FC = () => {
             multi-location operations, omnichannel digital commerce, healthcare
             informatics, and enterprise workforce learning.
           </p>
-        </div>
+        </motion.div>
 
-        <div ref={productsGridRef} className="featured-products-grid">
-          {displayProducts.slice(0, 4).map((product: any) => {
+        <div
+          className="featured-products-grid"
+        >
+          {displayProducts.map((product: any, idx: number) => {
             const productName = product.title || product.name;
             const productDesc =
               product.shortDescription ||
@@ -148,12 +130,15 @@ export const ProductsSection: React.FC = () => {
               [];
 
             return (
-              <article
+              <motion.div
                 key={product.id || product.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="featured-product-card"
                 style={{
                   border: "1px solid #E2E8F0",
-                  // border: "2px solid #C99B52",
                 }}
               >
                 <div className="featured-product-image">
@@ -165,7 +150,7 @@ export const ProductsSection: React.FC = () => {
                     </div>
                   )}
 
-                  <div className="featured-product-status">
+                  <div className="featured-product-status" >
                     <ProductStatusBadge
                       status={product.status || "Under Development"}
                       colorScheme={product.statusColor}
@@ -199,21 +184,20 @@ export const ProductsSection: React.FC = () => {
                   <Link to="/products" className="featured-product-learn">
                     LEARN MORE <ArrowRight size={13} />
                   </Link>
-
-                  <Link
-                    to={`/connect-with-us?product=${encodeURIComponent(product.slug)}`}
-                    className="featured-product-demo"
-                  >
-                    DEMO
-                  </Link>
                 </div>
-              </article>
+                </motion.div>
             );
           })}
         </div>
 
         {/* View All Products CTA */}
-        <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: '-100px' }}
+          transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: "center", marginTop: "3rem" }}
+        >
           <Link
             to="/products"
             style={{
@@ -235,7 +219,7 @@ export const ProductsSection: React.FC = () => {
             <span>View Complete Platform Catalog</span>
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

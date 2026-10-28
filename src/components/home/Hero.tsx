@@ -25,7 +25,7 @@ export const Hero: React.FC = () => {
       style={{
         backgroundColor: "#FFFFFF",
         paddingTop: "4.5rem",
-        paddingBottom: "5.5rem",
+        paddingBottom: "4rem",
         position: "relative",
         overflow: "hidden",
       }}
@@ -77,7 +77,7 @@ export const Hero: React.FC = () => {
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: "clamp(2.75rem, 5.2vw, 4rem)",
+                fontSize: "clamp(2.75rem, 5.2vw, 1rem)",
                 fontWeight: 800,
                 color: "var(--color-text-primary, #0F172A)",
                 lineHeight: 1.15,
@@ -85,7 +85,7 @@ export const Hero: React.FC = () => {
                 marginBottom: "1.5rem",
               }}
             >
-              Intelligence, Engineered and{" "}
+              Intelligence Engineered{" "}
               <span
                 style={{
                   background: "var(--gradient-heading)",
@@ -94,9 +94,8 @@ export const Hero: React.FC = () => {
                   display: "inline-block",
                 }}
               >
-                Innovation
+                Innovation Unleashed.
               </span>{" "}
-              Unleashed.
             </h1>
 
             {/* Subtitle */}
@@ -256,8 +255,10 @@ export const Hero: React.FC = () => {
                 border: "1px solid rgba(226, 232, 240, 0.9)",
                 boxShadow: "0 10px 25px -4px rgba(124, 58, 237, 0.18)",
                 animation: "heroBadgeFloat1 4.5s ease-in-out infinite",
+                maxWidth: "45vw",
+                overflow: "hidden",
               }}
-              className="hero-badge-interactive"
+              className="hero-badge-interactive hero-badge-1"
             >
               <div
                 style={{
@@ -279,6 +280,8 @@ export const Hero: React.FC = () => {
                   fontWeight: 700,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
                 Web Development
@@ -302,8 +305,10 @@ export const Hero: React.FC = () => {
                 border: "1px solid rgba(226, 232, 240, 0.9)",
                 boxShadow: "0 10px 25px -4px rgba(13, 148, 136, 0.18)",
                 animation: "heroBadgeFloat2 5s ease-in-out infinite 0.6s",
+                maxWidth: "40vw",
+                overflow: "hidden",
               }}
-              className="hero-badge-interactive"
+              className="hero-badge-interactive hero-badge-2"
             >
               <div
                 style={{
@@ -348,8 +353,10 @@ export const Hero: React.FC = () => {
                 border: "1px solid rgba(226, 232, 240, 0.9)",
                 boxShadow: "0 10px 25px -4px rgba(2, 132, 199, 0.18)",
                 animation: "heroBadgeFloat3 4.2s ease-in-out infinite 1.2s",
+                maxWidth: "40vw",
+                overflow: "hidden",
               }}
-              className="hero-badge-interactive"
+              className="hero-badge-interactive hero-badge-3"
             >
               <div
                 style={{
@@ -371,6 +378,8 @@ export const Hero: React.FC = () => {
                   fontWeight: 700,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
                 Cloud Solutions
@@ -394,8 +403,10 @@ export const Hero: React.FC = () => {
                 border: "1px solid rgba(226, 232, 240, 0.9)",
                 boxShadow: "0 10px 25px -4px rgba(73, 36, 63, 0.18)",
                 animation: "heroBadgeFloat1 4.8s ease-in-out infinite 1.8s",
+                maxWidth: "45vw",
+                overflow: "hidden",
               }}
-              className="hero-badge-interactive"
+              className="hero-badge-interactive hero-badge-4"
             >
               <div
                 style={{
@@ -440,8 +451,10 @@ export const Hero: React.FC = () => {
                 border: "1px solid rgba(226, 232, 240, 0.9)",
                 boxShadow: "0 10px 25px -4px rgba(6, 182, 212, 0.18)",
                 animation: "heroBadgeFloat2 4.4s ease-in-out infinite 2.2s",
+                maxWidth: "45vw",
+                overflow: "hidden",
               }}
-              className="hero-badge-interactive"
+              className="hero-badge-interactive hero-badge-5"
             >
               <div
                 style={{
@@ -463,6 +476,8 @@ export const Hero: React.FC = () => {
                   fontWeight: 700,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
                 Analytics
@@ -496,6 +511,15 @@ export const Hero: React.FC = () => {
           .hero-badge-interactive {
             animation: none !important;
           }
+        }
+
+        /* Responsive badge placement for small viewports */
+        @media (max-width: 768px) {
+          .hero-badge-1 { top: -0.5rem !important; left: 1% !important; }
+          .hero-badge-2 { top: -0.25rem !important; left: 30% !important; }
+          .hero-badge-3 { top: -0.5rem !important; right: 1% !important; }
+          .hero-badge-4 { top: 20% !important; right: -0.5rem !important; }
+          .hero-badge-5 { top: 58% !important; right: -0.25rem !important; }
         }
       `}</style>
     </section>

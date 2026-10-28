@@ -9,7 +9,7 @@ export const deliveryFrameworkMeta = {
 export const deliveryStages: DeliveryStage[] = [
   {
     stageNumber: 1,
-    title: 'Discovery & Requirements',
+    title: 'Discovery',
     tagline: 'Understanding Goals, Constraints & Direction',
     duration: 'Phase 01',
     description: 'We understand your goals, user needs, existing systems, and technical challenges to define clear requirements and establish the right direction for your project.',
@@ -31,7 +31,7 @@ export const deliveryStages: DeliveryStage[] = [
   },
   {
     stageNumber: 2,
-    title: 'Planning & Solution Design',
+    title: 'Planning',
     tagline: 'Translating Needs into Practical Architecture',
     duration: 'Phase 02',
     description: 'We translate requirements into practical technical solutions, defining system architecture, technology choices, integrations, and a development roadmap built for long-term adaptability.',
@@ -53,7 +53,7 @@ export const deliveryStages: DeliveryStage[] = [
   },
   {
     stageNumber: 3,
-    title: 'Development & Implementation',
+    title: 'Development',
     tagline: 'Disciplined Coding & Collaborative Execution',
     duration: 'Phase 03',
     description: 'We transform designs into functional software through disciplined coding, collaborative development, reusable components, and consistent engineering practices.',
@@ -75,7 +75,7 @@ export const deliveryStages: DeliveryStage[] = [
   },
   {
     stageNumber: 4,
-    title: 'Testing & Quality Assurance',
+    title: 'Testing',
     tagline: 'Functionality, Performance & Usability Validation',
     duration: 'Phase 04',
     description: 'We validate functionality, performance, security, compatibility, and usability to identify issues early and ensure the solution meets its intended requirements.',
@@ -97,7 +97,7 @@ export const deliveryStages: DeliveryStage[] = [
   },
   {
     stageNumber: 5,
-    title: 'Deployment & Integration',
+    title: 'Deployment',
     tagline: 'Structured Rollout & Smooth Transition',
     duration: 'Phase 05',
     description: 'We implement solutions through structured deployment, system integration, data validation, and release management to ensure a smooth transition into operation.',
@@ -119,7 +119,7 @@ export const deliveryStages: DeliveryStage[] = [
   },
   {
     stageNumber: 6,
-    title: 'Support & Continuous Improvement',
+    title: 'Support',
     tagline: 'Ongoing Reliability, Optimization & Evolution',
     duration: 'Phase 06',
     description: 'We provide ongoing maintenance, issue resolution, performance optimisation, and iterative enhancements to keep your software reliable, relevant, and ready to evolve.',

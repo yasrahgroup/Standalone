@@ -350,6 +350,8 @@ import {
   FileText,
   X,
 } from "lucide-react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import { ContactFormData } from "../../types";
 import { Button } from "../common/Button";
 import { apiService, ContactSubmission } from "../../services/api";
@@ -730,6 +732,12 @@ export const ContactForm: React.FC = () => {
   gap: 1.25rem;
 }
 
+@media (max-width: 768px) {
+  .project-enquiry-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-enquiry-section .form-group {
   min-width: 0;
 }
@@ -919,6 +927,63 @@ export const ContactForm: React.FC = () => {
   }
 }
 
+/* Phone input with country selector */
+.phone-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+.phone-input:focus-within {
+  border-color: var(--color-primary, #4338ca);
+  outline: 2px solid rgba(67, 56, 202, 0.2);
+}
+
+.phone-input select {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  max-width: 120px;
+  font-family: var(--font-body);
+}
+
+.phone-input input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: var(--font-body);
+}
+
+.phone-input input:focus {
+  outline: none;
+}
+
+@media (max-width: 480px) {
+  .phone-input {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px;
+  }
+  .phone-input select {
+    max-width: 100%;
+  }
+  .phone-input input {
+    width: 100%;
+  }
+}
+
       `}</style>
       {/* Honeypot field: hidden from genuine users. */}
       <div
@@ -1028,14 +1093,15 @@ export const ContactForm: React.FC = () => {
             <label className="form-label" htmlFor="phone">
               Contact Number *
             </label>
-            <input
+            <PhoneInput
               id="phone"
-              type="tel"
-              className="form-input"
-              placeholder="Include country code, e.g. +91"
-              autoComplete="tel"
+              international
+              defaultCountry="IN"
+              countryCallingCodeEditable={false}
+              placeholder="Enter phone number"
               value={formData.phone}
-              onChange={(event) => updateField("phone", event.target.value)}
+              onChange={(value) => updateField("phone", value || "")}
+              className="phone-input"
               aria-invalid={Boolean(errors.phone)}
               aria-describedby={
                 errors.phone ? "contact-phone-error" : undefined

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface PageHeaderProps {
-  kicker: string;
+  kicker?: string;
   title: string;
   subtitle?: string;
   gradientWords?: string[];
@@ -9,7 +9,6 @@ interface PageHeaderProps {
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
-  kicker,
   title,
   subtitle,
   gradientWords = [],
@@ -48,7 +47,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     <section
       style={{
         backgroundColor: 'var(--color-canvas-bg, #FFFFFF)',
-        paddingTop: '5rem',
+        paddingTop: '12rem',
         paddingBottom: actions ? '4rem' : '5rem',
         position: 'relative',
         overflow: 'hidden',
@@ -119,33 +118,49 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       />
 
       <div
+        className="page-header-content"
+        style={{
+          width: "100%",
+          maxWidth: "1500px",
+          margin: "0 auto",
+          padding: "0 4rem",
+          textAlign: "left",
+        }}
+      >
+        {/* <div
         className="container"
         style={{
           textAlign: 'center',
-          maxWidth: '840px',
+          maxWidth: '110%',
           position: 'relative',
           zIndex: 1,
+          marginLeft: '0',
+          marginRight: '0',
+          paddingLeft: '0',
+          paddingRight: '0',
         }}
-      >
+      > */}
         {/* Kicker text */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            fontSize: '0.8125rem',
-            fontWeight: 700,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            marginBottom: '1rem',
-            color: '#49243F',
-            animation: 'fadeInUp 1s ease-out 0.3s forwards',
-            opacity: 0,
-          }}
-          className="page-header-kicker"
-        >
-          {kicker}
-        </div>
+        {/* {kicker && (
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontSize: '0.8125rem',
+              fontWeight: 700,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              marginBottom: '1rem',
+              color: '#49243F',
+              animation: 'fadeInUp 1s ease-out 0.3s forwards',
+              opacity: 0,
+            }}
+            className="page-header-kicker"
+          >
+            {kicker}
+          </div>
+        )} */}
 
         {/* Main title */}
         <h1
@@ -164,22 +179,28 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         </h1>
 
         {/* Subtitle if provided */}
-        {subtitle && (
-          <p
-            style={{
-              fontSize: '1.1875rem',
-              color: '#334155',
-              lineHeight: 1.7,
-              maxWidth: '720px',
-              margin: '0 auto',
-              animation: 'fadeInUp 1s ease-out 0.7s forwards',
-              opacity: 0,
-            }}
-            className="page-header-subtitle"
-          >
-            {subtitle}
-          </p>
-        )}
+
+{/* Subtitle if provided */}
+{subtitle && (
+  <p
+    style={{
+      fontSize: "1.1875rem",
+      color: "#334155",
+      lineHeight: 1.7,
+      width: "100%",
+      maxWidth: "none",
+      margin: "0",
+      textAlign: "left",
+      animation: "fadeInUp 1s ease-out 0.7s forwards",
+      opacity: 0,
+    }}
+    className="page-header-subtitle"
+  >
+    {subtitle}
+  </p>
+)}
+
+
 
         {/* Actions if provided */}
         {actions && (

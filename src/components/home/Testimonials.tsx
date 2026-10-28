@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
 import { testimonialAhmedImg } from '../../assets/images';
 
@@ -71,7 +72,11 @@ export const Testimonials: React.FC = () => {
       aria-label="Client Testimonials"
     >
       <div className="container">
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -80,7 +85,13 @@ export const Testimonials: React.FC = () => {
           }}
         >
           {/* Left Column: Heading */}
-          <div style={{ maxWidth: '420px' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            style={{ maxWidth: '420px' }}
+          >
             <div
               style={{
                 display: 'inline-flex',
@@ -122,10 +133,14 @@ export const Testimonials: React.FC = () => {
             <p style={{ color: '#64748B', fontSize: '1rem', lineHeight: 1.6 }}>
               Real feedback from enterprise leaders, founders, and CTOs who trust Azaroth Techhive to architect and build their software platforms.
             </p>
-          </div>
+          </motion.div>
 
           {/* Right Column: Testimonial Card */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{
               position: 'relative',
               backgroundColor: '#F8FAFC',
@@ -276,8 +291,8 @@ export const Testimonials: React.FC = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

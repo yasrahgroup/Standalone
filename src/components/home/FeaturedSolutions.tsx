@@ -1,39 +1,24 @@
+
 import React from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  Smartphone,
-  Cloud,
-  Settings,
-  ShieldCheck,
-  Lightbulb,
-  ArrowRight,
   Cpu,
   Compass,
   Users,
   Workflow,
+  ArrowRight,
 } from "lucide-react";
-import { useCMS } from "../../context/CMSContext";
 
 interface ServiceItem {
   id: string;
   title: string;
   description: string;
-  icon?: React.ReactNode;
-  iconBg?: string;
-  iconColor?: string;
-  link?: string;
-  slug?: string;
-  iconName?: string;
+  icon: React.ReactNode;
+  iconBg: string;
+  iconColor: string;
+  link: string;
 }
-
-const servicePalettes = [
-  { bg: "#F5F3FF", color: "#7C3AED" }, // Web Dev - Purple
-  { bg: "#F0FDFA", color: "#0D9488" }, // Mobile - Teal/Emerald
-  { bg: "#F0F9FF", color: "#0284C7" }, // Cloud - Sky Blue
-  { bg: "#FFE4E6", color: "#49243F" }, // IT Consulting - Crimson
-  { bg: "#FAF5FF", color: "#9333EA" }, // Cybersecurity - Indigo/Purple
-  { bg: "#FFF1F2", color: "#E11D48" }, // UI/UX - Rose
-];
 
 const services: ServiceItem[] = [
   {
@@ -79,75 +64,30 @@ const services: ServiceItem[] = [
 ];
 
 export const FeaturedSolutions: React.FC = () => {
-  const { services: cmsServices } = useCMS();
-
-  const getServiceIcon = (name?: string) => {
-    switch (name?.toLowerCase()) {
-      case "cpu":
-        return <Cpu size={24} />;
-      case "compass":
-        return <Compass size={24} />;
-      case "users":
-        return <Users size={24} />;
-      case "workflow":
-        return <Workflow size={24} />;
-      case "smartphone":
-      case "mobile":
-      case "mobile applications":
-        return <Smartphone size={24} />;
-      case "cloud":
-      case "cloud solutions":
-        return <Cloud size={24} />;
-      case "settings":
-      case "consulting":
-      case "it consulting":
-        return <Settings size={24} />;
-      case "shieldcheck":
-      case "security":
-      case "cybersecurity":
-        return <ShieldCheck size={24} />;
-      case "lightbulb":
-      case "design":
-      case "ui/ux design":
-        return <Lightbulb size={24} />;
-      default:
-        return <Cpu size={24} />;
-    }
-  };
-
-  const displayServices =
-    cmsServices && cmsServices.length > 0
-      ? cmsServices.map((srv, idx) => {
-          const pal = servicePalettes[idx % servicePalettes.length];
-          return {
-            id: srv.id || srv.slug || `srv-${idx}`,
-            title: srv.title,
-            description: srv.description || srv.summary || "",
-            icon: getServiceIcon(srv.iconName || srv.title),
-            iconBg: pal.bg,
-            iconColor: pal.color,
-            link: `/services#${srv.slug || "services"}`,
-          };
-        })
-      : services;
-
   return (
     <section
       id="services"
+      aria-label="Our Services"
       style={{
         backgroundColor: "#F8FAFC",
         paddingTop: "5rem",
-        paddingBottom: "5.5rem",
+        paddingBottom: "2.5rem",
         position: "relative",
       }}
-      aria-label="Our Services"
     >
       <div className="container">
         {/* Section Header */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           style={{
             textAlign: "left",
-            maxWidth: "720px",
+            maxWidth: "1300px",
             margin: "0 0 3.5rem 0",
           }}
         >
@@ -158,10 +98,10 @@ export const FeaturedSolutions: React.FC = () => {
               color: "#1E293B",
               letterSpacing: "-0.02em",
               lineHeight: 1.2,
-              marginBottom: "1rem",
+              marginBottom: "3rem",
             }}
           >
-            Software Engineering for{" "}
+            Engineering for{" "}
             <span
               style={{
                 background: "var(--gradient-heading)",
@@ -184,40 +124,45 @@ export const FeaturedSolutions: React.FC = () => {
             Azaroth Tech-Hive helps businesses turn ideas into dependable
             software, overcome technical challenges, and continuously improve
             their digital capabilities. From developing new applications and
-            integrating systems to modernizing existing solutions and supporting
-            ongoing development, we combine practical expertise with thoughtful
-            engineering to deliver software that works reliably, adapts to
-            changing needs, and creates lasting value. Our focus is on
-            simplifying complexity, improving performance, and building
-            maintainable solutions that support real-world goals and future
-            opportunities.
+            integrating systems to modernizing existing solutions and
+            supporting ongoing development, we combine practical expertise
+            with thoughtful engineering to deliver software that works
+            reliably, adapts to changing needs, and creates lasting value.
+            Our focus is on simplifying complexity, improving performance,
+            and building maintainable solutions that support real-world goals
+            and future opportunities.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Enterprise Services 1x1 Grid */}
+        {/* Services Grid */}
 
         <div
           className="featured-services-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-            gap: "16px",
-            width: "100%",
+            gap: "1.25rem",
             alignItems: "stretch",
+            width: "100%",
           }}
         >
-          {" "}
-          {displayServices.slice(0, 4).map((item) => (
-            <div
+          {services.map((item, idx) => (
+            <motion.div
               key={item.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, margin: "-100px" }}
+              transition={{
+                duration: 0.6,
+                delay: idx * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="featured-service-card"
               style={{
                 backgroundColor: "#FFFFFF",
                 borderRadius: "1rem",
                 padding: "1.25rem",
                 border: "1px solid #E2E8F0",
-                // border: "2px solid #C99B52",
-
                 boxShadow: "0 3px 12px rgba(15, 23, 42, 0.04)",
                 display: "flex",
                 flexDirection: "column",
@@ -225,11 +170,8 @@ export const FeaturedSolutions: React.FC = () => {
                 minWidth: 0,
                 height: "100%",
                 boxSizing: "border-box",
-                transition:
-                  "transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease",
               }}
             >
-              {/* Icon */}
               <div
                 style={{
                   width: "2.75rem",
@@ -243,14 +185,14 @@ export const FeaturedSolutions: React.FC = () => {
                   justifyContent: "center",
                   marginBottom: "1rem",
                 }}
+                aria-hidden="true"
               >
                 {item.icon}
               </div>
 
-              {/* Service title */}
               <h3
                 style={{
-                  fontSize: "1.0625rem",
+                  fontSize: "1rem",
                   fontWeight: 700,
                   color: "#1E293B",
                   lineHeight: 1.4,
@@ -261,25 +203,57 @@ export const FeaturedSolutions: React.FC = () => {
                 {item.title}
               </h3>
 
-              {/* Service description */}
               <p
                 style={{
-                  fontSize: "0.875rem",
+                  fontSize: "0.8125rem",
                   color: "#64748B",
                   lineHeight: 1.65,
                   margin: 0,
                   overflowWrap: "break-word",
                   textAlign: "justify",
+                  flexGrow: 1,
                 }}
               >
                 {item.description}
               </p>
-            </div>
+
+              <Link
+                to={item.link}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginTop: "1.25rem",
+                  color: "#0878E8",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+                aria-label={`Learn more about ${item.title}`}
+              >
+                Learn more
+                <ArrowRight size={16} />
+              </Link>
+            </motion.div>
           ))}
         </div>
 
-        {/* Single Learn More CTA */}
-        <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+
+        {/* Explore All Services */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{
+            duration: 0.6,
+            delay: 0.4,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style={{
+            textAlign: "center",
+            marginTop: "3.5rem",
+          }}
+        >
           <Link
             to="/services"
             style={{
@@ -293,31 +267,16 @@ export const FeaturedSolutions: React.FC = () => {
               fontWeight: 600,
               fontSize: "0.975rem",
               textDecoration: "none",
-              boxShadow: "0 6px 20px -2px rgba(73, 36, 63, 0.35)",
-              transition: "all 200ms ease-out",
+              boxShadow: "0 6px 20px -2px rgba(73, 36, 63, 0.25)",
+              transition: "transform 200ms ease, opacity 200ms ease",
             }}
             className="hover:scale-105 hover:opacity-95"
           >
-            <span>Explore</span>
+            <span>Explore All Services</span>
             <ArrowRight size={17} />
           </Link>
-        </div>
+        </motion.div>
       </div>
-
-      <style>{`
-        .featured-services-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 1.75rem;
-          align-items: stretch;
-        }
-        @media (min-width: 768px) {
-          .featured-services-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-          }
-        }
-      `}</style>
     </section>
   );
 };

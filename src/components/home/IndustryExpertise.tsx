@@ -1,32 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { industryExpertiseData } from '../../data/industryData';
-import { Card } from '../common/Card';
-import { ShoppingBag, GraduationCap, HeartPulse, Truck, Layers } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+
+interface ExpertiseSection {
+  key: 'challenge' | 'architecture' | 'outcome';
+  label: string;
+  field: 'challenge' | 'architecture' | 'outcome';
+}
+
+const SECTIONS: ({ num: number } & ExpertiseSection)[] = [
+  { num: 1, key: 'challenge', label: 'Challenge', field: 'challenge' },
+  { num: 2, key: 'architecture', label: 'Architecture', field: 'architecture' },
+  { num: 3, key: 'outcome', label: 'Outcome', field: 'outcome' },
+];
+
+const SECTION_STYLE: Record<string, { text: string; bg: string; border: string }> = {
+  challenge: {
+    text: 'var(--color-brand-violet)',
+    bg: 'var(--color-surface-muted)',
+    border: 'var(--color-border)',
+  },
+  architecture: {
+    text: 'var(--color-brand-gold-text)',
+    bg: 'var(--color-brand-gold-light)',
+    border: 'var(--color-brand-gold-border)',
+  },
+  outcome: {
+    text: 'var(--color-brand-emerald)',
+    bg: 'var(--color-surface-muted)',
+    border: 'var(--color-border)',
+  },
+};
 
 export const IndustryExpertise: React.FC = () => {
-  const getIcon = (iconName: string) => {
-    const icons: Record<string, React.ReactNode> = {
-      ShoppingBag: <ShoppingBag size={28} aria-hidden="true" />,
-      GraduationCap: <GraduationCap size={28} aria-hidden="true" />,
-      HeartPulse: <HeartPulse size={28} aria-hidden="true" />,
-      Truck: <Truck size={28} aria-hidden="true" />,
-      Layers: <Layers size={28} aria-hidden="true" />,
-    };
-    return icons[iconName] || <Layers size={28} aria-hidden="true" />;
-  };
+  const [selectedId, setSelectedId] = useState<string>(industryExpertiseData[0]?.id ?? '');
+  const industry = industryExpertiseData.find((item) => item.id === selectedId) ?? industryExpertiseData[0];
+
+  const isSelected = (id: string) => id === selectedId;
 
   return (
-    <section className="section" style={{ backgroundColor: '#ffffff' }}>
+    <section className="section" style={{ backgroundColor: '#ffffff' }} aria-labelledby="industry-expertise-heading">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 3.5rem 0' }}
+          style={{ textAlign: 'left', width: '104%', margin: '0 0 2rem 0' }}
         >
-          <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.75rem)', fontWeight: 800, marginBottom: '1rem', color: 'var(--color-text-primary)', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+          {/* <spantextAlign: 'left'
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              color: 'var(--color-brand-magenta)',
+              backgroundColor: 'var(--color-surface-rose)',
+              border: '1px solid var(--color-border)',
+              padding: '0.375rem 0.875rem',
+              borderRadius: 'var(--radius-full)',
+              marginBottom: '1rem',
+            }}
+          >
+            INDUSTRIAL EXPERTISE
+          </span> */}
+          <h2
+            id="industry-expertise-heading"
+            style={{
+              fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
+              fontWeight: 800,
+               maxWidth: "1300px",
+              marginBottom: '1rem',
+              color: 'var(--color-text-primary)',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
+              fontFamily: 'var(--font-heading)',
+            }}
+          >
             Our Specialised Engineering Across{' '}
             <span
               style={{
@@ -38,135 +91,270 @@ export const IndustryExpertise: React.FC = () => {
               Diverse Industries
             </span>
           </h2>
-          <p style={{ fontSize: '1.0625rem', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '1.0625rem', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
             We engineer for the operating realities of each industry: we learn the business and operational challenge first, then shape architecture, integrations, and automation around it.
           </p>
         </motion.div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2rem',
-        }}>
-          {industryExpertiseData.map((industry, index) => (
-            <motion.div
-              key={industry.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+        <div className="industry-expertise-grid" style={{ display: 'grid', gap: '2.5rem', alignItems: 'start' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}
+          >
+            {industryExpertiseData.map((item, idx) => {
+              const selected = isSelected(item.id);
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, margin: '-100px' }}
+                  transition={{ duration: 0.5, delay: idx * 0.08 }}
+                >
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.25rem',
+                    width: '100%',
+                    minHeight: '3.75rem',
+                    padding: '0.875rem 1rem',
+                    borderRadius: 'var(--radius-xl)',
+                    border: selected ? 'none' : '1px solid var(--color-border)',
+                    backgroundColor: selected ? 'var(--color-brand-magenta)' : 'var(--color-white)',
+                    color: selected ? 'var(--color-white)' : 'var(--color-text-primary)',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 200ms ease-out',
+                    boxSizing: 'border-box',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = selected ? 'transparent' : 'var(--color-brand-violet)';
+                    e.currentTarget.style.backgroundColor = selected
+                      ? 'var(--color-brand-violet)'
+                      : 'var(--color-surface-soft)';
+                    e.currentTarget.style.boxShadow = selected ? 'var(--shadow-md)' : 'var(--shadow-sm)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = selected ? 'none' : 'var(--color-border)';
+                    e.currentTarget.style.backgroundColor = selected
+                      ? 'var(--color-brand-magenta)'
+                      : 'var(--color-white)';
+                    e.currentTarget.style.boxShadow = '';
+                  }}
+                  onClick={() => setSelectedId(item.id)}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+                    <div>
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '0.9375rem',
+                          fontWeight: 800,
+                          lineHeight: 1.25,
+                          color: selected ? 'var(--color-white)' : 'var(--color-text-primary)',
+                        }}
+                      >
+                        {item.industry}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
+                          lineHeight: 1.4,
+                          color: selected ? 'var(--color-indigo-200)' : 'var(--color-text-secondary)',
+                        }}
+                      >
+                        {item.subtitle}
+                      </div>
+                    </div>
+                    <ChevronRight
+                      size={15}
+                      aria-hidden="true"
+                      style={{
+                        color: selected ? 'var(--color-white)' : 'var(--color-text-muted)',
+                        flexShrink: 0,
+                        transition: 'color 200ms ease-out',
+                      }}
+                    />
+                  </div>
+                  </button>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          >
+            <div
+              style={{
+                padding: '1.5rem',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-2xl)',
+                backgroundColor: 'var(--color-white)',
+                boxShadow: 'var(--shadow-sm)',
+              }}
             >
-              <Card
-                variant="glass"
-                padding="lg"
+              <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                  border: '1px solid var(--color-border)',
-                  transition: 'all 180ms ease-out',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                  e.currentTarget.style.borderColor = 'var(--color-brand-violet)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '';
-                  e.currentTarget.style.borderColor = '';
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '1rem',
+                  marginBottom: '1rem',
+                  flexWrap: 'wrap',
                 }}
               >
-                <div style={{
-                  width: '3.5rem',
-                  height: '3.5rem',
-                  borderRadius: '12px',
-                  backgroundColor: 'var(--color-surface-rose)',
-                  color: 'var(--color-brand-magenta)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1.25rem',
-                }}>
-                  {getIcon(industry.iconName)}
-                </div>
-
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
-                  {industry.industry}
-                </h3>
-
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-brand-magenta)', fontWeight: 600, marginBottom: '1.25rem' }}>
-                  {industry.subtitle}
-                </p>
-
-                <div style={{
-                  backgroundColor: 'var(--color-surface-muted)',
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border)',
-                  marginBottom: '0.75rem',
-                }}>
-                  <div style={{
+                {/* <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
                     fontSize: '0.75rem',
                     fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
                     color: 'var(--color-brand-violet)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    marginBottom: '0.5rem',
-                  }}>
-                    Operational & Business Challenge
-                  </div>
-                  <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                    {industry.challenge}
-                  </div>
-                </div>
+                    backgroundColor: 'var(--color-surface-soft)',
+                    border: '1px solid var(--color-border)',
+                    padding: '0.375rem 0.875rem',
+                    borderRadius: 'var(--radius-full)',
+                  }}
+                >
+                  ENGINEERING PRACTICE
+                </span> */}
+                {/* <button
+                  type="button"
+                  aria-label="View capabilities"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: 'var(--color-brand-violet)',
+                    backgroundColor: 'var(--color-surface-soft)',
+                    border: '1px solid var(--color-border)',
+                    padding: '0.4rem 1rem',
+                    borderRadius: 'var(--radius-full)',
+                    cursor: 'pointer',
+                    transition: 'all 200ms ease-out',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--color-primary-light)';
+                    e.currentTarget.style.borderColor = 'var(--color-brand-violet)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--color-surface-soft)';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
+                  }}
+                >
+                  View Capabilities
+                  <ArrowRight size={15} style={{ flexShrink: 0 }} aria-hidden="true" />
+                </button> */}
+              </div>
 
-                <div style={{
-                  backgroundColor: 'var(--color-brand-gold-light)',
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-brand-gold-border)',
-                  marginBottom: '0.75rem',
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: 'var(--color-brand-gold-text)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    marginBottom: '0.5rem',
-                  }}>
-                    Implemented Architecture
-                  </div>
-                  <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                    {industry.architecture}
-                  </div>
-                </div>
+              <h3
+                style={{
+                  fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                  fontWeight: 800,
+                  color: 'var(--color-text-primary)',
+                  margin: '0 0 1.5rem 0',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.2,
+                  fontFamily: 'var(--font-heading)',
+                }}
+              >
+                {industry.industry}
+              </h3>
 
-                <div style={{
-                  backgroundColor: 'var(--color-surface-muted)',
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border)',
-                  marginTop: 'auto',
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: 'var(--color-brand-emerald)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    marginBottom: '0.5rem',
-                  }}>
-                    Final Outcome
-                  </div>
-                  <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                    {industry.outcome}
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+              {SECTIONS.map((section, sidx) => {
+                const style = SECTION_STYLE[section.key];
+                return (
+                  <motion.div
+                    key={section.key}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, margin: '-100px' }}
+                    transition={{ duration: 0.5, delay: 0.2 + sidx * 0.08 }}
+                  >
+                    <div
+                      key={section.key}
+                      style={{
+                        backgroundColor: style.bg,
+                      border: `1px solid ${style.border}`,
+                      borderRadius: 'var(--radius-xl)',
+                      padding: '1rem',
+                      marginBottom: section.key === 'outcome' ? 0 : '1rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'baseline',
+                        gap: '0.375rem',
+                        marginBottom: '0.625rem',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '0.875rem',
+                          fontWeight: 800,
+                          color: style.text,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {section.num}. {section.label}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '0.9375rem',
+                        color: 'var(--color-text-secondary)',
+                        lineHeight: 1.55,
+                        margin: 0,
+                      }}
+                    >
+                      {industry[section.field]}
+                    </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
       </div>
+
+      <style>{`
+        .industry-expertise-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 1024px) {
+          .industry-expertise-grid {
+            grid-template-columns: 340px 1fr !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .industry-expertise-grid {
+            gap: 1.5rem;
+          }
+        }
+      `}</style>
     </section>
   );
 };

@@ -11,7 +11,7 @@ export const ProcessSection: React.FC = () => {
       backgroundColor: 'var(--color-surface-muted)',
       padding: '5rem 0',
     }}>
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container" style={{ position: 'relative' }}>
 
         {/* Section Header */}
         <motion.div

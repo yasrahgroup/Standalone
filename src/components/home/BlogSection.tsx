@@ -45,9 +45,9 @@ export const BlogSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 3.5rem 0' }}
+          style={{ textAlign: 'left', maxWidth: '1100px', margin: '0 0 3.5rem 0' }}
         >
           <h2 style={{
             fontSize: 'clamp(2rem, 3.5vw, 2.5rem)',
@@ -91,7 +91,7 @@ export const BlogSection: React.FC = () => {
               key={article.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: false, margin: '-100px' }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.25 } }}
               style={{
@@ -155,7 +155,7 @@ export const BlogSection: React.FC = () => {
                     }}
                   />
                   {/* Category Pill Badge */}
-                  <div
+                  {/* <div
                     style={{
                       position: 'absolute',
                       top: '1rem',
@@ -178,7 +178,7 @@ export const BlogSection: React.FC = () => {
                   >
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#49243F' }} />
                     {article.category}
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Content */}
@@ -259,7 +259,7 @@ export const BlogSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center' }}
         >

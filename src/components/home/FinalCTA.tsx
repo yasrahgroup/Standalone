@@ -27,25 +27,40 @@ export const FinalCTA: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}
+          style={{ textAlign: 'center', maxWidth: '1100px', margin: '0 auto' }}
         >
-          <h2 style={{
-            fontSize: 'clamp(2rem, 4vw, 2.75rem)',
-            fontWeight: 800,
-            color: 'var(--color-text-primary)',
-            marginBottom: '1.5rem',
-            lineHeight: 1.2,
-          }}>
-            Let's Build the Right Digital Solution.
+      
+             <h2
+            style={{
+              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
+              fontWeight: 800,
+              color: 'var(--color-text-primary, #0F172A)',
+              marginBottom: '1rem',
+              lineHeight: 1.2,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Let's Build the {' '}
+            <span
+              style={{
+                background: 'var(--gradient-heading)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Right Digital Solution.
+            </span>
           </h2>
-          <p style={{
-            fontSize: '1.25rem',
-            color: 'var(--color-text-secondary)',
-            lineHeight: 1.7,
-            marginBottom: '2.5rem',
-          }}>
+          <p
+            style={{
+              fontSize: '1.0625rem',
+              color: 'var(--color-text-secondary, #4B5563)',
+              lineHeight: 1.7,
+              margin: '25px 0',
+            }}
+          >
             Whether you need to engineer a mission-critical platform, modernize legacy systems, or deploy a dedicated engineering pod, we partner with you to turn ambitious roadmaps into resilient digital reality.
           </p>
           <div style={{
@@ -56,7 +71,7 @@ export const FinalCTA: React.FC = () => {
             gap: '1rem',
           }}>
             <Button to="/connect-with-us" variant="primary" size="lg" icon={<ArrowRight size={18} aria-hidden="true" />}>
-              Connect With Us
+              Plan Your Next Move
             </Button>
           </div>
         </motion.div>

@@ -7,6 +7,20 @@ import { Button } from '../common/Button';
 export const SlaMatrix: React.FC = () => {
   return (
     <section className="section" style={{ backgroundColor: '#F8FAFC', padding: '5.5rem 0' }}>
+      <style>{`
+        @media (max-width: 560px) {
+          .sla-highlight-badge {
+            whiteSpace: normal !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.7rem !important;
+            lineHeight: 1.25 !important;
+            textAlign: center !important;
+          }
+          .sla-highlight-badge span:last-child {
+            display: block !important;
+          }
+        }
+      `}</style>
       <div className="container">
         
         {/* Section Header */}
@@ -83,24 +97,25 @@ export const SlaMatrix: React.FC = () => {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.375rem',
-                      padding: '0.35rem 0.85rem',
-                      borderRadius: '9999px',
-                      fontSize: '0.75rem',
-                      fontWeight: 800,
-                      background: '#49243F',
-                      color: '#FFFFFF',
-                      boxShadow: '0 4px 14px rgba(73, 36, 63, 0.35)',
-                      letterSpacing: '0.02em',
-                    }}
-                  >
-                    <Sparkles size={13} />
-                    <span>Recommended for Global Enterprises</span>
-                  </span>
+<span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        padding: '0.35rem 0.85rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        background: '#49243F',
+                        color: '#FFFFFF',
+                        boxShadow: '0 4px 14px rgba(73, 36, 63, 0.35)',
+                        letterSpacing: '0.02em',
+                      }}
+                      className="sla-highlight-badge"
+                    >
+                      <Sparkles size={13} />
+                      <span>Recommended for Global Enterprises</span>
+                    </span>
                 </div>
               )}
 

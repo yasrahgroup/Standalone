@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Button } from '../common/Button';
-import { ChevronDown, ChevronUp, ArrowRight, ShieldCheck, Zap, Users } from 'lucide-react';
+//import { Link } from 'react-router-dom';
+//import { Button } from '../common/Button';
+import { ChevronDown, ChevronUp, ShieldCheck, Zap, Users } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 import { faqSupportCardImg } from '../../assets/images';
 
@@ -66,6 +66,12 @@ export const FAQSection: React.FC = () => {
             gap: 2.75rem;
           }
         }
+        @media (max-width: 1023px) {
+          .faq-visual-card {
+            position: relative !important;
+            top: 0 !important;
+          }
+        }
       `}</style>
 
       <div className="container">
@@ -73,7 +79,7 @@ export const FAQSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 3rem 0' }}
         >
@@ -125,7 +131,7 @@ export const FAQSection: React.FC = () => {
                     key={index}
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-80px' }}
+                    viewport={{ once: false, margin: '-80px' }}
                     transition={{ duration: 0.35, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
                     style={{
                       marginBottom: '0.625rem',
@@ -230,19 +236,20 @@ export const FAQSection: React.FC = () => {
             </div>
 
             {/* Quick Micro-links beneath FAQs */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            {/* <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               <Button to="/connect-with-us" variant="primary" size="md">
                 Connect with our team
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Column: Visual Feature Card with Image */}
           <motion.div
             initial={{ opacity: 0, x: 25 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, margin: '-100px' }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="faq-visual-card"
             style={{
               position: 'sticky',
               top: '6rem',
@@ -395,7 +402,7 @@ export const FAQSection: React.FC = () => {
               </div>
 
               {/* Action Button */}
-              <Link
+              {/* <Link
                 to="/connect-with-us"
                 style={{
                   display: 'flex',
@@ -417,7 +424,7 @@ export const FAQSection: React.FC = () => {
               >
                 <span>Plan Your Next Move</span>
                 <ArrowRight size={15} />
-              </Link>
+              </Link> */}
             </div>
           </motion.div>
         </div>
