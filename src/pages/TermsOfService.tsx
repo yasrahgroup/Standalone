@@ -42,8 +42,8 @@ export const TermsOfService: React.FC = () => {
           <h1
             style={{
               marginBottom: "1rem",
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.2vw, 2.35rem)",
+              fontWeight: 600,
               color: "var(--color-text-primary)",
             }}
           >

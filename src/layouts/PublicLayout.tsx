@@ -54,7 +54,7 @@ export const PublicLayout: React.FC = () => {
             padding: '0.75rem 1.25rem',
             backgroundColor: 'var(--color-primary-button, #18181B)',
             color: '#ffffff',
-            fontWeight: 700,
+            fontWeight: 600,
             textDecoration: 'none',
             borderRadius: '0 0 var(--radius-md, 8px) 0',
           }}

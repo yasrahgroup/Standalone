@@ -73,8 +73,8 @@ export const Connect: React.FC = () => {
             <Reveal>
               <h2
                 style={{
-                  fontSize: 'clamp(1.85rem, 3.5vw, 2.35rem)',
-                  fontWeight: 800,
+                  fontSize: 'clamp(1.65rem, 3vw, 2.15rem)',
+                  fontWeight: 600,
                   color: '#1E293B',
                   marginBottom: '1rem',
                   lineHeight: 1.25,
@@ -164,8 +164,8 @@ export const Connect: React.FC = () => {
                       rel="noopener noreferrer"
                       aria-label={`Chat on WhatsApp: ${phone}`}
                       style={{
-                        fontSize: '1.0625rem',
-                        fontWeight: 800,
+                        fontSize: '1rem',
+                        fontWeight: 600,
                         color: '#1E293B',
                         textDecoration: 'none',
                         letterSpacing: '0.01em',
@@ -206,7 +206,7 @@ export const Connect: React.FC = () => {
                       href={`mailto:${email}`}
                       style={{
                         fontSize: '0.9375rem',
-                        fontWeight: 700,
+                        fontWeight: 600,
                         color: '#1E293B',
                         textDecoration: 'none',
                         display: 'inline-flex',

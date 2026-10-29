@@ -20,11 +20,11 @@ export const NotFound: React.FC = () => {
         Status 404
       </Badge>
 
-      <h1 style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, color: 'var(--color-brand-emerald)', marginBottom: '0.75rem', lineHeight: 1 }}>
+      <h1 style={{ fontSize: 'clamp(2.25rem, 4.5vw, 3.25rem)', fontWeight: 600, color: 'var(--color-brand-emerald)', marginBottom: '0.75rem', lineHeight: 1.1 }}>
         Route Not Found
       </h1>
 
-      <p style={{ maxWidth: '520px', color: 'var(--color-text-secondary)', fontSize: '1.125rem', marginBottom: '2.5rem', lineHeight: 1.6, marginLeft: 'auto', marginRight: 'auto' }}>
+      <p style={{ maxWidth: '520px', color: 'var(--color-text-secondary)', fontSize: '1rem', marginBottom: '2.5rem', lineHeight: 1.6, marginLeft: 'auto', marginRight: 'auto' }}>
         The path you navigated to does not exist or has been relocated within our enterprise architecture.
       </p>
 

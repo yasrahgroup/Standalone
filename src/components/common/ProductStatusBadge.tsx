@@ -15,7 +15,7 @@ interface ProductStatusBadgeProps {
  * ProductStatusBadge
  * Renders consistent, accessible color-coded badges for product statuses:
  * - Green (Live): #DCFCE7 bg, #15803D text, #86EFAC border
- * - Blue (Ready For Deploy): #EFF6FF bg, #1D4ED8 text, #BFDBFE border
+ * - Blue (Ready For Deployment): #EFF6FF bg, #1D4ED8 text, #BFDBFE border
  * - Violet (Staging): #F3E8FF bg, #7E22CE text, #D8B4FE border
  * - Amber (Under Development): #FFFBEB bg, #B45309 text, #FDE68A border
  */
@@ -29,7 +29,7 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
 }) => {
   const normalized = (status || '').trim().toLowerCase();
   const isLive = normalized === 'live' || normalized === 'published';
-  const isReady = normalized === 'ready to deploy' || normalized === 'ready';
+  const isReady = normalized === 'ready for deployment' || normalized === 'ready';
   const isStaging = normalized === 'staging';
 
   // Determine effective color scheme
@@ -61,7 +61,7 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
     dotColor = '#16A34A';
     pulse = false;
   } else if (scheme === 'blue') {
-    label = isReady ? 'Ready For Deploy' : status;
+    label = isReady ? 'Ready For Deployment' : status;
     bg = '#EFF6FF';
     text = '#1D4ED8';
     border = '#BFDBFE';
@@ -120,7 +120,7 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
         border: `1px solid ${border}`,
         borderRadius: '9999px',
         fontSize: sizeStyles.fontSize,
-        fontWeight: 700,
+        fontWeight: 600,
         lineHeight: 1.2,
         letterSpacing: '0.02em',
         boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',

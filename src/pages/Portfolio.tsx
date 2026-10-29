@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -7,14 +7,11 @@ import {
   Compass,
   Cpu,
   Layers,
-  Lightbulb,
-  Maximize2,
   ShieldCheck,
-  TrendingUp,
   Users,
   Workflow,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SEOHead } from "../components/common/SEOHead";
 import { Button } from "../components/common/Button";
 import { Reveal } from "../components/common/Reveal";
@@ -23,10 +20,6 @@ import { productsCatalog } from "../data/productsData";
 import { ProductStatusBadge } from "../components/common/ProductStatusBadge";
 import { serviceOfferings } from "../data/servicesData";
 import { deliveryStages } from "../data/deliveryData";
-import { ourValuesPrinciples } from "../data/companyData";
-
-const featuredProduct = productsCatalog[0];
-const ongoingProducts = productsCatalog.slice(1);
 
 const serviceIcon = (name: string) => {
   switch (name) {
@@ -41,34 +34,104 @@ const serviceIcon = (name: string) => {
   }
 };
 
-const principleIcon = (name: string) => {
-  switch (name) {
-    case "ShieldCheck":
-      return <ShieldCheck size={22} />;
-    case "Maximize2":
-      return <Maximize2 size={22} />;
-    case "CheckCircle":
-      return <Check size={22} />;
-    case "Users":
-      return <Users size={22} />;
-    case "TrendingUp":
-      return <TrendingUp size={22} />;
-    default:
-      return <Lightbulb size={22} />;
-  }
-};
-
-const principleOrder = [
-  "Purpose-Driven Innovation",
-  "Engineering Excellence",
-  "Trust & Accountability",
-  "Collaborative Partnership",
-];
-
 export const Portfolio: React.FC = () => {
-  const principles = principleOrder
-    .map((title) => ourValuesPrinciples.find((item) => item.title === title))
-    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+  const location = useLocation();
+  const [activeSection, setActiveSection] = useState<"products" | "services">("products");
+  const isUserScrollingRef = useRef(false);
+
+  const scrollToSection = useCallback((sectionId: string, smooth = true) => {
+    const targetId =
+      sectionId === "platforms"
+        ? "products"
+        : sectionId === "capabilities"
+          ? "services"
+          : sectionId;
+
+    setActiveSection(targetId === "services" ? "services" : "products");
+    isUserScrollingRef.current = true;
+
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: smooth ? "smooth" : "auto",
+        block: "start",
+      });
+      window.history.pushState(null, "", `#${targetId}`);
+    }
+
+    // Re-enable observer tracking after smooth scroll completes
+    setTimeout(() => {
+      isUserScrollingRef.current = false;
+    }, 700);
+  }, []);
+
+  // Handle anchor navigation on initial load and route/hash changes
+  useEffect(() => {
+    const rawHash = location.hash ? location.hash.replace("#", "") : "";
+    if (!rawHash) return;
+
+    const targetId =
+      rawHash === "platforms"
+        ? "products"
+        : rawHash === "capabilities"
+          ? "services"
+          : rawHash;
+
+    if (targetId === "products" || targetId === "services") {
+      setActiveSection(targetId);
+
+      const attemptScroll = (behavior: ScrollBehavior) => {
+        const elem = document.getElementById(targetId);
+        if (elem) {
+          elem.scrollIntoView({ behavior, block: "start" });
+        }
+      };
+
+      // Immediate attempt on animation frame
+      const raf = requestAnimationFrame(() => attemptScroll("auto"));
+
+      // Staggered timers to ensure correct scroll position after layout, fonts, and images settle
+      const t1 = setTimeout(() => attemptScroll("smooth"), 80);
+      const t2 = setTimeout(() => attemptScroll("smooth"), 280);
+      const t3 = setTimeout(() => attemptScroll("smooth"), 550);
+
+      return () => {
+        cancelAnimationFrame(raf);
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
+    }
+  }, [location.hash, location.pathname]);
+
+  // Track active section via IntersectionObserver for scroll spy
+  useEffect(() => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      if (isUserScrollingRef.current) return;
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === "products") {
+            setActiveSection("products");
+          } else if (entry.target.id === "services") {
+            setActiveSection("services");
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: "-25% 0px -55% 0px",
+      threshold: 0.1,
+    });
+
+    const productsEl = document.getElementById("products");
+    const servicesEl = document.getElementById("services");
+
+    if (productsEl) observer.observe(productsEl);
+    if (servicesEl) observer.observe(servicesEl);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div>
@@ -110,20 +173,6 @@ export const Portfolio: React.FC = () => {
                 scope and a practical plan.
               </p>
 
-              <div className="portfolio-actions">
-                <Button
-                  to="/connect-with-us"
-                  variant="primary"
-                  size="lg"
-                  icon={<ArrowRight size={18} />}
-                >
-                  Discuss Your Project
-                </Button>
-                <Button to="/products" variant="outline" size="lg">
-                  Explore Platforms
-                </Button>
-              </div>
-
               <div className="portfolio-hero-note">
                 <ShieldCheck size={15} />
                 <span>
@@ -155,11 +204,6 @@ export const Portfolio: React.FC = () => {
                     label: "Delivery framework",
                     value: `${deliveryStages.length} defined stages`,
                   },
-                  // {
-                  //   icon: <MapPin size={18} />,
-                  //   label: 'Head office',
-                  //   value: 'Chennai, India',
-                  // },
                 ].map((item) => (
                   <div key={item.label} className="portfolio-snapshot-row">
                     <span className="portfolio-snapshot-icon">{item.icon}</span>
@@ -180,115 +224,55 @@ export const Portfolio: React.FC = () => {
         </div>
       </section>
 
-      {/* FEATURED & ONGOING PROJECTS */}
+
+
+      {/* 1. DEDICATED PRODUCTS SECTION */}
       <section
-        id="platforms"
+        id="products"
         className="portfolio-section portfolio-section--muted"
+        style={{ scrollMarginTop: "5.5rem" }}
       >
+        {/* Alias for backwards compatibility with legacy #platforms links */}
+        <div id="platforms" style={{ position: "relative", top: "-5.5rem", height: 0 }} aria-hidden="true" />
         <div className="container">
           <Reveal className="portfolio-section-head">
             <div className="portfolio-section-heading">
               <div className="portfolio-kicker">
-                {/* <Sparkles size={16} /> */}
-                <span>Featured &amp; Ongoing Projects</span>
+                <Layers size={16} />
+                <span>Software Products</span>
               </div>
               <h2 className="portfolio-section-title">
-                Featured work and what is in progress
+                Software Products &amp; Platforms
               </h2>
             </div>
             <div className="portfolio-section-aside">
               <p className="portfolio-section-copy">
-                One platform is closest to deployment, while the others are in
-                active development. Status labels reflect the current stage
-                shown in our published catalog, not a marketing timeline.
+                Purpose-engineered software platforms designed for scalable multi-location operations,
+                omnichannel digital commerce, healthcare informatics, and enterprise workforce learning.
               </p>
             </div>
           </Reveal>
 
-          {featuredProduct && (
-            <Reveal className="portfolio-featured-card">
-              <div className="portfolio-featured-media">
-                <img
-                  src={featuredProduct.coverImage}
-                  alt={featuredProduct.coverAlt}
-                />
-                <div
-                  className="portfolio-featured-overlay"
-                  aria-hidden="true"
-                />
-                <div className="portfolio-featured-badges">
-                  <ProductStatusBadge
-                    status={featuredProduct.status || "Under Development"}
-                    colorScheme={featuredProduct.statusColor}
-                    size="sm"
-                  />
-                </div>
-              </div>
-
-              <div className="portfolio-featured-body">
-                <h3>{featuredProduct.name}</h3>
-                <div className="portfolio-featured-tagline">
-                  {featuredProduct.tagline}
-                </div>
-                <p>{featuredProduct.shortDescription}</p>
-
-                <div className="portfolio-capability-list">
-                  {featuredProduct.keyCapabilities
-                    .slice(0, 4)
-                    .map((capability) => (
-                      <div key={capability}>
-                        <Check size={14} />
-                        <span>{capability}</span>
-                      </div>
-                    ))}
-                </div>
-
-                <div className="portfolio-card-footer">
-                  <Link
-                    to={`/products?product=${featuredProduct.slug}`}
-                    className="portfolio-inline-link"
-                  >
-                    <span>View Platform</span>
-                    <ArrowUpRight size={15} />
-                  </Link>
-                  <Button to="/connect-with-us" variant="primary" size="sm">
-                    Request a Walkthrough
-                  </Button>
-                </div>
-              </div>
-            </Reveal>
-          )}
-
-          <div className="portfolio-ongoing-head">
-            <div>
-              <h3>Ongoing projects</h3>
-              <p>Platforms currently in staging and active development.</p>
-            </div>
-            <span className="portfolio-ongoing-count">
-              {ongoingProducts.length}{" "}
-              {ongoingProducts.length === 1 ? "project" : "projects"} in
-              progress
-            </span>
-          </div>
-
-          <div className="portfolio-ongoing-grid">
-            {ongoingProducts.map((product, index) => (
+          <div className="portfolio-products-showcase">
+            {productsCatalog.map((product, index) => (
               <Reveal
                 key={product.id}
                 delay={index * 0.06}
-                className="portfolio-platform-card"
+                className="portfolio-product-card"
               >
-                <div className="portfolio-platform-media">
+                <div className="portfolio-product-media">
                   <img
                     src={product.coverImage}
                     alt={product.coverAlt}
                     loading="lazy"
                   />
+
                   <div
-                    className="portfolio-platform-overlay"
+                    className="portfolio-product-overlay"
                     aria-hidden="true"
                   />
-                  <div className="portfolio-platform-status">
+
+                  <div className="portfolio-product-status">
                     <ProductStatusBadge
                       status={product.status || "Under Development"}
                       colorScheme={product.statusColor}
@@ -297,32 +281,31 @@ export const Portfolio: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="portfolio-platform-body">
+                <div className="portfolio-product-body">
                   <h3>{product.name}</h3>
-                  <div className="portfolio-platform-tagline">
+
+                  <div className="portfolio-product-tagline">
                     {product.tagline}
                   </div>
+
                   <p>{product.shortDescription}</p>
 
-                  <div className="portfolio-capability-list">
-                    {product.keyCapabilities.slice(0, 2).map((capability) => (
-                      <div key={capability}>
-                        <Check size={14} />
-                        <span>{capability}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="portfolio-card-footer">
+                  <div className="portfolio-product-footer">
                     <Link
                       to={`/products?product=${product.slug}`}
+                      state={{ from: '/portfolio' }}
                       className="portfolio-inline-link"
                     >
-                      <span>View Platform</span>
+                      <span>Explore More</span>
                       <ArrowUpRight size={15} />
                     </Link>
-                    <Button to="/connect-with-us" variant="primary" size="sm">
-                      Request a Walkthrough
+
+                    <Button
+                      to="/connect-with-us"
+                      variant="primary"
+                      size="sm"
+                    >
+                      Request a Demo
                     </Button>
                   </div>
                 </div>
@@ -332,23 +315,29 @@ export const Portfolio: React.FC = () => {
         </div>
       </section>
 
-      {/* CAPABILITIES */}
-      <section id="capabilities" className="portfolio-section">
+      {/* 2. DEDICATED SERVICES SECTION */}
+      <section
+        id="services"
+        className="portfolio-section"
+        style={{ scrollMarginTop: "5.5rem" }}
+      >
+        {/* Alias for backwards compatibility with legacy #capabilities links */}
+        <div id="capabilities" style={{ position: "relative", top: "-5.5rem", height: 0 }} aria-hidden="true" />
         <div className="container">
           <Reveal className="portfolio-section-head">
             <div className="portfolio-section-heading">
               <div className="portfolio-kicker">
                 <Workflow size={16} />
-                <span>Engineering Capabilities</span>
+                <span>Enterprise Engineering Services</span>
               </div>
               <h2 className="portfolio-section-title">
-                How we support delivery
+                Services &amp; Engineering Practices
               </h2>
             </div>
             <div className="portfolio-section-aside">
               <p className="portfolio-section-copy">
                 Our practices cover the work that sits around a platform:
-                modernisation, technical direction, engineering capacity, and
+                digital modernisation, technical direction, dedicated engineering capacity, and
                 process automation.
               </p>
             </div>
@@ -403,91 +392,6 @@ export const Portfolio: React.FC = () => {
         </div>
       </section>
 
-      {/* APPROACH */}
-      <section
-        id="approach"
-        className="portfolio-section portfolio-section--muted"
-      >
-        <div className="container">
-          <Reveal className="portfolio-section-head">
-            <div className="portfolio-section-heading">
-              <div className="portfolio-kicker">
-                <Building2 size={16} />
-                <span>Our Approach</span>
-              </div>
-              <h2 className="portfolio-section-title">
-                A structured path from discovery to support
-              </h2>
-            </div>
-            <div className="portfolio-section-aside">
-              <p className="portfolio-section-copy">
-                Every project follows the same six-stage delivery framework. The
-                depth of each stage is agreed up front, so you always know what
-                is happening and what comes next.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="portfolio-approach-grid">
-            {deliveryStages.map((stage, index) => (
-              <Reveal
-                key={stage.stageNumber}
-                delay={index * 0.05}
-                className="portfolio-approach-card"
-              >
-                <div className="portfolio-approach-number">
-                  {String(stage.stageNumber).padStart(2, "0")}
-                </div>
-                <h3>{stage.title}</h3>
-                <div className="portfolio-approach-tagline">
-                  {stage.tagline}
-                </div>
-                <p>{stage.description}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PRINCIPLES */}
-      <section id="principles" className="portfolio-section">
-        <div className="container">
-          <Reveal className="portfolio-section-head">
-            <div className="portfolio-section-heading">
-              <div className="portfolio-kicker">
-                <ShieldCheck size={16} />
-                <span>How We Work</span>
-              </div>
-              <h2 className="portfolio-section-title">
-                Principles behind every engagement
-              </h2>
-            </div>
-            <div className="portfolio-section-aside">
-              <p className="portfolio-section-copy">
-                These are the working principles that shape how we scope, build,
-                communicate, and hand over software.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="portfolio-principles-grid">
-            {principles.map((principle, index) => (
-              <Reveal
-                key={principle.number}
-                delay={index * 0.06}
-                className="portfolio-principle-card"
-              >
-                <span className="portfolio-icon-tile">
-                  {principleIcon(principle.iconName)}
-                </span>
-                <h3>{principle.title}</h3>
-                <p>{principle.description}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <FinalCTA />
 
       <style>{`
@@ -534,7 +438,7 @@ export const Portfolio: React.FC = () => {
           align-items: center;
           gap: 0.5rem;
           font-size: 0.8125rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           letter-spacing: 0.18em;
           text-transform: uppercase;
@@ -542,18 +446,18 @@ export const Portfolio: React.FC = () => {
         }
 
         .portfolio-hero-title {
-          font-size: clamp(2.35rem, 4.6vw, 3.5rem);
-          font-weight: 800;
+          font-size: clamp(1.85rem, 3.5vw, 2.35rem);
+          font-weight: 600;
           color: #1E293B;
-          line-height: 1.14;
+          line-height: 1.22;
           letter-spacing: -0.025em;
           margin-bottom: 1.25rem;
         }
 
         .portfolio-hero-copy {
-          font-size: 1.125rem;
+          font-size: 1rem;
           color: #475569;
-          line-height: 1.72;
+          line-height: 1.7;
           max-width: 620px;
           margin-bottom: 1.75rem;
         }
@@ -573,7 +477,7 @@ export const Portfolio: React.FC = () => {
           gap: 0.4rem;
           color: #49243F;
           font-size: 0.9rem;
-          font-weight: 700;
+          font-weight: 600;
           text-decoration: none;
           transition: gap 160ms ease, color 160ms ease;
         }
@@ -613,7 +517,7 @@ export const Portfolio: React.FC = () => {
           align-items: center;
           gap: 0.55rem;
           font-size: 0.8125rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: #49243F;
@@ -644,13 +548,13 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-snapshot-label {
           font-size: 0.875rem;
-          font-weight: 600;
+          font-weight: 500;
           color: #475569;
         }
 
         .portfolio-snapshot-value {
           font-size: 0.875rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           text-align: right;
         }
@@ -665,6 +569,104 @@ export const Portfolio: React.FC = () => {
         .portfolio-section {
           padding: clamp(3rem, 7vw, 5rem) 0;
           background-color: #FFFFFF;
+          scroll-margin-top: 5.5rem;
+        }
+
+        .portfolio-anchor-nav {
+          position: sticky;
+          top: clamp(3.5rem, 5vw, 4.75rem);
+          z-index: 30;
+          background-color: rgba(255, 255, 255, 0.96);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-bottom: 1px solid #E2E8F0;
+          padding: 0.75rem 0;
+          box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+        }
+
+        .portfolio-anchor-pills {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .portfolio-anchor-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1.15rem;
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #475569;
+          background-color: #F8FAFC;
+          border: 1px solid #E2E8F0;
+          text-decoration: none;
+          transition: all 180ms ease-out;
+          cursor: pointer;
+        }
+
+        .portfolio-anchor-pill:hover {
+          background-color: #F1F5F9;
+          color: #1E293B;
+          transform: translateY(-1px);
+        }
+
+        .portfolio-anchor-pill--active {
+          background: var(--gradient-button, #49243F) !important;
+          color: #FFFFFF !important;
+          border-color: #49243F !important;
+          box-shadow: 0 4px 14px rgba(73, 36, 63, 0.25);
+        }
+
+        .portfolio-anchor-pill--active .portfolio-anchor-count {
+          background: rgba(255, 255, 255, 0.25);
+          color: #FFFFFF;
+        }
+
+        .portfolio-anchor-count {
+          font-size: 0.75rem;
+          padding: 0.15rem 0.45rem;
+          border-radius: 9999px;
+          background: #E2E8F0;
+          color: #64748B;
+          font-weight: 600;
+          transition: all 180ms ease;
+        }
+
+        .portfolio-hero-anchor-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.4rem;
+          border-radius: 9999px;
+          font-size: 0.9375rem;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 180ms ease-out;
+        }
+
+        .portfolio-hero-anchor-btn--primary {
+          background: var(--gradient-button);
+          color: #FFFFFF;
+          box-shadow: 0 4px 16px rgba(73, 36, 63, 0.3);
+        }
+
+        .portfolio-hero-anchor-btn--primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(73, 36, 63, 0.4);
+          opacity: 0.95;
+        }
+
+        .portfolio-hero-anchor-btn--secondary {
+          background: #FFFFFF;
+          color: #49243F;
+          border: 1.5px solid #49243F;
+        }
+
+        .portfolio-hero-anchor-btn--secondary:hover {
+          background: rgba(73, 36, 63, 0.05);
+          transform: translateY(-2px);
         }
 
         .portfolio-section--muted {
@@ -683,6 +685,166 @@ export const Portfolio: React.FC = () => {
           width: 100%;
           max-width: 1100px;
         }
+          
+.portfolio-products-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.portfolio-product-card {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle, #E2E8F0);
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 22px -8px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.portfolio-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -18px rgba(73, 36, 63, 0.18);
+  border-color: rgba(73, 36, 63, 0.22);
+}
+
+.portfolio-product-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-surface-soft, #F5F8FB);
+}
+
+.portfolio-product-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.portfolio-product-card:hover .portfolio-product-media img {
+  transform: scale(1.04);
+}
+
+.portfolio-product-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.02) 35%,
+    rgba(15, 23, 42, 0.38) 100%
+  );
+  pointer-events: none;
+}
+
+.portfolio-product-status {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 1;
+  max-width: calc(100% - 1.7rem);
+}
+
+.portfolio-product-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.35rem;
+}
+
+.portfolio-product-body h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary, #1E293B);
+}
+
+.portfolio-product-tagline {
+  margin-bottom: 0.75rem;
+  color: var(--color-primary-maroon, #49243F);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.portfolio-product-body > p {
+  flex: 1;
+  margin: 0 0 1.1rem;
+  color: var(--color-text-secondary, #64748B);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.portfolio-product-capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin-bottom: 1.2rem;
+}
+
+.portfolio-capability-pill {
+  max-width: 100%;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-border-subtle, #E2E8F0);
+  border-radius: 999px;
+  background: var(--color-surface-soft, #F5F8FB);
+  color: var(--color-text-secondary, #475569);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.portfolio-product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  margin-top: auto;
+  border-top: 1px solid var(--color-border-subtle, #E2E8F0);
+}
+
+@media (max-width: 960px) {
+  .portfolio-products-showcase {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .portfolio-products-showcase {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .portfolio-product-body {
+    padding: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-product-card,
+  .portfolio-product-media img {
+    transition: none;
+  }
+
+  .portfolio-product-card:hover {
+    transform: none;
+  }
+}
+
 
         .portfolio-section-aside {
           display: flex;
@@ -693,18 +855,18 @@ export const Portfolio: React.FC = () => {
         }
 
         .portfolio-section-title {
-          font-size: clamp(1.9rem, 3.4vw, 2.6rem);
-          font-weight: 800;
+          font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+          font-weight: 600;
           color: #1E293B;
-          line-height: 1.18;
+          line-height: 1.25;
           letter-spacing: -0.02em;
           margin-bottom: 0;
         }
 
         .portfolio-section-copy {
           color: #64748B;
-          font-size: 1.0625rem;
-          line-height: 1.7;
+          font-size: 0.95rem;
+          line-height: 1.65;
           max-width: 100%;
         }
 
@@ -761,7 +923,7 @@ export const Portfolio: React.FC = () => {
           background-color: rgba(255, 255, 255, 0.94);
           color: #49243F;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           padding: 0.35rem 0.6rem;
@@ -776,7 +938,7 @@ export const Portfolio: React.FC = () => {
           z-index: 1;
           color: #FFFFFF;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           text-shadow: 0 1px 8px rgba(15, 23, 42, 0.5);
@@ -790,7 +952,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-featured-eyebrow {
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: #7A5422;
@@ -798,17 +960,17 @@ export const Portfolio: React.FC = () => {
         }
 
         .portfolio-featured-body h3 {
-          font-size: clamp(1.5rem, 2.6vw, 2rem);
-          font-weight: 800;
+          font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+          font-weight: 600;
           color: #1E293B;
-          line-height: 1.22;
+          line-height: 1.25;
           letter-spacing: -0.015em;
           margin-bottom: 0.45rem;
         }
 
         .portfolio-featured-tagline {
           font-size: 0.875rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           line-height: 1.45;
           margin-bottom: 0.9rem;
@@ -832,7 +994,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-ongoing-head h3 {
           font-size: 1.15rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin-bottom: 0.2rem;
         }
@@ -850,7 +1012,7 @@ export const Portfolio: React.FC = () => {
           border-radius: 9999px;
           padding: 0.35rem 0.75rem;
           font-size: 0.75rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #475569;
         }
 
@@ -878,7 +1040,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-ongoing-label {
           font-size: 0.625rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: #7A5422;
@@ -959,7 +1121,7 @@ export const Portfolio: React.FC = () => {
           z-index: 1;
           color: #FFFFFF;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           text-shadow: 0 1px 8px rgba(15, 23, 42, 0.5);
@@ -974,8 +1136,8 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-platform-body h3,
         .portfolio-cap-card h3 {
-          font-size: 1.3rem;
-          font-weight: 800;
+          font-size: 1.125rem;
+          font-weight: 600;
           color: #1E293B;
           line-height: 1.3;
           margin-bottom: 0.4rem;
@@ -983,7 +1145,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-platform-tagline {
           font-size: 0.8125rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           line-height: 1.45;
           margin-bottom: 0.85rem;
@@ -1068,7 +1230,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-cap-category {
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #64748B;
@@ -1087,7 +1249,7 @@ export const Portfolio: React.FC = () => {
         .portfolio-best-for span {
           display: block;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #7A5422;
@@ -1114,7 +1276,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-approach-number {
           font-size: 2rem;
-          font-weight: 800;
+          font-weight: 600;
           line-height: 1;
           color: rgba(73, 36, 63, 0.16);
           margin-bottom: 0.6rem;
@@ -1123,14 +1285,14 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-approach-card h3 {
           font-size: 1.05rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin-bottom: 0.25rem;
         }
 
         .portfolio-approach-tagline {
           font-size: 0.75rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           line-height: 1.4;
           margin-bottom: 0.7rem;
@@ -1148,7 +1310,7 @@ export const Portfolio: React.FC = () => {
 
         .portfolio-principle-card h3 {
           font-size: 1.05rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin: 1rem 0 0.5rem;
         }

@@ -328,7 +328,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { GitBranch, Cpu, Users, ShieldCheck } from "lucide-react";
 import { heroWorkspaceImg } from "../../assets/images";
 
 export const AboutSection: React.FC = () => {
@@ -354,44 +353,13 @@ export const AboutSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  const metrics = [
-    {
-      value: "95%",
-      label: "Client Satisfaction",
-      icon: <Users size={19} />,
-      backgroundColor: "#EDE9FE",
-      iconColor: "#7C3AED",
-    },
-    {
-      value: "100%",
-      label: "Commitment to Quality",
-      icon: <GitBranch size={19} />,
-      backgroundColor: "#D1FAE5",
-      iconColor: "#059669",
-    },
-    {
-      value: "90%",
-      label: "On-Time Delivery",
-      icon: <Cpu size={19} />,
-      backgroundColor: "#FFF1F2",
-      iconColor: "#49243F",
-    },
-    {
-      value: "98%",
-      label: "System Reliability",
-      icon: <ShieldCheck size={19} />,
-      backgroundColor: "#E0F2FE",
-      iconColor: "#0878E8",
-    },
-  ];
-
   return (
     <section
       id="who-we-are"
       style={{
         backgroundColor: "#FFFFFF",
         paddingTop: "5.5rem",
-        paddingBottom: "5.5rem",
+        paddingBottom: "1.5rem",
         position: "relative",
         overflow: "hidden",
       }}
@@ -402,7 +370,8 @@ export const AboutSection: React.FC = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
             gap: "clamp(2rem, 5vw, 4rem)",
             alignItems: "center",
             marginBottom: "4.5rem",
@@ -443,18 +412,18 @@ export const AboutSection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, margin: '-100px' }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={{ maxWidth: "620px", minWidth: 0 }}
           >
             <h2
               style={{
-                fontSize: "clamp(2.25rem, 4.2vw, 3rem)",
-                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+                fontWeight: 600,
                 color: "var(--color-text-primary, #1F2937)",
-                letterSpacing: "-0.025em",
-                lineHeight: 1.15,
-                marginBottom: "1.5rem",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.25,
+                marginBottom: "1.25rem",
               }}
             >
               Turning Ideas into{" "}
@@ -471,132 +440,45 @@ export const AboutSection: React.FC = () => {
 
             <p
               style={{
-                fontSize: "1.0625rem",
+                fontSize: "1rem",
                 color: "var(--color-text-secondary, #4B5563)",
-                lineHeight: 1.75,
+                lineHeight: 1.65,
                 marginBottom: "1.5rem",
                 textAlign: "justify",
               }}
             >
-              Azaroth Tech-Hive delivers practical software engineering
-              solutions that help businesses solve technical challenges and
-              build dependable digital products. From application development
-              and system integration to software modernisation and ongoing
-              support, we focus on reliability, security, performance, and
-              maintainability. Our approach combines thoughtful problem-solving
-              with sound engineering practices to create scalable solutions
-              aligned with business goals.
+              <div className="service-description">
+                <p>
+                  Azaroth Tech-Hive delivers practical software engineering
+                  solutions that help businesses overcome technical challenges,
+                  improve operations, and transform ideas into dependable
+                  digital products. We support the software lifecycle, from
+                  requirements analysis and solution design to application
+                  development, system integration, and modernization.
+                </p>
+                <br />
+                <p>
+                  Our structured approach follows six stages: Discovery and
+                  Planning → Solution Design → Development and Integration →
+                  Testing and Quality Assurance → Deployment → Ongoing Support
+                  and Enhancement. Each stage focuses on business objectives,
+                  engineering quality, and practical outcomes.
+                </p>
+                <br />
+                <p>
+                  We prioritize reliability, security, performance, usability,
+                  and maintainability, building solutions that deliver lasting
+                  value without unnecessary complexity. Whether developing new
+                  applications or enhancing existing systems, we help businesses
+                  leverage technology effectively and prepare for future growth.
+                </p>
+              </div>
             </p>
           </motion.div>
         </div>
 
         {/* Metrics Section */}
-        <div
-          className="about-metrics-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-            columnGap: "24px",
-            rowGap: "20px",
-            alignItems: "center",
-            width: "100%",
-            margin: "2rem 0",
-            paddingTop: "1.25rem",
-            paddingLeft: "100px",
-            borderTop: "1px solid #E2E8F0",
-            boxSizing: "border-box",
-          }}
-        >
-          {metrics.map((metric, index) => (
-            <motion.div
-              key={`${metric.label}-${index}`}
-              className="about-metric"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: '-100px' }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: "12px",
-                width: "100%",
-                minWidth: 0,
-                boxSizing: "border-box",
-              }}
-            >
-              {/* Metric Icon */}
-              <div
-                style={{
-                  flex: "0 0 42px",
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "50%",
-                  backgroundColor: metric.backgroundColor,
-                  color: metric.iconColor,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {metric.icon}
-              </div>
-
-              {/* Metric Text */}
-              <div
-                style={{
-                  flex: "1 1 auto",
-                  minWidth: 0,
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "1.25rem",
-                    fontWeight: 800,
-                    color: "#1E293B",
-                    lineHeight: 1.2,
-                    whiteSpace: "nowrap",
-                    marginBottom: "2px",
-                  }}
-                >
-                  {metric.value}
-                </div>
-
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#64748B",
-                    fontWeight: 500,
-                    lineHeight: 1.4,
-                    overflowWrap: "anywhere",
-                  }}
-                >
-                  {metric.label}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
-
-      {/* Responsive styles for metrics only */}
-      <style>{`
-        @media (max-width: 900px) {
-          #who-we-are .about-metrics-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            column-gap: 20px;
-            row-gap: 20px;
-            padding-left: 0 !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          #who-we-are .about-metrics-grid {
-            grid-template-columns: minmax(0, 1fr) !important;
-            gap: 16px;
-          }
-        }
-      `}</style>
     </section>
   );
 };

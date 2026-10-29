@@ -50,11 +50,11 @@ export const BlogSection: React.FC = () => {
           style={{ textAlign: 'left', maxWidth: '1100px', margin: '0 0 3.5rem 0' }}
         >
           <h2 style={{
-            fontSize: 'clamp(2rem, 3.5vw, 2.5rem)',
-            fontWeight: 800,
+            fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+            fontWeight: 600,
             color: 'var(--color-text-primary)',
             marginBottom: '1rem',
-            lineHeight: 1.2,
+            lineHeight: 1.25,
             letterSpacing: '-0.02em',
           }}>
             Practical Engineering Insight{' '}
@@ -69,9 +69,9 @@ export const BlogSection: React.FC = () => {
             </span>
           </h2>
           <p style={{
-            fontSize: '1.0625rem',
+            fontSize: '1rem',
             color: 'var(--color-text-secondary)',
-            lineHeight: 1.7,
+            lineHeight: 1.65,
             textAlign: 'justify',
             textJustify: 'inter-word',
           }}>
@@ -211,8 +211,8 @@ export const BlogSection: React.FC = () => {
 
                   {/* Title */}
                   <h3 style={{
-                    fontSize: '1.1875rem',
-                    fontWeight: 700,
+                    fontSize: '1.0625rem',
+                    fontWeight: 600,
                     color: 'var(--color-text-primary)',
                     marginBottom: '0.75rem',
                     lineHeight: 1.4,
@@ -240,7 +240,7 @@ export const BlogSection: React.FC = () => {
                       alignItems: 'center',
                       gap: '0.375rem',
                       color: '#49243F',
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: '0.875rem',
                       marginTop: 'auto',
                     }}
@@ -263,7 +263,18 @@ export const BlogSection: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center' }}
         >
-          <Button to="/technology-insights" variant="outline" size="lg" icon={<ArrowRight size={18} aria-hidden="true" />}>
+          <Button
+            to="/technology-insights"
+            variant="outline"
+            size="md"
+            icon={<ArrowRight size={18} aria-hidden="true" />}
+            style={{
+              background: 'var(--gradient-button)',
+              borderColor: 'transparent',
+              color: '#fff',
+              fontWeight: 600,
+            }}
+          >
             View All Articles
           </Button>
         </motion.div>

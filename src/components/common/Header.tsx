@@ -72,12 +72,12 @@ export const siteNavItems: NavItem[] = [
     children: [
       {
         name: "Explore Products",
-        href: "/products",
+        href: "/portfolio#products",
         icon: <Layers size={18} style={{ color: "#49243F" }} />,
       },
       {
         name: "Explore Services",
-        href: "/service",
+        href: "/portfolio#services",
         icon: <Cpu size={18} style={{ color: "#49243F" }} />,
       },
     ],
@@ -237,8 +237,9 @@ export const Header: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "1rem",
-          height: "4.75rem",
+          gap: "clamp(0.5rem, 2vw, 1rem)",
+          height: "clamp(3.5rem, 5vw, 4.75rem)",
+          minHeight: "3.5rem",
         }}
       >
         {/* Brand Logo */}
@@ -249,7 +250,7 @@ export const Header: React.FC = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.75rem",
+            gap: "clamp(0.5rem, 2vw, 0.75rem)",
             textDecoration: "none",
             flexShrink: 0,
           }}
@@ -259,8 +260,8 @@ export const Header: React.FC = () => {
             alt={settings?.companyName || "Azaroth Tech-Hive Logo"}
             className="header-brand-logo"
             style={{
-              maxHeight: "2.5rem",
-              maxWidth: "8rem",
+              maxHeight: "clamp(2rem, 4vw, 2.5rem)",
+              maxWidth: "clamp(6rem, 15vw, 8rem)",
               objectFit: "contain",
               flexShrink: 0,
               filter: "drop-shadow(0 2px 4px rgba(73, 36, 63, 0.15))",
@@ -271,8 +272,8 @@ export const Header: React.FC = () => {
             <span
               className="header-brand-name"
               style={{
-                fontSize: "1.25rem",
-                fontWeight: 800,
+                fontSize: "clamp(1rem, 3vw, 1.25rem)",
+                fontWeight: 700,
                 color: "var(--color-primary, #49243F)",
                 fontFamily: "serif",
                 letterSpacing: "0.04em",
@@ -285,8 +286,8 @@ export const Header: React.FC = () => {
             <span
               className="header-brand-sub"
               style={{
-                fontSize: "0.625rem",
-                fontWeight: 700,
+                fontSize: "clamp(0.5rem, 1.5vw, 0.625rem)",
+                fontWeight: 600,
                 color: "var(--color-brand-gold, #C99B52)",
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
@@ -300,7 +301,7 @@ export const Header: React.FC = () => {
         {/* Desktop Navigation */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden lg:flex flex-1 items-center justify-end gap-4 lg:gap-6"
+          className="hidden lg:flex flex-1 items-center justify-end gap-2 lg:gap-4"
         >
           {siteNavItems.map((item) => {
             const active = item.isActive(location.pathname);
@@ -321,15 +322,15 @@ export const Header: React.FC = () => {
                       aria-haspopup="true"
                       aria-expanded={isDropdownOpen}
                       style={{
-                        fontSize: "0.9375rem",
-                        fontWeight: active ? 700 : 600,
+                        fontSize: "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+                        fontWeight: active ? 600 : 500,
                         color: active ? CRIMSON_DEEP : "#374151",
-                        padding: "0.65rem 0.25rem",
+                        padding: "clamp(0.5rem, 1vw, 0.65rem) 0.25rem",
                         textDecoration: "none",
                         position: "relative",
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "0.35rem",
+                        gap: "clamp(0.25rem, 0.5vw, 0.35rem)",
                         transition: "color 160ms ease-out",
                       }}
                       className="azaroth-nav-link"
@@ -375,7 +376,8 @@ export const Header: React.FC = () => {
                         left: item.name === "Our Portfolio" ? "-1.5rem" : "0",
                         paddingTop: "0.65rem",
                         zIndex: 110,
-                        minWidth: "22rem",
+                        minWidth: "clamp(18rem, 40vw, 22rem)",
+                        maxWidth: "min(90vw, 22rem)",
                       }}
                       onMouseEnter={() => handleMouseEnter(item.name)}
                       onMouseLeave={handleMouseLeave}
@@ -463,7 +465,7 @@ export const Header: React.FC = () => {
                               <span
                                 style={{
                                   fontSize: "0.9rem",
-                                  fontWeight: 700,
+                                  fontWeight: 600,
                                   color: isSubActive ? CRIMSON_DEEP : "#18181B",
                                   lineHeight: 1.4,
                                 }}
@@ -487,10 +489,10 @@ export const Header: React.FC = () => {
                 to={item.href}
                 aria-current={active ? "page" : undefined}
                 style={{
-                  fontSize: "0.9375rem",
-                  fontWeight: active ? 700 : 600,
+                  fontSize: "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+                  fontWeight: active ? 600 : 500,
                   color: active ? CRIMSON_DEEP : "#374151",
-                  padding: "0.65rem 0.25rem",
+                  padding: "clamp(0.5rem, 1vw, 0.65rem) 0.25rem",
                   textDecoration: "none",
                   position: "relative",
                   display: "inline-flex",
@@ -528,13 +530,17 @@ export const Header: React.FC = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.875rem",
+            gap: "clamp(0.5rem, 1.5vw, 0.875rem)",
             flexShrink: 0,
           }}
         >
           <Link
             to="/connect-with-us"
-            style={getStartedButtonStyle}
+            style={{
+              ...getStartedButtonStyle,
+              padding: "clamp(0.5rem, 1.2vw, 0.625rem) clamp(1rem, 2.5vw, 1.4rem)",
+              fontSize: "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+            }}
             className="hidden sm:flex header-connect-cta hover:opacity-95 hover:shadow-lg hover:scale-105"
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--gradient-button-hover)";
@@ -557,14 +563,16 @@ export const Header: React.FC = () => {
             style={{
               alignItems: "center",
               justifyContent: "center",
-              width: "2.5rem",
-              height: "2.5rem",
+              width: "clamp(2rem, 5vw, 2.5rem)",
+              height: "clamp(2rem, 5vw, 2.5rem)",
               borderRadius: "0.75rem",
               border: "1px solid #FECDD3",
               backgroundColor: "#FFFFFF",
               color: "#49243F",
               cursor: "pointer",
               transition: "all 200ms ease-out",
+              minWidth: "2rem",
+              minHeight: "2rem",
             }}
             className="flex lg:hidden"
             onMouseEnter={(e) => {
@@ -589,7 +597,7 @@ export const Header: React.FC = () => {
             style={{
               position: "fixed",
               inset: 0,
-              top: "4.75rem",
+              top: "clamp(3.5rem, 5vw, 4.75rem)",
               left: 0,
               right: 0,
               bottom: 0,
@@ -608,13 +616,13 @@ export const Header: React.FC = () => {
             aria-label="Mobile Navigation"
             style={{
               backgroundColor: "#FFFFFF",
-              padding: "1.5rem 1.25rem",
+              padding: "clamp(1rem, 3vw, 1.5rem) clamp(0.75rem, 2vw, 1.25rem)",
               borderBottom: `2px solid ${CRIMSON_VIBRANT}`,
               boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.12)",
               display: "flex",
               flexDirection: "column",
               gap: "0.5rem",
-              maxHeight: "calc(100vh - 4.75rem)",
+              maxHeight: "calc(100vh - clamp(3.5rem, 5vw, 4.75rem))",
               overflowY: "auto",
               WebkitOverflowScrolling: "touch",
               position: "relative",
@@ -640,7 +648,7 @@ export const Header: React.FC = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        padding: "0.875rem 1rem",
+                        padding: "clamp(0.75rem, 2vw, 0.875rem) clamp(0.75rem, 2vw, 1rem)",
                         borderRadius: "8px",
                         backgroundColor: active
                           ? "rgba(73, 36, 63, 0.06)"
@@ -654,8 +662,8 @@ export const Header: React.FC = () => {
                         to={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         style={{
-                          fontWeight: active ? 700 : 600,
-                          fontSize: "1rem",
+                          fontWeight: active ? 600 : 500,
+                          fontSize: "clamp(0.9375rem, 2vw, 1rem)",
                           color: active ? CRIMSON_DEEP : "#1F2937",
                           textDecoration: "none",
                           flex: 1,
@@ -700,11 +708,11 @@ export const Header: React.FC = () => {
                           display: "flex",
                           flexDirection: "column",
                           gap: "0.25rem",
-                          paddingLeft: "1.25rem",
+                          paddingLeft: "clamp(1rem, 2.5vw, 1.25rem)",
                           paddingTop: "0.35rem",
                           paddingBottom: "0.35rem",
                           borderLeft: "2px dashed #FECDD3",
-                          marginLeft: "1.25rem",
+                          marginLeft: "clamp(1rem, 2.5vw, 1.25rem)",
                           position: "relative",
                           zIndex: 1,
                           color: "#1F2937",
@@ -746,8 +754,8 @@ export const Header: React.FC = () => {
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.75rem",
-                                padding: "0.75rem 1rem",
+                                gap: "clamp(0.5rem, 1.5vw, 0.75rem)",
+                                padding: "clamp(0.625rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)",
                                 borderRadius: "8px",
                                 textDecoration: "none",
                                 backgroundColor: isSubActive
@@ -760,8 +768,8 @@ export const Header: React.FC = () => {
                             >
                               <div
                                 style={{
-                                  width: "2rem",
-                                  height: "2rem",
+                                  width: "clamp(1.75rem, 4vw, 2rem)",
+                                  height: "clamp(1.75rem, 4vw, 2rem)",
                                   borderRadius: "8px",
                                   backgroundColor: isSubActive
                                     ? "rgba(73, 36, 63, 0.16)"
@@ -776,7 +784,7 @@ export const Header: React.FC = () => {
                               </div>
                               <span
                                 style={{
-                                  fontSize: "0.9rem",
+                                  fontSize: "clamp(0.875rem, 2vw, 0.9rem)",
                                   fontWeight: 600,
                                   color: isSubActive ? CRIMSON_DEEP : "#18181B",
                                   lineHeight: 1.4,
@@ -799,11 +807,11 @@ export const Header: React.FC = () => {
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
-                    fontWeight: active ? 700 : 600,
-                    fontSize: "1rem",
+                    fontWeight: active ? 600 : 500,
+                    fontSize: "clamp(0.9375rem, 2vw, 1rem)",
                     color: active ? CRIMSON_DEEP : "#1F2937",
                     textDecoration: "none",
-                    padding: "0.875rem 1rem",
+                    padding: "clamp(0.75rem, 2vw, 0.875rem) clamp(0.75rem, 2vw, 1rem)",
                     borderRadius: "8px",
                     backgroundColor: active
                       ? "rgba(73, 36, 63, 0.06)"
@@ -821,7 +829,13 @@ export const Header: React.FC = () => {
               );
             })}
 
-            <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #E5E7EB", position: "relative", zIndex: 1 }}>
+            <div
+              style={{
+                marginTop: "1rem",
+                paddingTop: "1rem",
+                borderTop: "1px solid #E5E7EB",
+              }}
+            >
               <Link
                 to="/connect-with-us"
                 onClick={() => setMobileMenuOpen(false)}

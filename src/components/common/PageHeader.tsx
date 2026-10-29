@@ -169,11 +169,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         <motion.h1
           {...revealProps(0.1)}
           style={{
-            fontSize: 'clamp(2.5rem, 5vw, 3.75rem)',
-            fontWeight: 800,
+            fontSize: 'clamp(1.85rem, 3.5vw, 2.6rem)',
+            fontWeight: 600,
             color: '#0F172A',
-            lineHeight: 1.2,
-            marginBottom: '1.25rem',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.22,
+            marginBottom: '1rem',
           }}
           className="page-header-title"
         >
@@ -181,25 +182,23 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         </motion.h1>
 
         {/* Subtitle if provided */}
-
-{/* Subtitle if provided */}
-{subtitle && (
-  <motion.p
-    {...revealProps(0.2)}
-    style={{
-      fontSize: "1.1875rem",
-      color: "#334155",
-      lineHeight: 1.7,
-      width: "100%",
-      maxWidth: "none",
-      margin: "0",
-      textAlign: "left",
-    }}
-    className="page-header-subtitle"
-  >
-    {subtitle}
-  </motion.p>
-)}
+        {subtitle && (
+          <motion.p
+            {...revealProps(0.2)}
+            style={{
+              fontSize: "1.0625rem",
+              color: "#334155",
+              lineHeight: 1.65,
+              width: "100%",
+              maxWidth: "none",
+              margin: "0",
+              textAlign: "left",
+            }}
+            className="page-header-subtitle"
+          >
+            {subtitle}
+          </motion.p>
+        )}
 
 
 
@@ -235,6 +234,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           margin: 0 auto;
           padding: 0 2rem;
           text-align: left;
+          transform: translateY(-2.5rem);
         }
         @media (min-width: 768px) {
           .page-header-content {
@@ -248,6 +248,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           }
           .page-header-section--with-actions {
             padding-bottom: 3rem;
+          }
+          .page-header-content {
+            transform: translateY(-1.75rem);
           }
         }
       `}</style>

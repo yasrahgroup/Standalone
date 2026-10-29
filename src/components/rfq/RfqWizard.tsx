@@ -350,7 +350,7 @@ export const RfqWizard: React.FC = () => {
         {currentStep === 1 && (
           <div>
             <div style={{ marginBottom: '1.75rem' }}>
-              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
+              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
                 Select Architecture & Engineering Focus
               </h3>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)' }}>
@@ -444,7 +444,7 @@ export const RfqWizard: React.FC = () => {
         {currentStep === 2 && (
           <div>
             <div style={{ marginBottom: '1.75rem' }}>
-              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
+              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
                 Project Scope & Target Timeline
               </h3>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)' }}>
@@ -524,7 +524,7 @@ export const RfqWizard: React.FC = () => {
         {currentStep === 3 && (
           <div>
             <div style={{ marginBottom: '1.75rem' }}>
-              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
+              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
                 Budget Allocation & Architectural Requirements
               </h3>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)' }}>
@@ -610,7 +610,7 @@ export const RfqWizard: React.FC = () => {
         {currentStep === 4 && (
           <div>
             <div style={{ marginBottom: '1.75rem' }}>
-              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
+              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
                 Share Your Project Documents
               </h3>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)' }}>
@@ -678,7 +678,7 @@ export const RfqWizard: React.FC = () => {
             {/* Uploaded Files List */}
             {uploadedFiles.length > 0 && (
               <div style={{ marginTop: '1.5rem' }}>
-                <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-dark-maroon)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Uploaded Files ({uploadedFiles.length})
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -744,7 +744,7 @@ export const RfqWizard: React.FC = () => {
         {currentStep === 5 && (
           <div>
             <div style={{ marginBottom: '1.75rem' }}>
-              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
+              <h3 ref={stepHeadingRef} tabIndex={-1} style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '0.375rem' }}>
                 Contact & Verification Details
               </h3>
               <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)' }}>

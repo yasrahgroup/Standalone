@@ -1,69 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import {
-  ArrowRight,
-  CheckCircle2,
-  X,
-  Cpu,
-  Layers,
-  Zap,
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { PageHeader } from '../components/common/PageHeader';
-import { productsCatalog } from '../data/productsData';
-import { useCMS } from '../context/CMSContext';
-import { ProductStatusBadge } from '../components/common/ProductStatusBadge';
-import { MediaRenderer } from '../components/common/MediaRenderer';
-import { Reveal } from '../components/common/Reveal';
-import { FinalCTA } from '../components/home/FinalCTA';
+  useNavigate,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
+import { ArrowRight, CheckCircle2, X, Cpu, Layers, Zap } from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { PageHeader } from "../components/common/PageHeader";
+import { productsCatalog } from "../data/productsData";
+import { useCMS } from "../context/CMSContext";
+import { ProductStatusBadge } from "../components/common/ProductStatusBadge";
+import { MediaRenderer } from "../components/common/MediaRenderer";
+import { Reveal } from "../components/common/Reveal";
+import { FinalCTA } from "../components/home/FinalCTA";
 
 export const Products: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
   const { products: cmsProducts } = useCMS();
 
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const closedProductRef = useRef<string | null>(null);
 
-  const effectiveProducts = productsCatalog.map((catalogProd) => {
-    const cmsMatch = (cmsProducts || []).find(cp => cp.slug === catalogProd.slug || cp.id === catalogProd.id);
-    return {
-      ...catalogProd,
-      name: cmsMatch?.name || cmsMatch?.title || catalogProd.name,
-      status: catalogProd.status,
-      statusColor: catalogProd.statusColor,
-      badge: catalogProd.badge,
-      shortDescription: cmsMatch?.shortDescription || (cmsMatch as any)?.short_description || catalogProd.shortDescription,
-      description: (cmsMatch as any)?.description || cmsMatch?.fullDescription || catalogProd.description,
-      isEnabled: true,
-    };
-  });
+  const effectiveProducts = useMemo(() => {
+    return productsCatalog.map((catalogProd) => {
+      const cmsMatch = (cmsProducts || []).find(
+        (cp) => cp.slug === catalogProd.slug || cp.id === catalogProd.id,
+      );
+      return {
+        ...catalogProd,
+        name: cmsMatch?.name || cmsMatch?.title || catalogProd.name,
+        status: catalogProd.status,
+        statusColor: catalogProd.statusColor,
+        badge: catalogProd.badge,
+        shortDescription:
+          cmsMatch?.shortDescription ||
+          (cmsMatch as any)?.short_description ||
+          catalogProd.shortDescription,
+        description:
+          (cmsMatch as any)?.description ||
+          cmsMatch?.fullDescription ||
+          catalogProd.description,
+        isEnabled: true,
+      };
+    });
+  }, [cmsProducts]);
 
   // If a slug was passed in URL or query param, automatically select that product
   useEffect(() => {
-    const targetSlug = slug || searchParams.get('product');
+    const targetSlug = slug || searchParams.get("product");
     if (targetSlug) {
-      const found = effectiveProducts.find(p => p.slug === targetSlug || p.id === targetSlug);
-      if (found) setSelectedProduct(found);
+      if (targetSlug !== closedProductRef.current) {
+        const found = effectiveProducts.find(
+          (p) => p.slug === targetSlug || p.id === targetSlug,
+        );
+        if (found) {
+          setSelectedProduct(found);
+        }
+      }
+    } else {
+      closedProductRef.current = null;
+      setSelectedProduct(null);
     }
   }, [slug, searchParams, effectiveProducts]);
+
+  const handleCloseModal = useCallback(() => {
+    const currentSlug =
+      selectedProduct?.slug || slug || searchParams.get("product");
+    if (currentSlug) {
+      closedProductRef.current = currentSlug;
+    }
+    setSelectedProduct(null);
+
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } else if (searchParams.has("product")) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("product");
+      const queryString = newParams.toString();
+      navigate(queryString ? `/products?${queryString}` : "/products", {
+        replace: true,
+      });
+    } else if (slug) {
+      navigate("/products", { replace: true });
+    }
+  }, [selectedProduct, slug, searchParams, location.state, navigate]);
 
   // Handle Escape key to close modal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedProduct(null);
+      if (e.key === "Escape") {
+        handleCloseModal();
+      }
     };
     if (selectedProduct) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
     }
     return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedProduct]);
+  }, [selectedProduct, handleCloseModal]);
 
-  const filteredProducts = effectiveProducts;
+  const filteredProducts = effectiveProducts.filter(
+    (product) => product.isEnabled !== false,
+  );
 
   const handleBookDemo = (product: any) => {
     navigate(`/connect-with-us?product=${encodeURIComponent(product.slug)}`);
@@ -74,14 +125,14 @@ export const Products: React.FC = () => {
       <SEOHead
         title="Enterprise Software Platforms — Fitness, E-Commerce, Healthcare & Learning Management"
         description="Enterprise software platforms in active development: Fitness Management System, Multi-Store E-Commerce, Healthcare Management System, and Learning Management Platform — available for scoped early builds, fully customizable with complete source ownership."
-        canonicalPath={slug ? `/products/${slug}` : '/products'}
+        canonicalPath={slug ? `/products/${slug}` : "/products"}
       />
 
       {/* Hero */}
       <PageHeader
         kicker="- OUR PRODUCTS -"
         title="Our Products & Platform Foundations"
-        gradientWords={['Products', 'Platform', 'Foundations']}
+        gradientWords={["Products", "Platform", "Foundations"]}
         subtitle="Four platforms in active development, each available for scoped early builds. They give your teams a practical starting point for the roadmap while keeping scope, branding, and operational ownership clear."
         actions={
           <>
@@ -128,220 +179,300 @@ export const Products: React.FC = () => {
       />
 
       {/* Product Grid */}
-      <section style={{ backgroundColor: '#F8FAFC', padding: '5.5rem 0' }}>
+      <section style={{ backgroundColor: "#F8FAFC", padding: "5.5rem 0" }}>
         <div className="container">
-
           {/* Empty State */}
           {filteredProducts.length === 0 && (
-            <div style={{
-              padding: '3rem 1.5rem',
-              borderRadius: '1.25rem',
-              border: '1px dashed #CBD5E1',
-              backgroundColor: '#ffffff',
-              textAlign: 'center',
-            }}>
-              <h3 style={{ margin: '0 0 0.5rem', color: '#1E293B' }}>No platforms found.</h3>
-              <p style={{ margin: 0, color: '#64748B' }}>Check back soon for enterprise software platforms.</p>
+            <div
+              style={{
+                padding: "3rem 1.5rem",
+                borderRadius: "1.25rem",
+                border: "1px dashed #CBD5E1",
+                backgroundColor: "#ffffff",
+                textAlign: "center",
+              }}
+            >
+              <h3 style={{ margin: "0 0 0.5rem", color: "#1E293B" }}>
+                No platforms found.
+              </h3>
+              <p style={{ margin: 0, color: "#64748B" }}>
+                Check back soon for enterprise software platforms.
+              </p>
             </div>
           )}
 
           {filteredProducts.length > 0 && (
             <div className="grid-layout-3x3">
-              {filteredProducts.filter((p) => p.isEnabled !== false).map((product, productIndex) => (
-                <Reveal
-                  key={product.id}
-                  id={product.slug}
-                  delay={productIndex * 0.08}
-                  style={{
-                    scrollMarginTop: '7rem',
-                    backgroundColor: '#ffffff',
-                    borderRadius: '1.5rem',
-                    border: '1px solid rgba(226, 232, 240, 0.9)',
-                    boxShadow: '0 4px 16px -2px rgba(15, 23, 42, 0.05)',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    transition: 'all 200ms ease-out',
-                  }}
-                  className="hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"
-                >
-                  {/* Visual Header */}
-                  <div style={{
-                    position: 'relative',
-                    height: '240px',
-                    backgroundColor: '#0F172A',
-                    overflow: 'hidden',
-                  }}>
-                    <MediaRenderer
-                      src={product.coverImage}
-                      alt={product.coverAlt}
-                      objectFit="cover"
-                      loading="lazy"
+              {filteredProducts
+                .filter((p) => p.isEnabled !== false)
+                .map((product, productIndex) => (
+                  <Reveal
+                    key={product.id}
+                    id={product.slug}
+                    delay={productIndex * 0.08}
+                    style={{
+                      scrollMarginTop: "7rem",
+                      backgroundColor: "#ffffff",
+                      borderRadius: "1.5rem",
+                      border: "1px solid rgba(226, 232, 240, 0.9)",
+                      boxShadow: "0 4px 16px -2px rgba(15, 23, 42, 0.05)",
+                      overflow: "hidden",
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                      transition: "all 200ms ease-out",
+                    }}
+                    className="hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"
+                  >
+                    {/* Visual Header */}
+                    <div
                       style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
+                        position: "relative",
+                        height: "240px",
+                        backgroundColor: "#0F172A",
+                        overflow: "hidden",
                       }}
-                    />
-                    <div style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.85) 100%)',
-                    }} />
-                    <div style={{
-                      position: 'absolute',
-                      top: '1rem',
-                      right: '1rem',
-                      zIndex: 2,
-                    }}>
-                      <ProductStatusBadge
-                        status={product.status || 'Under Development'}
-                        colorScheme={(product as any).statusColor}
-                        size="sm"
+                    >
+                      <MediaRenderer
+                        src={product.coverImage}
+                        alt={product.coverAlt}
+                        objectFit="cover"
+                        loading="lazy"
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                        }}
                       />
-                    </div>
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background:
+                            "linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.85) 100%)",
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "1rem",
+                          right: "1rem",
+                          zIndex: 2,
+                        }}
+                      >
+                        <ProductStatusBadge
+                          status={product.status || "Under Development"}
+                          colorScheme={(product as any).statusColor}
+                          size="sm"
+                        />
+                      </div>
 
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '1rem',
-                      left: '1.25rem',
-                      right: '1.25rem',
-                      color: '#ffffff',
-                    }}>
-                      <span style={{
-                        fontSize: '0.6875rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.12em',
-                        color: product.status === 'Live' ? '#A7F3D0' : product.status === 'Ready For Deploy' ? '#BFDBFE' : '#FECDD3',
-                      }}>
-                        {/* {product.status === 'Live'
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "1rem",
+                          left: "1.25rem",
+                          right: "1.25rem",
+                          color: "#ffffff",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: "0.6875rem",
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.12em",
+                            color:
+                              product.status === "Live"
+                                ? "#A7F3D0"
+                                : product.status === "Ready For Deployment"
+                                  ? "#BFDBFE"
+                                  : "#FECDD3",
+                          }}
+                        >
+                          {/* {product.status === 'Live'
                           ? 'Production Live Platform'
-                          : product.status === 'Ready For Deploy'
+                          : product.status === 'Ready For Deployment'
                             ? 'Ready for Enterprise Deployment'
                             : 'Platform In Active Development'} */}
-                      </span>
-                      <h2 style={{
-                        fontSize: '1.375rem',
-                        fontWeight: 800,
-                        color: '#ffffff',
-                        lineHeight: 1.25,
-                        marginTop: '0.25rem',
-                      }}>
-                        {product.name}
-                      </h2>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                      <p style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                        color: '#49243F',
-                        marginBottom: '0.5rem',
-                        minHeight: '1.15rem',
-                      }}>
-                        {product.tagline}
-                      </p>
-                      <p style={{ fontSize: '0.9375rem', color: '#64748B', lineHeight: 1.6, minHeight: '3.5rem', flexGrow: 1, margin: 0 }}>
-                        {product.shortDescription}
-                      </p>
-                    </div>
-
-                    {/* What You Get Deliverables */}
-                    <div style={{
-                      borderTop: '1px solid #F1F5F9',
-                      paddingTop: '1rem',
-                      marginBottom: '1.5rem',
-                      minHeight: '6.5rem',
-                    }}>
-                      <span style={{
-                        fontSize: '0.6875rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        color: '#475569',
-                        marginBottom: '0.75rem',
-                        display: 'block',
-                      }}>
-                        Key Capabilities:
-                      </span>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                        {(product.benefits || []).slice(0, 3).map((benefit: string, i: number) => (
-                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', color: '#334155' }}>
-                            <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '0.125rem' }} />
-                            <span>{benefit}</span>
-                          </div>
-                        ))}
+                        </span>
+                        <h2
+                          style={{
+                            fontSize: "1.25rem",
+                            fontWeight: 600,
+                            color: "#ffffff",
+                            lineHeight: 1.25,
+                            marginTop: "0.25rem",
+                          }}
+                        >
+                          {product.name}
+                        </h2>
                       </div>
                     </div>
 
-                    {/* Actions: "See Full Details" (Opens Popup) + "Schedule Demo" */}
-                    <div style={{
-                      marginTop: 'auto',
-                      paddingTop: '1.25rem',
-                      borderTop: '1px solid #E2E8F0',
-                      display: 'flex',
-                      gap: '0.75rem',
-                    }}>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedProduct(product)}
+                    {/* Content */}
+                    <div
+                      style={{
+                        padding: "1.75rem",
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <div
                         style={{
-                          flex: 1,
-                          padding: '0.7rem 1rem',
-                          borderRadius: '9999px',
-                          border: '1.5px solid #CBD5E1',
-                          backgroundColor: '#FFFFFF',
-                          color: '#1E293B',
-                          fontSize: '0.8125rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          transition: 'all 160ms ease-out',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          marginBottom: "1.5rem",
+                          display: "flex",
+                          flexDirection: "column",
+                          flexGrow: 1,
                         }}
-                        className="hover:border-rose-400 hover:text-rose-700 hover:bg-rose-50"
                       >
-                        See Full Details
-                      </button>
+                        <p
+                          style={{
+                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.04em",
+                            color: "#49243F",
+                            marginBottom: "0.5rem",
+                            minHeight: "1.15rem",
+                          }}
+                        >
+                          {product.tagline}
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "0.9375rem",
+                            color: "#64748B",
+                            lineHeight: 1.6,
+                            minHeight: "3.5rem",
+                            flexGrow: 1,
+                            margin: 0,
+                          }}
+                        >
+                          {product.shortDescription}
+                        </p>
+                      </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleBookDemo(product)}
+                      {/* What You Get Deliverables */}
+                      <div
                         style={{
-                          flex: 1,
-                          padding: '0.7rem 1rem',
-                          borderRadius: '9999px',
-                          background: 'var(--gradient-button)',
-                          color: '#FFFFFF',
-                          fontSize: '0.8125rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: 'none',
-                          boxShadow: '0 3px 12px rgba(73, 36, 63, 0.3)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.375rem',
-                          transition: 'all 160ms ease-out',
+                          borderTop: "1px solid #F1F5F9",
+                          paddingTop: "1rem",
+                          marginBottom: "1.5rem",
+                          minHeight: "6.5rem",
                         }}
-                        className="hover:opacity-95 hover:scale-[1.02]"
                       >
-                        <span>Schedule Demo</span>
-                        <ArrowRight size={14} />
-                      </button>
+                        <span
+                          style={{
+                            fontSize: "0.6875rem",
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.06em",
+                            color: "#475569",
+                            marginBottom: "0.75rem",
+                            display: "block",
+                          }}
+                        >
+                          Key Capabilities:
+                        </span>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "0.45rem",
+                          }}
+                        >
+                          {(product.benefits || [])
+                            .slice(0, 3)
+                            .map((benefit: string, i: number) => (
+                              <div
+                                key={i}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "flex-start",
+                                  gap: "0.5rem",
+                                  fontSize: "0.8125rem",
+                                  color: "#334155",
+                                }}
+                              >
+                                <CheckCircle2
+                                  size={15}
+                                  style={{
+                                    color: "#059669",
+                                    flexShrink: 0,
+                                    marginTop: "0.125rem",
+                                  }}
+                                />
+                                <span>{benefit}</span>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* Actions: "See Full Details" (Opens Popup) + "Schedule Demo" */}
+                      <div
+                        style={{
+                          marginTop: "auto",
+                          paddingTop: "1.25rem",
+                          borderTop: "1px solid #E2E8F0",
+                          display: "flex",
+                          gap: "0.75rem",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setSelectedProduct(product)}
+                          style={{
+                            flex: 1,
+                            padding: "0.7rem 1rem",
+                            borderRadius: "9999px",
+                            border: "1.5px solid #CBD5E1",
+                            backgroundColor: "#FFFFFF",
+                            color: "#1E293B",
+                            fontSize: "0.8125rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            transition: "all 160ms ease-out",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          className="hover:border-rose-400 hover:text-rose-700 hover:bg-rose-50"
+                        >
+                          See Full Details
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleBookDemo(product)}
+                          style={{
+                            flex: 1,
+                            padding: "0.7rem 1rem",
+                            borderRadius: "9999px",
+                            background: "var(--gradient-button)",
+                            color: "#FFFFFF",
+                            fontSize: "0.8125rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            border: "none",
+                            boxShadow: "0 3px 12px rgba(73, 36, 63, 0.3)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "0.375rem",
+                            transition: "all 160ms ease-out",
+                          }}
+                          className="hover:opacity-95 hover:scale-[1.02]"
+                        >
+                          <span>Schedule Demo</span>
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </Reveal>
-              ))}
+                  </Reveal>
+                ))}
             </div>
           )}
         </div>
@@ -357,74 +488,83 @@ export const Products: React.FC = () => {
           aria-modal="true"
           aria-labelledby="modal-product-title"
           style={{
-            position: 'fixed',
+            position: "fixed",
             inset: 0,
             zIndex: 99999,
-            backgroundColor: 'rgba(15, 23, 42, 0.75)',
-            backdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1.5rem',
-            overflowY: 'auto',
+            backgroundColor: "rgba(15, 23, 42, 0.75)",
+            backdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1.5rem",
+            overflowY: "auto",
           }}
           onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedProduct(null);
+            if (e.target === e.currentTarget) {
+              handleCloseModal();
+            }
           }}
         >
           <div
             style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '1.75rem',
-              maxWidth: '820px',
-              width: '100%',
-              maxHeight: '90vh',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35)',
-              border: '1px solid #FFE4E6',
-              position: 'relative',
-              animation: 'modalSlideIn 240ms cubic-bezier(0.16, 1, 0.3, 1)',
+              backgroundColor: "#FFFFFF",
+              borderRadius: "1.75rem",
+              maxWidth: "820px",
+              width: "100%",
+              maxHeight: "90vh",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.35)",
+              border: "1px solid #FFE4E6",
+              position: "relative",
+              animation: "modalSlideIn 240ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
             {/* Modal Header with Close Button */}
             <div
               style={{
-                background: '#49243F',
-                color: '#FFFFFF',
-                padding: '1.75rem 2rem',
-                position: 'relative',
+                background: "#49243F",
+                color: "#FFFFFF",
+                padding: "1.75rem 2rem",
+                position: "relative",
               }}
             >
               <button
                 type="button"
-                onClick={() => setSelectedProduct(null)}
+                onClick={handleCloseModal}
                 aria-label="Close product details popup"
                 style={{
-                  position: 'absolute',
-                  top: '1.25rem',
-                  right: '1.25rem',
-                  width: '2.5rem',
-                  height: '2.5rem',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  border: 'none',
-                  color: '#FFFFFF',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'background-color 160ms ease',
+                  position: "absolute",
+                  top: "1.25rem",
+                  right: "1.25rem",
+                  width: "2.5rem",
+                  height: "2.5rem",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  border: "none",
+                  color: "#FFFFFF",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "background-color 160ms ease",
                 }}
                 className="hover:bg-white/30"
               >
                 <X size={20} />
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.625rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
                 <ProductStatusBadge
-                  status={selectedProduct.status || 'Under Development'}
+                  status={selectedProduct.status || "Under Development"}
                   colorScheme={selectedProduct.statusColor}
                   size="sm"
                 />
@@ -433,17 +573,24 @@ export const Products: React.FC = () => {
               <h2
                 id="modal-product-title"
                 style={{
-                  fontSize: 'clamp(1.5rem, 3.5vw, 2.125rem)',
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  margin: '0 0 0.5rem 0',
-                  lineHeight: 1.2,
+                  fontSize: "clamp(1.35rem, 2.8vw, 1.75rem)",
+                  fontWeight: 600,
+                  color: "#FFFFFF",
+                  margin: "0 0 0.5rem 0",
+                  lineHeight: 1.25,
                 }}
               >
                 {selectedProduct.name}
               </h2>
 
-              <p style={{ margin: 0, color: '#FFE4E6', fontSize: '0.9375rem', fontWeight: 500 }}>
+              <p
+                style={{
+                  margin: 0,
+                  color: "#FFE4E6",
+                  fontSize: "0.9375rem",
+                  fontWeight: 500,
+                }}
+              >
                 {selectedProduct.tagline}
               </p>
             </div>
@@ -451,61 +598,156 @@ export const Products: React.FC = () => {
             {/* Modal Scrollable Body */}
             <div
               style={{
-                padding: '2rem',
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.75rem',
+                padding: "2rem",
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.75rem",
               }}
             >
               {/* Detailed Overview */}
               <div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.625rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <h3
+                  style={{
+                    fontSize: "0.9375rem",
+                    fontWeight: 600,
+                    color: "#1E293B",
+                    marginBottom: "0.625rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.04em",
+                  }}
+                >
                   Platform Overview
                 </h3>
-                <p style={{ color: '#475569', fontSize: '0.9375rem', lineHeight: 1.7, margin: 0 }}>
-                  {selectedProduct.description || selectedProduct.shortDescription}
+                <p
+                  style={{
+                    color: "#475569",
+                    fontSize: "0.9375rem",
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}
+                >
+                  {selectedProduct.description ||
+                    selectedProduct.shortDescription}
                 </p>
               </div>
 
               {/* Key Capabilities */}
-              {selectedProduct.keyCapabilities && selectedProduct.keyCapabilities.length > 0 && (
-                <div style={{ backgroundColor: '#F8FAFC', borderRadius: '1rem', padding: '1.25rem 1.5rem', border: '1px solid #E2E8F0' }}>
-                  <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Layers size={16} color="#49243F" />
-                    <span>Key Capabilities &amp; Architecture Modules</span>
-                  </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.625rem' }}>
-                    {selectedProduct.keyCapabilities.map((cap: string, i: number) => (
-                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', color: '#334155' }}>
-                        <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '0.15rem' }} />
-                        <span>{cap}</span>
-                      </div>
-                    ))}
+              {selectedProduct.keyCapabilities &&
+                selectedProduct.keyCapabilities.length > 0 && (
+                  <div
+                    style={{
+                      backgroundColor: "#F8FAFC",
+                      borderRadius: "1rem",
+                      padding: "1.25rem 1.5rem",
+                      border: "1px solid #E2E8F0",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        color: "#1E293B",
+                        marginBottom: "0.75rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      <Layers size={16} color="#49243F" />
+                      <span>Key Capabilities &amp; Architecture Modules</span>
+                    </h3>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+                        gap: "0.625rem",
+                      }}
+                    >
+                      {selectedProduct.keyCapabilities.map(
+                        (cap: string, i: number) => (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: "0.5rem",
+                              fontSize: "0.8125rem",
+                              color: "#334155",
+                            }}
+                          >
+                            <CheckCircle2
+                              size={15}
+                              style={{
+                                color: "#059669",
+                                flexShrink: 0,
+                                marginTop: "0.15rem",
+                              }}
+                            />
+                            <span>{cap}</span>
+                          </div>
+                        ),
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Core Features & Deliverables */}
               <div>
-                <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <h3
+                  style={{
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    color: "#1E293B",
+                    marginBottom: "0.75rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
                   <Zap size={16} color="#49243F" />
                   <span>Platform Deliverables &amp; Ownership</span>
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.625rem' }}>
-                  {(selectedProduct.benefits || []).map((benefit: string, i: number) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', color: '#334155' }}>
-                      <CheckCircle2 size={15} style={{ color: '#059669', flexShrink: 0, marginTop: '0.15rem' }} />
-                      <span>{benefit}</span>
-                    </div>
-                  ))}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+                    gap: "0.625rem",
+                  }}
+                >
+                  {(selectedProduct.benefits || []).map(
+                    (benefit: string, i: number) => (
+                      <div
+                        key={i}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "0.5rem",
+                          fontSize: "0.8125rem",
+                          color: "#334155",
+                        }}
+                      >
+                        <CheckCircle2
+                          size={15}
+                          style={{
+                            color: "#059669",
+                            flexShrink: 0,
+                            marginTop: "0.15rem",
+                          }}
+                        />
+                        <span>{benefit}</span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
 
               {/* Technical Specifications Highlights */}
-              {selectedProduct.techSpecs && (
+              {/* {selectedProduct.techSpecs && (
                 <div style={{ backgroundColor: '#FFF1F2', borderRadius: '1rem', padding: '1.25rem 1.5rem', border: '1px solid #FECDD3' }}>
-                  <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#49243F', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#49243F', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Cpu size={16} color="#49243F" />
                     <span>Technical Architecture Specs</span>
                   </h3>
@@ -527,35 +769,35 @@ export const Products: React.FC = () => {
                     )}
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Modal Footer Actions */}
             <div
               style={{
-                padding: '1.25rem 2rem',
-                borderTop: '1px solid #E2E8F0',
-                backgroundColor: '#F8FAFC',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                gap: '1rem',
-                flexWrap: 'wrap',
+                padding: "1.25rem 2rem",
+                borderTop: "1px solid #E2E8F0",
+                backgroundColor: "#F8FAFC",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: "1rem",
+                flexWrap: "wrap",
               }}
             >
               <button
                 type="button"
-                onClick={() => setSelectedProduct(null)}
+                onClick={handleCloseModal}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '9999px',
-                  border: '1px solid #CBD5E1',
-                  backgroundColor: '#FFFFFF',
-                  color: '#475569',
-                  fontSize: '0.875rem',
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "9999px",
+                  border: "1px solid #CBD5E1",
+                  backgroundColor: "#FFFFFF",
+                  color: "#475569",
+                  fontSize: "0.875rem",
                   fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'background-color 150ms ease',
+                  cursor: "pointer",
+                  transition: "background-color 150ms ease",
                 }}
                 className="hover:bg-slate-100"
               >
@@ -589,7 +831,6 @@ export const Products: React.FC = () => {
                 <span>Schedule Platform Discovery</span>
                 <ArrowRight size={15} />
               </button> */}
-
             </div>
           </div>
         </div>

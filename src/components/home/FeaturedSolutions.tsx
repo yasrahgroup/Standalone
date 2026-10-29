@@ -29,7 +29,7 @@ const services: ServiceItem[] = [
     icon: <Cpu size={24} />,
     iconBg: "#F5F3FF",
     iconColor: "#7C3AED",
-    link: "/services#digital-transformation-technology-solutions",
+    link: "/portfolio#services",
   },
   {
     id: "serv-strategic-partnership",
@@ -39,7 +39,7 @@ const services: ServiceItem[] = [
     icon: <Compass size={24} />,
     iconBg: "#F0FDFA",
     iconColor: "#0D9488",
-    link: "/services#strategic-partnership-consulting",
+    link: "/portfolio#services",
   },
   {
     id: "serv-on-demand-workforce",
@@ -49,7 +49,7 @@ const services: ServiceItem[] = [
     icon: <Users size={24} />,
     iconBg: "#F0F9FF",
     iconColor: "#0284C7",
-    link: "/services#on-demand-workforce-solutions",
+    link: "/portfolio#services",
   },
   {
     id: "serv-business-process-management",
@@ -59,7 +59,7 @@ const services: ServiceItem[] = [
     icon: <Workflow size={24} />,
     iconBg: "#FFF1F2",
     iconColor: "#49243F",
-    link: "/services#business-process-management-operations",
+    link: "/portfolio#services",
   },
 ];
 
@@ -93,12 +93,12 @@ export const FeaturedSolutions: React.FC = () => {
         >
           <h2
             style={{
-              fontSize: "clamp(2rem, 3.8vw, 2.75rem)",
-              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+              fontWeight: 600,
               color: "#1E293B",
               letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-              marginBottom: "3rem",
+              lineHeight: 1.25,
+              marginBottom: "2rem",
             }}
           >
             Engineering for{" "}
@@ -115,7 +115,7 @@ export const FeaturedSolutions: React.FC = () => {
 
           <p
             style={{
-              fontSize: "1.0625rem",
+              fontSize: "clamp(0.9375rem, 1.8vw, 1.0625rem)",
               color: "#64748B",
               lineHeight: 1.6,
               textAlign: "justify",
@@ -190,7 +190,7 @@ export const FeaturedSolutions: React.FC = () => {
               <h3
                 style={{
                   fontSize: "1rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   lineHeight: 1.4,
                   margin: "0 0 0.625rem",
@@ -252,7 +252,7 @@ export const FeaturedSolutions: React.FC = () => {
           }}
         >
           <Link
-            to="/services"
+            to="/portfolio#services"
             style={{
               display: "inline-flex",
               alignItems: "center",

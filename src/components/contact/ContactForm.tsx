@@ -3,9 +3,10 @@ import {
   Send,
   CheckCircle2,
   AlertCircle,
-  Upload,
-  FileText,
+  Paperclip,
   X,
+  FileText,
+
 } from "lucide-react";
 import PhoneInput, { getCountryCallingCode, type Country } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -16,27 +17,8 @@ import { companyInfo } from "../../data/companyData";
 
 const WHATSAPP_URL = `https://wa.me/${companyInfo.headquarters.whatsapp.replace(/[^0-9]/g, "")}`;
 const FALLBACK_EMAIL = "hello@azaroth-techhive.com";
-const FALLBACK_PHONE = "+916379480931";
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 const ALLOWED_FILE_EXTENSIONS = /\.(pdf|docx|xlsx|png|jpe?g|zip)$/i;
-
-type ProjectContactFormData = ContactFormData & {
-  country: string;
-  projectScope: string;
-};
-
-const initialFormData: ProjectContactFormData = {
-  fullName: "",
-  workEmail: "",
-  phone: "",
-  companyName: "",
-  enquiryAbout: "Project Enquiry",
-  message: "",
-  consent: false,
-  website_url: "",
-  country: "",
-  projectScope: "",
-};
 
 const countryOptions = [
   "Afghanistan",
@@ -109,6 +91,22 @@ const countryOptions = [
   "Other",
 ];
 
+type ProjectContactFormData = ContactFormData & {
+  country: string;
+};
+
+const initialFormData: ProjectContactFormData = {
+  fullName: "",
+  workEmail: "",
+  phone: "",
+  companyName: "",
+  enquiryAbout: "Cloud Architecture",
+  message: "",
+  consent: false,
+  website_url: "",
+  country: "",
+};
+
 interface CountryOption {
   value?: string;
   label: string;
@@ -133,11 +131,6 @@ interface CountrySelectProps {
   "aria-label"?: string;
 }
 
-/**
- * Compact country selector: flag, country code, and code share one control.
- * The native <select> stays invisible on top so keyboard and screen-reader
- * behaviour is unchanged.
- */
 const CountrySelect: React.FC<CountrySelectProps> = ({
   value,
   options,
@@ -192,8 +185,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
 };
 
 export const ContactForm: React.FC = () => {
-  const [formData, setFormData] =
-    useState<ProjectContactFormData>(initialFormData);
+  const [formData, setFormData] = useState<ProjectContactFormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -201,7 +193,6 @@ export const ContactForm: React.FC = () => {
   const [projectDocuments, setProjectDocuments] = useState<File[]>([]);
   const [documentError, setDocumentError] = useState("");
 
-  // Custom country dropdown state (native datalist cannot be themed).
   const [countryOpen, setCountryOpen] = useState(false);
   const [activeCountryIndex, setActiveCountryIndex] = useState(-1);
   const countryFieldRef = useRef<HTMLDivElement>(null);
@@ -271,36 +262,37 @@ export const ContactForm: React.FC = () => {
     const nextErrors: Record<string, string> = {};
 
     if (!formData.fullName.trim()) {
-      nextErrors.fullName = "Contact person name is required.";
+      nextErrors.fullName = "Full Name is required.";
     }
 
     if (!formData.workEmail.trim()) {
-      nextErrors.workEmail = "Business email is required.";
+      nextErrors.workEmail = "Work Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.workEmail.trim())) {
-      nextErrors.workEmail = "Please enter a valid email address.";
+      nextErrors.workEmail = "Please provide a valid email address.";
+    }
+
+    if (!formData.companyName.trim()) {
+      nextErrors.companyName = "Company name is required.";
     }
 
     if (!formData.phone.trim()) {
-      nextErrors.phone =
-        "Contact number is required. Include your country code.";
+      nextErrors.phone = "Contact number is required.";
     } else if (!/^\+?[0-9\s().-]{7,20}$/.test(formData.phone.trim())) {
-      nextErrors.phone = "Enter a valid phone number, including country code.";
+      nextErrors.phone = "Enter a valid phone number.";
     }
 
     if (!formData.country.trim()) {
       nextErrors.country = "Country / Region is required.";
     }
 
-    if (!formData.projectScope.trim()) {
-      nextErrors.projectScope =
-        "Project scope and technical requirements are required.";
-    } else if (formData.projectScope.trim().length < 10) {
-      nextErrors.projectScope = "Please provide at least 10 characters.";
+    if (!formData.message.trim()) {
+      nextErrors.message = "Please describe your project or requirements.";
+    } else if (formData.message.trim().length < 10) {
+      nextErrors.message = "Please provide at least 10 characters.";
     }
 
     if (!formData.consent) {
-      nextErrors.consent =
-        "Please confirm that we may contact you about this project.";
+      nextErrors.consent = "Please confirm you agree to be contacted.";
     }
 
     setErrors(nextErrors);
@@ -317,7 +309,7 @@ export const ContactForm: React.FC = () => {
     if (invalidFile) {
       setDocumentError(
         invalidFile.size > MAX_FILE_SIZE
-          ? `${invalidFile.name} exceeds the 15 MB per-file limit.`
+          ? `${invalidFile.name} exceeds the 15 MB limit.`
           : `${invalidFile.name} has an unsupported file type.`,
       );
       event.target.value = "";
@@ -325,7 +317,7 @@ export const ContactForm: React.FC = () => {
     }
 
     setDocumentError("");
-    setProjectDocuments(files);
+    setProjectDocuments((prev) => [...prev, ...files]);
   };
 
   const removeFile = (fileIndex: number) => {
@@ -338,33 +330,23 @@ export const ContactForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Honeypot anti-spam check.
     if (formData.website_url) return;
-
     if (!validate() || documentError) return;
 
     setIsSubmitting(true);
     setSubmissionError(null);
 
     try {
-      /*
-       * Compatibility note:
-       * The current apiService accepts the existing ContactSubmission shape.
-       * Until the API/backend supports dedicated project fields and multipart
-       * uploads, project details and filenames are included in the existing
-       * message field. This does NOT upload the file contents.
-       */
-      const projectMessage = [
-        "PROJECT ENQUIRY",
+      const detailedMessage = [
+        `Focus: ${formData.enquiryAbout}`,
+        `Country: ${formData.country.trim()}`,
         "",
-        `Country / Region: ${formData.country.trim()}`,
-        "",
-        "Project Scope & Technical Requirements:",
-        formData.projectScope.trim(),
+        "Project Scope & Requirements:",
+        formData.message.trim(),
         "",
         projectDocuments.length
-          ? `Supporting document filenames (files not uploaded by the current API): ${projectDocuments.map((file) => file.name).join(", ")}`
-          : "Supporting documents: None attached",
+          ? `Attached files: ${projectDocuments.map((f) => f.name).join(", ")}`
+          : "Attachments: None",
       ].join("\n");
 
       const submissionData: ContactSubmission = {
@@ -372,8 +354,8 @@ export const ContactForm: React.FC = () => {
         workEmail: formData.workEmail.trim(),
         phone: formData.phone.trim(),
         companyName: formData.companyName.trim(),
-        enquiryAbout: "Project Enquiry",
-        message: projectMessage,
+        enquiryAbout: formData.enquiryAbout,
+        message: detailedMessage,
         consent: formData.consent,
       };
 
@@ -383,7 +365,7 @@ export const ContactForm: React.FC = () => {
         setSubmitted(true);
       } else {
         setSubmissionError(
-          response.error || "Failed to submit the form. Please try again.",
+          response.error || "Failed to submit enquiry. Please try again.",
         );
       }
     } catch {
@@ -395,19 +377,19 @@ export const ContactForm: React.FC = () => {
 
   if (submitted) {
     return (
-      <div aria-live="polite" className="project-enquiry-success">
-        <div className="project-enquiry-success-icon">
+      <div aria-live="polite" className="contact-form-card contact-form-success">
+        <div className="contact-form-success-icon">
           <CheckCircle2 size={36} aria-hidden="true" />
         </div>
 
-        <h3>Project Enquiry Received</h3>
+        <h3 className="contact-form-success-title">Message Received</h3>
 
-        <p>
+        <p className="contact-form-success-text">
           Thank you, <strong>{formData.fullName}</strong>. A solution architect
           will review your brief and reply within one business day.
         </p>
 
-        <div className="project-enquiry-success-actions">
+        <div className="contact-form-success-actions">
           <Button
             onClick={() => {
               setSubmitted(false);
@@ -420,7 +402,7 @@ export const ContactForm: React.FC = () => {
             variant="outline"
             size="sm"
           >
-            Send Another Enquiry
+            Send Another Message
           </Button>
 
           <Button href={WHATSAPP_URL} variant="primary" size="sm">
@@ -432,473 +414,453 @@ export const ContactForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="project-enquiry-form">
+    <form onSubmit={handleSubmit} noValidate className="contact-form-card">
       <style>{`
-/* Project enquiry form */
-.project-enquiry-form {
-  position: relative;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #ece5ef;
-  border-radius: var(--radius-xl, 20px);
-  box-shadow: 0 24px 48px -28px rgba(48, 32, 57, 0.22);
-}
+        /* Contact Form Container */
+        .contact-form-card {
+          position: relative;
+          background: #ffffff;
+          border: 1px solid #ece5ef;
+          border-radius: var(--radius-xl, 20px);
+          box-shadow: 0 20px 44px -24px rgba(48, 32, 57, 0.16);
+          overflow: hidden;
+        }
 
-/* Header band: sets the "solution architect" context before the fields. */
-.project-form-intro {
-  padding: 2rem 2.5rem 1.75rem;
-  background:
-    radial-gradient(120% 140% at 100% 0%, rgba(201, 155, 82, 0.14) 0%, rgba(201, 155, 82, 0) 55%),
-    linear-gradient(135deg, #fbf8fc 0%, #fdfbf7 60%, #ffffff 100%);
-  border-bottom: 1px solid #f1eaf3;
-}
+        /* Compact Header Band */
+        .contact-form-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          padding: 1.25rem 1.75rem;
+          background: linear-gradient(135deg, #fdfbfd 0%, #faf6f9 100%);
+          border-bottom: 1px solid #f1eaf3;
+        }
 
-.project-form-eyebrow {
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  color: #8a6a3f;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+        .contact-form-title {
+          margin: 0;
+          color: #302039;
+          font-size: 1.35rem;
+          font-weight: 600;
+          letter-spacing: -0.015em;
+        }
 
-.project-form-title {
-  margin: 0;
-  color: #302039;
-  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-}
+        .contact-form-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.3rem 0.65rem;
+          border-radius: 9999px;
+          background: rgba(201, 155, 82, 0.12);
+          color: #8a6a3f;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+        }
 
-.project-enquiry-body {
-  padding: 2rem 2.5rem 2.5rem;
-}
+        /* Form Body */
+        .contact-form-body {
+          padding: 1.5rem 1.75rem 2rem;
+        }
 
-.project-enquiry-section {
-  margin-top: 2rem;
-}
+        /* 2-Column Split Grid */
+        .contact-form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1rem 1.25rem;
+        }
 
-.project-enquiry-section:first-of-type {
-  margin-top: 0;
-}
+        .contact-form-grid .col-span-full {
+          grid-column: 1 / -1;
+        }
 
-.project-enquiry-heading {
-  margin: 0 0 1rem;
-  color: #302039;
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
+        @media (max-width: 600px) {
+          .contact-form-header {
+            padding: 1.15rem 1.25rem;
+          }
+          .contact-form-body {
+            padding: 1.25rem;
+          }
+          .contact-form-grid {
+            grid-template-columns: 1fr;
+            gap: 0.9rem;
+          }
+        }
 
-.project-enquiry-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-}
+        /* Form Controls */
+        .contact-form-grid .form-group {
+          margin: 0;
+          min-width: 0;
+        }
 
-.project-enquiry-section .form-group {
-  min-width: 0;
-}
+        .contact-form-grid .form-label {
+          display: block;
+          margin-bottom: 0.35rem;
+          color: #334155;
+          font-size: 0.8125rem;
+          font-weight: 500;
+          line-height: 1.3;
+        }
 
-.project-country-field {
-  grid-column: 1 / -1;
-}
+        .required-mark {
+          color: #e11d48;
+          font-weight: 500;
+          margin-left: 2px;
+        }
 
-.project-enquiry-section .form-input,
-.project-enquiry-section .form-select,
-.project-enquiry-section .form-textarea {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
+        .contact-form-grid .form-input,
+        .contact-form-grid .form-select,
+        .contact-form-grid .form-textarea {
+          display: block;
+          width: 100%;
+          min-height: 42px;
+          padding: 0.55rem 0.85rem;
+          border: 1px solid #cbd5e1;
+          border-radius: 9px;
+          background: #ffffff;
+          color: #1e293b;
+          font-family: inherit;
+          font-size: 0.875rem;
+          line-height: 1.4;
+          box-sizing: border-box;
+          transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
 
-/* Country / Region uses the shared input styles plus a full-width slot. */
-.country-input {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding-right: 2.5rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.85rem center;
-  background-size: 1rem;
-}
+        .contact-form-grid .form-input:focus,
+        .contact-form-grid .form-select:focus,
+        .contact-form-grid .form-textarea:focus {
+          outline: none;
+          border-color: #c99b52;
+          box-shadow: 0 0 0 3px rgba(201, 155, 82, 0.15);
+        }
 
-.country-select {
-  position: relative;
-}
+        .contact-form-grid .form-input::placeholder,
+        .contact-form-grid .form-textarea::placeholder {
+          color: #94a3b8;
+          font-size: 0.8125rem;
+        }
 
-.country-options {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 40;
-  max-height: 240px;
-  margin: 0;
-  padding: 0.35rem;
-  overflow-y: auto;
-  list-style: none;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  box-shadow: 0 14px 32px -12px rgba(15, 23, 42, 0.25);
-}
+        /* Custom Country Select */
+        .country-select-wrapper {
+          position: relative;
+        }
 
-.country-options li {
-  margin: 0;
-}
+        .country-input {
+          padding-right: 2.2rem;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.75rem center;
+          background-size: 0.95rem;
+        }
 
-.country-option {
-  display: block;
-  width: 100%;
-  padding: 0.55rem 0.7rem;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #334155;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.4;
-  text-align: left;
-  cursor: pointer;
-}
+        .country-options {
+          position: absolute;
+          top: calc(100% + 4px);
+          left: 0;
+          right: 0;
+          z-index: 50;
+          max-height: 200px;
+          margin: 0;
+          padding: 0.3rem;
+          overflow-y: auto;
+          list-style: none;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 9px;
+          box-shadow: 0 12px 28px -10px rgba(15, 23, 42, 0.22);
+        }
 
-.country-option:hover,
-.country-option.is-active {
-  background: rgba(73, 36, 63, 0.07);
-  color: #49243f;
-}
+        .country-options li {
+          margin: 0;
+        }
 
-.country-option[aria-selected="true"] {
-  color: #49243f;
-  font-weight: 700;
-}
+        .country-option {
+          display: block;
+          width: 100%;
+          padding: 0.45rem 0.65rem;
+          border: 0;
+          border-radius: 6px;
+          background: transparent;
+          color: #334155;
+          font-family: inherit;
+          font-size: 0.8125rem;
+          text-align: left;
+          cursor: pointer;
+        }
 
-.country-empty {
-  padding: 0.75rem 0.7rem;
-  color: #64748b;
-  font-size: 0.85rem;
-}
+        .country-option:hover,
+        .country-option.is-active {
+          background: rgba(73, 36, 63, 0.08);
+          color: #49243f;
+        }
 
-.project-enquiry-body .form-error {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
+        .country-option[aria-selected="true"] {
+          color: #49243f;
+          font-weight: 700;
+        }
 
-.optional-label {
-  color: #64748b;
-  font-size: 0.85rem;
-  font-weight: 400;
-}
+        .country-empty {
+          padding: 0.6rem;
+          color: #64748b;
+          font-size: 0.8125rem;
+        }
 
-.project-upload-zone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  border: 1.5px dashed #cbd5e1;
-  border-radius: 12px;
-  background: #faf9fc;
-  color: #64748b;
-  text-align: center;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color 180ms ease, background-color 180ms ease;
-}
+        /* Phone Input Component */
+        .phone-input {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          width: 100%;
+          min-height: 42px;
+          padding: 0 10px;
+          border: 1px solid #cbd5e1;
+          border-radius: 9px;
+          background: #ffffff;
+          box-sizing: border-box;
+          transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
 
-.project-upload-zone:hover,
-.project-upload-zone:focus-within {
-  border-color: #c99b52;
-  background: #fcfaf7;
-}
+        .phone-input:focus-within {
+          border-color: #c99b52;
+          box-shadow: 0 0 0 3px rgba(201, 155, 82, 0.15);
+        }
 
-.project-upload-zone strong {
-  color: #49243f;
-  font-size: 0.95rem;
-}
+        .phone-input .PhoneInputCountry {
+          gap: 4px;
+        }
 
-.project-upload-zone input[type="file"] {
-  max-width: 100%;
-  margin-top: 0.5rem;
-}
+        .phone-input .PhoneInputCountryCode {
+          color: #475569;
+          font-size: 0.875rem;
+          font-weight: 600;
+          line-height: 1;
+        }
 
-.project-upload-file-list {
-  display: grid;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-}
+        .phone-input input {
+          flex: 1;
+          min-width: 0;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: #1e293b;
+          font-size: 0.875rem;
+          font-family: inherit;
+        }
 
-.project-upload-file-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  color: #475569;
-  font-size: 0.85rem;
-}
+        .phone-input input::placeholder {
+          color: #94a3b8;
+          font-size: 0.8125rem;
+        }
 
-.project-upload-file-list li span {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+        /* Interactive Focus Chips */
+        .topic-chips-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
 
-.project-upload-file-list li button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
-  border: 0;
-  border-radius: 5px;
-  background: transparent;
-  color: #64748b;
-  cursor: pointer;
-}
+        .topic-chips-header {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          color: #64748b;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
 
-.project-upload-file-list li button:hover {
-  background: #f1f5f9;
-  color: #9f1239;
-}
+        .topic-chips-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+        }
 
-.project-consent-label {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  color: var(--color-text-secondary, #4b5563);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  cursor: pointer;
-}
+        .topic-chip {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.35rem 0.7rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 9999px;
+          background: #f8fafc;
+          color: #475569;
+          font-family: inherit;
+          font-size: 0.78125rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 140ms ease;
+          user-select: none;
+        }
 
-.project-consent-label input {
-  flex: 0 0 auto;
-  margin-top: 0.25rem;
-}
+        .topic-chip:hover {
+          border-color: #cbd5e1;
+          background: #f1f5f9;
+          color: #1e293b;
+        }
 
-.project-consent-label a {
-  color: var(--color-link-main, #49243f);
-  text-decoration: underline;
-}
+        .topic-chip.is-selected {
+          border-color: #49243f;
+          background: #49243f;
+          color: #ffffff;
+          box-shadow: 0 2px 6px rgba(73, 36, 63, 0.2);
+        }
 
-.project-submission-error {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  border: 1px solid var(--color-alert-border, #fecdd3);
-  border-radius: var(--radius-md, 8px);
-  background: var(--color-alert-light, #ffe4e6);
-  color: var(--color-alert, #e11d48);
-  font-size: 0.875rem;
-}
+        /* Compact Attachment Row */
+        .compact-attachment-zone {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+          padding: 0.6rem 0.85rem;
+          border: 1px dashed #cbd5e1;
+          border-radius: 9px;
+          background: #fafafc;
+          transition: border-color 150ms ease, background-color 150ms ease;
+        }
 
-.project-submission-error > div:first-child {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
+        .compact-attachment-zone:hover,
+        .compact-attachment-zone:focus-within {
+          border-color: #c99b52;
+          background: #fcfbf9;
+        }
 
-.project-submission-fallbacks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
+        .compact-attachment-trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          color: #49243f;
+          font-size: 0.8125rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
 
-.project-submission-fallbacks a {
-  color: var(--color-alert, #e11d48);
-  font-weight: 600;
-}
+        .compact-attachment-hint {
+          color: #94a3b8;
+          font-size: 0.75rem;
+        }
 
-.project-form-submit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  margin-top: 1.75rem;
-}
+        .file-chips-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          margin-top: 0.4rem;
+        }
 
-.project-form-submit .btn {
-  width: 100%;
-  max-width: 320px;
-  justify-content: center;
-}
+        .file-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.25rem 0.5rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          background: #ffffff;
+          color: #334155;
+          font-size: 0.75rem;
+        }
 
-/* Success state shown after a successful submission. */
-.project-enquiry-success {
-  padding: 3rem 2rem;
-  border-radius: var(--radius-xl, 20px);
-  background: #ffffff;
-  border: 1px solid var(--color-success-border, #a7f3d0);
-  text-align: center;
-  box-shadow: 0 20px 40px -15px rgba(4, 120, 87, 0.12);
-}
+        .file-chip-remove {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 0;
+          background: transparent;
+          color: #94a3b8;
+          padding: 1px;
+          cursor: pointer;
+          border-radius: 3px;
+        }
 
-.project-enquiry-success-icon {
-  width: 4rem;
-  height: 4rem;
-  margin: 0 auto 1.5rem;
-  border-radius: 50%;
-  background: var(--color-success-light, #ecfdf5);
-  color: var(--color-success, #047857);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        .file-chip-remove:hover {
+          color: #e11d48;
+          background: #fee2e2;
+        }
 
-.project-enquiry-success h3 {
-  margin: 0 0 0.75rem;
-  color: var(--color-text-primary, #1f2937);
-  font-size: 1.75rem;
-  font-weight: 800;
-}
+        /* Inline Error */
+        .form-error {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          margin-top: 0.25rem;
+          color: #dc2626;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
 
-.project-enquiry-success p {
-  max-width: 460px;
-  margin: 0 auto 2rem;
-  color: var(--color-text-secondary, #4b5563);
-  line-height: 1.6;
-}
+        /* Consent Checkbox */
+        .consent-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.55rem;
+          cursor: pointer;
+          color: #475569;
+          font-size: 0.8125rem;
+          line-height: 1.45;
+        }
 
-.project-enquiry-success-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
+        .consent-row input {
+          margin-top: 0.15rem;
+          accent-color: #49243f;
+        }
 
-@media (max-width: 640px) {
-  .project-form-intro {
-    padding: 1.75rem 1.25rem 1.5rem;
-  }
+        .consent-row a {
+          color: #49243f;
+          text-decoration: underline;
+        }
 
-  .project-enquiry-body {
-    padding: 1.5rem 1.25rem 2rem;
-  }
+        /* Submit Button */
+        .contact-submit-btn {
+          width: 100%;
+          justify-content: center;
+        }
 
-  .project-enquiry-grid {
-    grid-template-columns: 1fr;
-  }
+        /* Success Card */
+        .contact-form-success {
+          padding: 3rem 2rem;
+          text-align: center;
+        }
 
-  .project-enquiry-heading {
-    font-size: 1rem;
-  }
+        .contact-form-success-icon {
+          width: 3.5rem;
+          height: 3.5rem;
+          margin: 0 auto 1.25rem;
+          border-radius: 50%;
+          background: #ecfdf5;
+          color: #059669;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
-  .project-enquiry-success {
-    padding: 2.5rem 1.25rem;
-  }
+        .contact-form-success-title {
+          margin: 0 0 0.5rem;
+          color: #1e293b;
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
 
-  .project-enquiry-success h3 {
-    font-size: 1.5rem;
-  }
-}
+        .contact-form-success-text {
+          max-width: 420px;
+          margin: 0 auto 1.5rem;
+          color: #475569;
+          font-size: 0.9375rem;
+          line-height: 1.6;
+        }
 
-@media (prefers-reduced-motion: reduce) {
-  .project-upload-zone {
-    transition: none;
-  }
-}
-
-/* Required field marker */
-.required-mark {
-  color: #dc2626;
-  font-weight: 700;
-}
-
-/* Phone input with compact country selector */
-.phone-input {
-  --PhoneInput-color--focus: #c99b52;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  min-height: 46px;
-  padding: 0 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  box-sizing: border-box;
-  font-family: var(--font-body);
-  transition: border-color 160ms ease, box-shadow 160ms ease;
-}
-
-.phone-input:hover {
-  border-color: #cbd5e1;
-}
-
-.phone-input:focus-within {
-  border-color: #c99b52;
-  box-shadow: 0 0 0 3px rgba(201, 155, 82, 0.14);
-}
-
-/* Keep flag, country code, and arrow tight together. */
-.phone-input .PhoneInputCountry {
-  gap: 4px;
-  margin-right: 2px;
-}
-
-.phone-input .PhoneInputCountryCode {
-  color: #475569;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.phone-input .PhoneInputCountrySelectArrow {
-  margin-left: 2px;
-}
-
-.phone-input select {
-  font-family: var(--font-body);
-}
-
-.phone-input input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #1e293b;
-  font-size: 16px;
-  font-family: var(--font-body);
-}
-
-.phone-input input:focus {
-  outline: none;
-}
-
-.phone-input input::placeholder {
-  color: #94a3b8;
-}
-
-@media (max-width: 480px) {
-  .phone-input {
-    padding: 0 10px;
-  }
-}
+        .contact-form-success-actions {
+          display: flex;
+          justify-content: center;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
       `}</style>
 
-      <header className="project-form-intro">
-        {/* <span className="project-form-eyebrow">Solution Architect Review</span> */}
-        <h3 className="project-form-title">Tell us what you are building</h3>
-      </header>
+      {/* Header */}
 
-      <div className="project-enquiry-body">
-        {/* Honeypot field: hidden from genuine users. */}
+
+      <div className="contact-form-body">
+        {/* Anti-spam Honeypot */}
         <div
           aria-hidden="true"
           style={{
@@ -909,365 +871,321 @@ export const ContactForm: React.FC = () => {
             clip: "rect(0, 0, 0, 0)",
           }}
         >
-          <label htmlFor="website_url">Leave this field empty</label>
+          <label htmlFor="website_url">Leave empty</label>
           <input
             id="website_url"
             type="text"
             name="website_url"
             value={formData.website_url}
-            onChange={(event) => updateField("website_url", event.target.value)}
+            onChange={(e) => updateField("website_url", e.target.value)}
             tabIndex={-1}
             autoComplete="off"
           />
         </div>
 
-        {/* 1. Contact details */}
-        <section className="project-enquiry-section">
-          <h4 className="project-enquiry-heading">1. Your contact details</h4>
-
-          <div className="project-enquiry-grid">
-            <div className="form-group">
-              <label className="form-label" htmlFor="fullName">
-                Contact Person Name{" "}
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="fullName"
-                type="text"
-                className="form-input"
-                placeholder="Enter your full name"
-                autoComplete="name"
-                aria-required="true"
-                value={formData.fullName}
-                onChange={(event) =>
-                  updateField("fullName", event.target.value)
-                }
-                aria-invalid={Boolean(errors.fullName)}
-                aria-describedby={
-                  errors.fullName ? "contact-fullName-error" : undefined
-                }
-              />
-              {errors.fullName && (
-                <span
-                  id="contact-fullName-error"
-                  role="alert"
-                  className="form-error"
-                >
-                  <AlertCircle size={13} /> {errors.fullName}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="companyName">
-                Organization Name
-              </label>
-              <input
-                id="companyName"
-                type="text"
-                className="form-input"
-                placeholder="Enter your company or organization"
-                autoComplete="organization"
-                value={formData.companyName}
-                onChange={(event) =>
-                  updateField("companyName", event.target.value)
-                }
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="workEmail">
-                Business Email{" "}
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="workEmail"
-                type="email"
-                className="form-input"
-                placeholder="name@company.com"
-                autoComplete="email"
-                aria-required="true"
-                value={formData.workEmail}
-                onChange={(event) =>
-                  updateField("workEmail", event.target.value)
-                }
-                aria-invalid={Boolean(errors.workEmail)}
-                aria-describedby={
-                  errors.workEmail ? "contact-workEmail-error" : undefined
-                }
-              />
-              {errors.workEmail && (
-                <span
-                  id="contact-workEmail-error"
-                  role="alert"
-                  className="form-error"
-                >
-                  <AlertCircle size={13} /> {errors.workEmail}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="phone">
-                Contact Number{" "}
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-              <PhoneInput
-                id="phone"
-                defaultCountry="IN"
-                countrySelectComponent={CountrySelect}
-                placeholder="Enter mobile number"
-                value={formData.phone}
-                onChange={(value) => updateField("phone", value || "")}
-                className="phone-input"
-                aria-required="true"
-                aria-invalid={Boolean(errors.phone)}
-                aria-describedby={
-                  errors.phone ? "contact-phone-error" : undefined
-                }
-              />
-              {errors.phone && (
-                <span
-                  id="contact-phone-error"
-                  role="alert"
-                  className="form-error"
-                >
-                  <AlertCircle size={13} /> {errors.phone}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group project-country-field" ref={countryFieldRef}>
-              <label className="form-label" htmlFor="country">
-                Country / Region{" "}
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-
-              <div className="country-select">
-                <input
-                  id="country"
-                  type="text"
-                  className="form-input country-input"
-                  placeholder="Search or enter your country"
-                  autoComplete="off"
-                  role="combobox"
-                  aria-required="true"
-                  aria-expanded={countryOpen}
-                  aria-controls="country-region-listbox"
-                  aria-autocomplete="list"
-                  aria-activedescendant={
-                    countryOpen && activeCountryIndex >= 0
-                      ? `country-option-${activeCountryIndex}`
-                      : undefined
-                  }
-                  value={formData.country}
-                  onChange={(event) => {
-                    updateField("country", event.target.value);
-                    setCountryOpen(true);
-                    setActiveCountryIndex(-1);
-                  }}
-                  onFocus={() => setCountryOpen(true)}
-                  onKeyDown={handleCountryKeyDown}
-                  aria-invalid={Boolean(errors.country)}
-                  aria-describedby={
-                    errors.country ? "contact-country-error" : undefined
-                  }
-                />
-
-                {countryOpen && (
-                  <ul
-                    id="country-region-listbox"
-                    role="listbox"
-                    className="country-options"
-                  >
-                    {filteredCountries.length > 0 ? (
-                      filteredCountries.map((country, index) => (
-                        <li key={country}>
-                          <button
-                            type="button"
-                            role="option"
-                            id={`country-option-${index}`}
-                            aria-selected={formData.country === country}
-                            className={`country-option ${
-                              index === activeCountryIndex ? "is-active" : ""
-                            }`}
-                            onMouseDown={(event) => event.preventDefault()}
-                            onClick={() => selectCountry(country)}
-                          >
-                            {country}
-                          </button>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="country-empty">No matching country found</li>
-                    )}
-                  </ul>
-                )}
-              </div>
-
-              {errors.country && (
-                <span
-                  id="contact-country-error"
-                  role="alert"
-                  className="form-error"
-                >
-                  <AlertCircle size={13} /> {errors.country}
-                </span>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* 2. Project requirements */}
-        <section className="project-enquiry-section">
-          <h4 className="project-enquiry-heading">
-            2. Project requirements
-          </h4>
-
+        {/* Form Inputs Grid in Split Columns */}
+        <div className="contact-form-grid">
+          {/* Col 1: Full Name */}
           <div className="form-group">
-            <label className="form-label" htmlFor="projectScope">
-              Project Scope &amp; Technical Requirements{" "}
-              <span className="required-mark" aria-hidden="true">*</span>
+            <label className="form-label" htmlFor="fullName">
+              Full Name <span className="required-mark" aria-hidden="true">*</span>
             </label>
-            <textarea
-              id="projectScope"
-              className="form-textarea"
-              rows={6}
-              placeholder="Describe your objectives, existing systems, technical requirements, integrations, expected outcomes, and performance needs..."
+            <input
+              id="fullName"
+              type="text"
+              className="form-input"
+              placeholder="Enter your full name"
+              autoComplete="name"
               aria-required="true"
-              value={formData.projectScope}
-              onChange={(event) =>
-                updateField("projectScope", event.target.value)
-              }
-              aria-invalid={Boolean(errors.projectScope)}
-              aria-describedby={
-                errors.projectScope ? "contact-projectScope-error" : undefined
-              }
+              value={formData.fullName}
+              onChange={(e) => updateField("fullName", e.target.value)}
+              aria-invalid={Boolean(errors.fullName)}
+              aria-describedby={errors.fullName ? "fullName-error" : undefined}
             />
-            {errors.projectScope && (
-              <span
-                id="contact-projectScope-error"
-                role="alert"
-                className="form-error"
-              >
-                <AlertCircle size={13} /> {errors.projectScope}
+            {errors.fullName && (
+              <span id="fullName-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.fullName}
               </span>
             )}
           </div>
-        </section>
 
-        {/* 3. Supporting documents */}
-        <section className="project-enquiry-section">
-          <h4 className="project-enquiry-heading">
-            3. Supporting documents{" "}
-            {/* <span className="optional-label">(Optional)</span> */}
-          </h4>
-
-          <label className="project-upload-zone" htmlFor="projectDocuments">
-            <Upload size={25} aria-hidden="true" />
-            <strong>Choose files to upload</strong>
-            <span>PDF, DOCX, XLSX, PNG, JPG, ZIP &middot; 15 MB max each</span>
+          {/* Col 2: Work Email */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="workEmail">
+              Email <span className="required-mark" aria-hidden="true">*</span>
+            </label>
             <input
-              id="projectDocuments"
-              type="file"
-              multiple
-              accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.zip"
-              onChange={handleFilesChange}
+              id="workEmail"
+              type="email"
+              className="form-input"
+              placeholder="Enter your Email"
+              autoComplete="email"
+              aria-required="true"
+              value={formData.workEmail}
+              onChange={(e) => updateField("workEmail", e.target.value)}
+              aria-invalid={Boolean(errors.workEmail)}
+              aria-describedby={errors.workEmail ? "workEmail-error" : undefined}
             />
-          </label>
-
-          {projectDocuments.length > 0 && (
-            <ul className="project-upload-file-list">
-              {projectDocuments.map((file, index) => (
-                <li key={`${file.name}-${index}`}>
-                  <FileText size={15} aria-hidden="true" />
-                  <span>
-                    {file.name} — {(file.size / (1024 * 1024)).toFixed(2)} MB
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeFile(index)}
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    <X size={15} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {documentError && (
-            <span className="form-error" role="alert">
-              {documentError}
-            </span>
-          )}
-        </section>
-
-        {/* Consent */}
-        <div className="form-group" style={{ marginTop: "1.5rem" }}>
-          <label className="project-consent-label">
-            <input
-              type="checkbox"
-              checked={formData.consent}
-              onChange={(event) =>
-                updateField("consent", event.target.checked)
-              }
-              aria-invalid={Boolean(errors.consent)}
-              aria-describedby={
-                errors.consent ? "contact-consent-error" : undefined
-              }
-            />
-            <span>
-              I agree that Azaroth Tech-Hive may contact me about this project
-              enquiry in accordance with the{" "}
-              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
-                Privacy Policy
-              </a>
-              .
-            </span>
-          </label>
-          {errors.consent && (
-            <span id="contact-consent-error" role="alert" className="form-error">
-              <AlertCircle size={13} /> {errors.consent}
-            </span>
-          )}
-        </div>
-
-        {/* Submission error */}
-        {submissionError && (
-          <div role="alert" className="project-submission-error">
-            <div>
-              <AlertCircle size={14} aria-hidden="true" /> {submissionError}
-            </div>
-            <div className="project-submission-fallbacks">
-              <a href={`mailto:${FALLBACK_EMAIL}`}>Email us directly</a>
-              <a href={`tel:${FALLBACK_PHONE}`}>Call +91 6379480931</a>
-            </div>
+            {errors.workEmail && (
+              <span id="workEmail-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.workEmail}
+              </span>
+            )}
           </div>
-        )}
 
-        <div className="project-form-submit">
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            disabled={isSubmitting}
-          >
-            <span
+          {/* Col 1: Company / Organization */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="companyName">
+              Company / Organization <span className="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="companyName"
+              type="text"
+              className="form-input"
+              placeholder="Enter your organization name"
+              autoComplete="organization"
+              aria-required="true"
+              value={formData.companyName}
+              onChange={(e) => updateField("companyName", e.target.value)}
+              aria-invalid={Boolean(errors.companyName)}
+              aria-describedby={errors.companyName ? "companyName-error" : undefined}
+            />
+            {errors.companyName && (
+              <span id="companyName-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.companyName}
+              </span>
+            )}
+          </div>
+
+          {/* Col 2: Contact Number */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="phone">
+              Contact Number <span className="required-mark" aria-hidden="true">*</span>
+            </label>
+            <PhoneInput
+              id="phone"
+              defaultCountry="IN"
+              countrySelectComponent={CountrySelect}
+              placeholder="Mobile number"
+              value={formData.phone}
+              onChange={(value) => updateField("phone", value || "")}
+              className="phone-input"
+              aria-required="true"
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? "phone-error" : undefined}
+            />
+            {errors.phone && (
+              <span id="phone-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.phone}
+              </span>
+            )}
+          </div>
+
+          {/* Full Width: Country / Region */}
+          <div className="form-group country-select-wrapper col-span-full" ref={countryFieldRef}>
+            <label className="form-label" htmlFor="country">
+              Country / Region <span className="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="country"
+              type="text"
+              className="form-input country-input"
+              placeholder="Search country..."
+              autoComplete="off"
+              role="combobox"
+              aria-required="true"
+              aria-expanded={countryOpen}
+              aria-controls="country-listbox"
+              aria-autocomplete="list"
+              value={formData.country}
+              onChange={(e) => {
+                updateField("country", e.target.value);
+                setCountryOpen(true);
+                setActiveCountryIndex(-1);
+              }}
+              onFocus={() => setCountryOpen(true)}
+              onKeyDown={handleCountryKeyDown}
+              aria-invalid={Boolean(errors.country)}
+              aria-describedby={errors.country ? "country-error" : undefined}
+            />
+            {countryOpen && (
+              <ul id="country-listbox" role="listbox" className="country-options">
+                {filteredCountries.length > 0 ? (
+                  filteredCountries.map((country, index) => (
+                    <li key={country}>
+                      <button
+                        type="button"
+                        role="option"
+                        id={`country-opt-${index}`}
+                        aria-selected={formData.country === country}
+                        className={`country-option ${
+                          index === activeCountryIndex ? "is-active" : ""
+                        }`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => selectCountry(country)}
+                      >
+                        {country}
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  <li className="country-empty">No matching country</li>
+                )}
+              </ul>
+            )}
+            {errors.country && (
+              <span id="country-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.country}
+              </span>
+            )}
+          </div>
+
+          {/* Full Width: How Can We Help? / Scope */}
+          <div className="form-group col-span-full">
+            <label className="form-label" htmlFor="message">
+              How Can We Help? <span className="required-mark" aria-hidden="true">*</span>
+            </label>
+            <textarea
+              id="message"
+              className="form-textarea"
+              rows={3}
+              placeholder="Brief summary of objectives, systems, or target timeline..."
+              aria-required="true"
+              value={formData.message}
+              onChange={(e) => updateField("message", e.target.value)}
+              aria-invalid={Boolean(errors.message)}
+              aria-describedby={errors.message ? "message-error" : undefined}
+            />
+            {errors.message && (
+              <span id="message-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.message}
+              </span>
+            )}
+          </div>
+
+          {/* Full Width: Compact Document Attachment Bar */}
+          <div className="form-group col-span-full">
+            <div className="compact-attachment-zone">
+              <label
+                htmlFor="projectDocuments"
+                className="compact-attachment-trigger"
+              >
+                <Paperclip size={14} aria-hidden="true" />
+                <span>Attachments</span>
+                <input
+                  id="projectDocuments"
+                  type="file"
+                  multiple
+                  accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.zip"
+                  onChange={handleFilesChange}
+                  style={{ display: "none" }}
+                />
+              </label>
+              <span className="compact-attachment-hint">
+                PDF, DOCX, XLSX, ZIP · max 15MB
+              </span>
+            </div>
+
+            {projectDocuments.length > 0 && (
+              <div className="file-chips-list">
+                {projectDocuments.map((file, idx) => (
+                  <span key={`${file.name}-${idx}`} className="file-chip">
+                    <FileText size={12} />
+                    <span>
+                      {file.name} ({(file.size / (1024 * 1024)).toFixed(1)}MB)
+                    </span>
+                    <button
+                      type="button"
+                      className="file-chip-remove"
+                      onClick={() => removeFile(idx)}
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {documentError && (
+              <span role="alert" className="form-error">
+                <AlertCircle size={12} /> {documentError}
+              </span>
+            )}
+          </div>
+
+          {/* Full Width: Consent Checkbox */}
+          <div className="form-group col-span-full">
+            <label className="consent-row">
+              <input
+                type="checkbox"
+                checked={formData.consent}
+                onChange={(e) => updateField("consent", e.target.checked)}
+                aria-invalid={Boolean(errors.consent)}
+                aria-describedby={errors.consent ? "consent-error" : undefined}
+              />
+              <span>
+                I agree to the{" "}
+                <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                  Privacy Policy
+                </a>{" "}
+                and confirm you may contact me regarding this enquiry.
+              </span>
+            </label>
+            {errors.consent && (
+              <span id="consent-error" role="alert" className="form-error">
+                <AlertCircle size={12} /> {errors.consent}
+              </span>
+            )}
+          </div>
+
+          {/* Submission Error Banner */}
+          {submissionError && (
+            <div
+              role="alert"
+              className="col-span-full form-error"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-                lineHeight: 1.2,
+                padding: "0.65rem 0.85rem",
+                borderRadius: "8px",
+                background: "#fef2f2",
+                border: "1px solid #fecdd3",
               }}
             >
-              <Send size={18} aria-hidden="true" />
+              <AlertCircle size={14} />
               <span>
-                {isSubmitting ? "Submitting..." : "Submit Project Enquiry"}
+                {submissionError}{" "}
+                <a
+                  href={`mailto:${FALLBACK_EMAIL}`}
+                  style={{ textDecoration: "underline", fontWeight: 700 }}
+                >
+                  Email us directly
+                </a>
               </span>
-            </span>
-          </Button>
+            </div>
+          )}
+
+          {/* Full Width: Submit Button */}
+          <div className="form-group col-span-full" style={{ marginTop: "0.25rem" }}>
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              disabled={isSubmitting}
+              className="contact-submit-btn"
+            >
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
+                <Send size={16} aria-hidden="true" />
+                <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
     </form>

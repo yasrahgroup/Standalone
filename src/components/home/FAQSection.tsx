@@ -85,11 +85,11 @@ export const FAQSection: React.FC = () => {
         >
           <h2
             style={{
-              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
-              fontWeight: 800,
+              fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+              fontWeight: 600,
               color: 'var(--color-text-primary, #0F172A)',
               marginBottom: '1rem',
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               letterSpacing: '-0.02em',
             }}
           >
@@ -106,9 +106,9 @@ export const FAQSection: React.FC = () => {
           </h2>
           <p
             style={{
-              fontSize: '1.0625rem',
+              fontSize: '1rem',
               color: 'var(--color-text-secondary, #4B5563)',
-              lineHeight: 1.7,
+              lineHeight: 1.65,
               margin: 0,
             }}
           >
@@ -290,7 +290,7 @@ export const FAQSection: React.FC = () => {
                   backdropFilter: 'blur(8px)',
                   color: '#FFFFFF',
                   fontSize: '0.725rem',
-                  fontWeight: 700,
+                  fontWeight: 600,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -304,10 +304,10 @@ export const FAQSection: React.FC = () => {
             <div style={{ padding: '1.65rem 1.65rem 1.85rem' }}>
               <h3
                 style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 800,
+                  fontSize: '1.125rem',
+                  fontWeight: 600,
                   color: '#1E293B',
-                  lineHeight: 1.3,
+                  lineHeight: 1.35,
                   marginBottom: '0.65rem',
                   letterSpacing: '-0.01em',
                 }}
@@ -415,7 +415,7 @@ export const FAQSection: React.FC = () => {
                   background: 'var(--gradient-button)',
                   color: '#FFFFFF',
                   fontSize: '0.90rem',
-                  fontWeight: 700,
+                  fontWeight: 600,
                   textDecoration: 'none',
                   boxShadow: '0 4px 14px rgba(73, 36, 63, 0.3)',
                   transition: 'all 160ms ease',

@@ -25,18 +25,18 @@ export const ProcessSection: React.FC = () => {
             Our Process
           </Badge>
           <h2 style={{
-            fontSize: 'clamp(2rem, 4vw, 2.5rem)',
-            fontWeight: 800,
+            fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+            fontWeight: 600,
             color: 'var(--color-text-primary)',
             marginBottom: '1rem',
-            lineHeight: 1.2,
+            lineHeight: 1.25,
           }}>
             Turning Ideas Into Impact
           </h2>
           <p style={{
-            fontSize: '1.0625rem',
+            fontSize: '1rem',
             color: 'var(--color-text-secondary)',
-            lineHeight: 1.7,
+            lineHeight: 1.65,
           }}>
             Every engagement moves through the same six-stage delivery framework, from discovery and solution design through testing and deployment to continuous improvement. Here is the short version of each stage.
           </p>
@@ -78,7 +78,7 @@ export const ProcessSection: React.FC = () => {
               {/* Step Number */}
               <div style={{
                 fontSize: '2rem',
-                fontWeight: 800,
+                fontWeight: 600,
                 color: 'var(--color-brand-violet-glow)',
                 marginBottom: '0.75rem',
                 lineHeight: 1,
@@ -89,7 +89,7 @@ export const ProcessSection: React.FC = () => {
               {/* Stage Title */}
               <h3 style={{
                 fontSize: '1rem',
-                fontWeight: 700,
+                fontWeight: 600,
                 color: 'var(--color-text-primary)',
                 marginBottom: '0.5rem',
                 lineHeight: 1.35,

@@ -32,13 +32,13 @@ export const FinalCTA: React.FC = () => {
           style={{ textAlign: 'center', maxWidth: '1100px', margin: '0 auto' }}
         >
       
-             <h2
+          <h2
             style={{
-              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
-              fontWeight: 800,
+              fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+              fontWeight: 600,
               color: 'var(--color-text-primary, #0F172A)',
               marginBottom: '1rem',
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               letterSpacing: '-0.02em',
             }}
           >
@@ -55,10 +55,10 @@ export const FinalCTA: React.FC = () => {
           </h2>
           <p
             style={{
-              fontSize: '1.0625rem',
+              fontSize: '1rem',
               color: 'var(--color-text-secondary, #4B5563)',
-              lineHeight: 1.7,
-              margin: '25px 0',
+              lineHeight: 1.65,
+              margin: '20px 0',
             }}
           >
             Whether you need to engineer a mission-critical platform, modernize legacy systems, or deploy a dedicated engineering pod, we partner with you to turn ambitious roadmaps into resilient digital reality.

@@ -17,13 +17,10 @@ import {
   Workflow,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SlaMatrix } from '../components/services/SlaMatrix';
-import { Button } from '../components/common/Button';
 import { SEOHead } from '../components/common/SEOHead';
 import { Reveal } from '../components/common/Reveal';
 import { FinalCTA } from '../components/home/FinalCTA';
 import { serviceOfferings } from '../data/servicesData';
-import { deliveryStages } from '../data/deliveryData';
 import { industryExpertiseData } from '../data/industryData';
 
 const serviceIcon = (name: string) => {
@@ -94,20 +91,6 @@ export const Services: React.FC = () => {
                 automation. Each engagement begins with a clear problem
                 statement, an agreed scope, and a practical delivery plan.
               </p>
-
-              <div className="services-actions">
-                <Button
-                  to="/connect-with-us"
-                  variant="primary"
-                  size="lg"
-                  icon={<ArrowRight size={18} />}
-                >
-                  Discuss Your Requirements
-                </Button>
-                <Button to="#engagement-models" variant="outline" size="lg">
-                  Compare Engagement Models
-                </Button>
-              </div>
 
               <div className="services-hero-note">
                 <ShieldCheck size={15} />
@@ -219,49 +202,6 @@ export const Services: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* HOW WE WORK */}
-      <section id="how-we-work" className="services-section">
-        <div className="container">
-          <Reveal className="services-section-head">
-            <div>
-              <div className="services-kicker">
-                <Workflow size={16} />
-                <span>How We Work</span>
-              </div>
-              <h2 className="services-section-title">
-                A six-stage path from brief to support
-              </h2>
-              <p className="services-section-copy">
-                Every engagement follows the same delivery framework. The depth
-                of each stage is agreed up front, so responsibilities and
-                decision points stay visible.
-              </p>
-            </div>
-        
-          </Reveal>
-
-          <div className="services-process-grid">
-            {deliveryStages.map((stage, index) => (
-              <Reveal
-                key={stage.stageNumber}
-                delay={index * 0.05}
-                className="services-process-card"
-              >
-                <div className="services-process-number">
-                  {String(stage.stageNumber).padStart(2, '0')}
-                </div>
-                <h3>{stage.title}</h3>
-                <div className="services-process-tagline">{stage.tagline}</div>
-                <p>{stage.description}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ENGAGEMENT MODELS */}
-      <SlaMatrix />
 
       {/* DOMAINS */}
       <section id="domains" className="services-section">
@@ -425,26 +365,26 @@ export const Services: React.FC = () => {
           align-items: center;
           gap: 0.5rem;
           font-size: 0.8125rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
-          letter-spacing: 0.18em;
+          letter-spacing: 0.16em;
           text-transform: uppercase;
           margin-bottom: 0.9rem;
         }
 
         .services-hero-title {
-          font-size: clamp(2.3rem, 4.5vw, 3.4rem);
-          font-weight: 800;
+          font-size: clamp(1.85rem, 3.5vw, 2.25rem);
+          font-weight: 600;
           color: #1E293B;
-          line-height: 1.14;
+          line-height: 1.18;
           letter-spacing: -0.025em;
           margin-bottom: 1.25rem;
         }
 
         .services-hero-copy {
-          font-size: 1.125rem;
+          font-size: 1rem;
           color: #475569;
-          line-height: 1.72;
+          line-height: 1.68;
           max-width: 620px;
           margin-bottom: 1.75rem;
         }
@@ -463,7 +403,7 @@ export const Services: React.FC = () => {
           gap: 0.4rem;
           color: #49243F;
           font-size: 0.9rem;
-          font-weight: 700;
+          font-weight: 600;
           text-decoration: none;
           transition: gap 160ms ease, color 160ms ease;
         }
@@ -502,7 +442,7 @@ export const Services: React.FC = () => {
           align-items: center;
           gap: 0.55rem;
           font-size: 0.8125rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: #49243F;
@@ -560,7 +500,7 @@ export const Services: React.FC = () => {
 
         .services-start-text strong {
           font-size: 0.8125rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           line-height: 1.35;
         }
@@ -586,7 +526,7 @@ export const Services: React.FC = () => {
           border-top: 1px solid rgba(227, 218, 207, 0.9);
           color: #49243F;
           font-size: 0.75rem;
-          font-weight: 700;
+          font-weight: 600;
           line-height: 1.45;
           text-decoration: none;
         }
@@ -610,8 +550,8 @@ export const Services: React.FC = () => {
         }
 
         .services-section-title {
-          font-size: clamp(1.9rem, 3.4vw, 2.6rem);
-          font-weight: 800;
+          font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+          font-weight: 600;
           color: #1E293B;
           background-image: var(--gradient-heading);
           background-size: 100% 100%;
@@ -619,23 +559,29 @@ export const Services: React.FC = () => {
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          line-height: 1.18;
+          line-height: 1.2;
           letter-spacing: -0.02em;
           margin-bottom: 0.85rem;
         }
 
         .services-section-copy {
           color: #64748B;
-          font-size: 1.0625rem;
-          line-height: 1.7;
+          font-size: 0.95rem;
+          line-height: 1.65;
           max-width: none;
+        }
+
+        .services-hero-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+          gap: clamp(2rem, 5vw, 4rem);
+          align-items: center;
         }
 
         .services-practice-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 1.5rem;
-          align-items: stretch;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.75rem;
         }
 
         .practice-card {
@@ -678,14 +624,14 @@ export const Services: React.FC = () => {
 
         .practice-card-number {
           font-size: 0.75rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.1em;
           color: #94A3B8;
         }
 
         .practice-card-category {
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.09em;
           text-transform: uppercase;
           color: #7A5422;
@@ -693,17 +639,17 @@ export const Services: React.FC = () => {
         }
 
         .practice-card h3 {
-          font-size: 1.3rem;
-          font-weight: 800;
+          font-size: 1.125rem;
+          font-weight: 600;
           color: #1E293B;
-          line-height: 1.3;
+          line-height: 1.35;
           margin-bottom: 0.65rem;
         }
 
         .practice-card-desc {
-          font-size: 0.9rem;
+          font-size: 0.875rem;
           color: #64748B;
-          line-height: 1.68;
+          line-height: 1.65;
           margin-bottom: 1.15rem;
         }
 
@@ -743,7 +689,7 @@ export const Services: React.FC = () => {
         .practice-card-best > span {
           display: block;
           font-size: 0.625rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.09em;
           text-transform: uppercase;
           color: #7A5422;
@@ -769,7 +715,7 @@ export const Services: React.FC = () => {
           gap: 0.4rem;
           color: #49243F;
           font-size: 0.875rem;
-          font-weight: 700;
+          font-weight: 600;
           text-decoration: none;
           transition: gap 160ms ease, color 160ms ease;
         }
@@ -800,8 +746,8 @@ export const Services: React.FC = () => {
         }
 
         .services-process-number {
-          font-size: 1.9rem;
-          font-weight: 800;
+          font-size: 1.6rem;
+          font-weight: 600;
           line-height: 1;
           color: rgba(73, 36, 63, 0.16);
           margin-bottom: 0.55rem;
@@ -810,14 +756,14 @@ export const Services: React.FC = () => {
 
         .services-process-card h3 {
           font-size: 1.05rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin-bottom: 0.25rem;
         }
 
         .services-process-tagline {
           font-size: 0.75rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           line-height: 1.4;
           margin-bottom: 0.65rem;
@@ -865,14 +811,14 @@ export const Services: React.FC = () => {
 
         .services-domain-head h3 {
           font-size: 1.05rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin-bottom: 0.2rem;
         }
 
         .services-domain-head p {
           font-size: 0.75rem;
-          font-weight: 600;
+          font-weight: 500;
           color: #64748B;
           line-height: 1.45;
         }
@@ -884,7 +830,7 @@ export const Services: React.FC = () => {
         .services-domain-block span {
           display: block;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #7A5422;
@@ -949,14 +895,14 @@ export const Services: React.FC = () => {
 
         .services-next-step {
           font-size: 0.75rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.1em;
           color: #94A3B8;
         }
 
         .services-next-card h3 {
           font-size: 1.05rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1E293B;
           margin-bottom: 0.45rem;
         }
@@ -984,7 +930,7 @@ export const Services: React.FC = () => {
 
         .services-next-cta a {
           color: #49243F;
-          font-weight: 700;
+          font-weight: 600;
           text-decoration: none;
         }
 
@@ -1004,7 +950,7 @@ export const Services: React.FC = () => {
 
         @media (max-width: 820px) {
           .services-practice-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
           }
 
           .services-domain-grid {
@@ -1017,6 +963,10 @@ export const Services: React.FC = () => {
         }
 
         @media (max-width: 640px) {
+          .services-practice-grid {
+            grid-template-columns: 1fr;
+          }
+
           .services-process-grid {
             grid-template-columns: 1fr;
           }

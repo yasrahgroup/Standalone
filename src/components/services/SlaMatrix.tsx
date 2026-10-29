@@ -117,7 +117,7 @@ export const SlaMatrix: React.FC = () => {
           align-items: center;
           gap: 0.5rem;
           font-size: 0.8125rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #49243F;
           letter-spacing: 0.18em;
           text-transform: uppercase;
@@ -125,8 +125,8 @@ export const SlaMatrix: React.FC = () => {
         }
 
         .engagement-title {
-          font-size: clamp(2rem, 3.8vw, 2.6rem);
-          font-weight: 800;
+          font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+          font-weight: 600;
           color: #1E293B;
           background-image: var(--gradient-heading);
           background-size: 100% 100%;
@@ -134,15 +134,15 @@ export const SlaMatrix: React.FC = () => {
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          line-height: 1.2;
+          line-height: 1.25;
           letter-spacing: -0.02em;
           margin-bottom: 0.85rem;
         }
 
         .engagement-copy {
-          font-size: 1.0625rem;
+          font-size: 0.95rem;
           color: #64748B;
-          line-height: 1.7;
+          line-height: 1.65;
         }
 
         .engagement-grid {
@@ -186,7 +186,7 @@ export const SlaMatrix: React.FC = () => {
           background-color: #49243F;
           color: #FFFFFF;
           font-size: 0.6875rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.06em;
           text-transform: uppercase;
           padding: 0.35rem 0.8rem;
@@ -214,14 +214,14 @@ export const SlaMatrix: React.FC = () => {
 
         .engagement-index {
           font-size: 0.75rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.1em;
           color: #94A3B8;
         }
 
         .engagement-card h3 {
-          font-size: 1.25rem;
-          font-weight: 800;
+          font-size: 1.125rem;
+          font-weight: 600;
           color: #1E293B;
           line-height: 1.3;
           margin-bottom: 0.5rem;
@@ -245,7 +245,7 @@ export const SlaMatrix: React.FC = () => {
         .engagement-best > span {
           display: block;
           font-size: 0.625rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.09em;
           text-transform: uppercase;
           color: #7A5422;
@@ -290,7 +290,7 @@ export const SlaMatrix: React.FC = () => {
         .engagement-row-label {
           display: block;
           font-size: 0.625rem;
-          font-weight: 800;
+          font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #64748B;
@@ -299,7 +299,7 @@ export const SlaMatrix: React.FC = () => {
 
         .engagement-row p {
           font-size: 0.8125rem;
-          font-weight: 600;
+          font-weight: 500;
           color: #0F172A;
           line-height: 1.5;
         }

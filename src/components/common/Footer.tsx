@@ -158,32 +158,31 @@ export const Footer: React.FC = () => {
 
   // 1. Brand Logo, Tagline & Follow Us Column
   const brandColumn = (
-    <div key="col-brand" style={{ maxWidth: "300px" }}>
-      <Link
-        to="/"
+    <div style={{ minWidth: 0 }}>
+      <div
         style={{
-          display: "inline-flex",
+          display: "flex",
           alignItems: "center",
-          gap: "0.75rem",
-          textDecoration: "none",
-          marginBottom: "1rem",
+          gap: "clamp(0.5rem, 1.5vw, 0.75rem)",
+          marginBottom: "clamp(1rem, 2.5vw, 1.25rem)",
         }}
       >
         <img
           src={brandIcon}
-          alt={settings?.companyName || "Azaroth Techhive Logo"}
+          alt="Azaroth Tech-Hive Logo"
           style={{
-            maxHeight: "2.5rem",
-            maxWidth: "8rem",
+            maxHeight: "clamp(2rem, 4vw, 2.5rem)",
+            maxWidth: "clamp(6rem, 15vw, 8rem)",
             objectFit: "contain",
+            filter: "drop-shadow(0 2px 4px rgba(73, 36, 63, 0.15))",
           }}
         />
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span
             style={{
-              fontSize: "1.25rem",
-              fontWeight: 800,
-              color: "#FFFFFF",
+              fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+              fontWeight: 700,
+              color: "var(--color-primary, #49243F)",
               fontFamily: "serif",
               letterSpacing: "0.04em",
               lineHeight: 1.1,
@@ -193,29 +192,29 @@ export const Footer: React.FC = () => {
           </span>
           <span
             style={{
-              fontSize: "0.625rem",
-              fontWeight: 700,
-            color: "var(--color-brand-gold, #C99B52)",
-            letterSpacing: "0.22em",
+              fontSize: "clamp(0.5rem, 1.2vw, 0.625rem)",
+              fontWeight: 600,
+              color: "var(--color-brand-gold, #C99B52)",
+              letterSpacing: "0.22em",
               textTransform: "uppercase",
             }}
           >
-            TECHHIVE
+            TECH-HIVE
           </span>
         </div>
-      </Link>
+      </div>
 
-      <div
+      <p
         style={{
-          fontSize: "0.875rem",
-          color: "#94A3B8",
-          letterSpacing: "0.08em",
-          fontWeight: 500,
-          marginTop: "0.5rem",
+          fontSize: "clamp(0.875rem, 1.8vw, 0.9375rem)",
+          color: "#64748B",
+          lineHeight: 1.6,
+          marginBottom: "clamp(1rem, 2.5vw, 1.25rem)",
         }}
       >
-        Build &middot; Innovate &middot; Grow
-      </div>
+        {settings?.tagline ||
+          "Engineering resilient software ecosystems for modern enterprises."}
+      </p>
 
       {socialIcons}
     </div>
@@ -223,13 +222,14 @@ export const Footer: React.FC = () => {
 
   // 2. Quick Links Column (Updated with Explore Products & Explore Services per diagram)
   const quickLinksColumn = (
-    <div key="col-quicklinks">
+    <div key="col-quicklinks" style={{ minWidth: 0 }}>
       <h4
         style={{
+          fontSize: "clamp(0.9375rem, 2vw, 1rem)",
+          fontWeight: 600,
           color: "#FFFFFF",
-          fontSize: "0.9375rem",
-          fontWeight: 700,
-          marginBottom: "1.25rem",
+          marginBottom: "clamp(0.75rem, 2vw, 1rem)",
+          letterSpacing: "0.02em",
         }}
       >
         Quick Links
@@ -241,30 +241,16 @@ export const Footer: React.FC = () => {
           margin: 0,
           display: "flex",
           flexDirection: "column",
-          gap: "0.75rem",
+          gap: "clamp(0.5rem, 1.2vw, 0.625rem)",
         }}
       >
         <li>
           <Link
-            to="/portfolio"
+            to="/portfolio#products"
             style={{
               color: "#94A3B8",
               textDecoration: "none",
-              fontSize: "0.875rem",
-              transition: "color 160ms",
-            }}
-            className="hover:text-rose-400"
-          >
-            Our Portfolio
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/products"
-            style={{
-              color: "#94A3B8",
-              textDecoration: "none",
-              fontSize: "0.875rem",
+              fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
             }}
             className="hover:text-rose-400"
@@ -274,11 +260,11 @@ export const Footer: React.FC = () => {
         </li>
         <li>
           <Link
-            to="/service"
+            to="/portfolio#services"
             style={{
               color: "#94A3B8",
               textDecoration: "none",
-              fontSize: "0.875rem",
+              fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
             }}
             className="hover:text-rose-400"
@@ -292,7 +278,7 @@ export const Footer: React.FC = () => {
             style={{
               color: "#94A3B8",
               textDecoration: "none",
-              fontSize: "0.875rem",
+              fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
             }}
             className="hover:text-rose-400"
@@ -306,13 +292,13 @@ export const Footer: React.FC = () => {
 
   // 3. Contact Us Column
   const contactColumn = (
-    <div key="col-contact">
+    <div key="col-contact" style={{ minWidth: 0 }}>
       <h4
         style={{
           color: "#FFFFFF",
-          fontSize: "0.9375rem",
-          fontWeight: 700,
-          marginBottom: "1.25rem",
+          fontSize: "clamp(0.875rem, 2vw, 0.9375rem)",
+          fontWeight: 600,
+          marginBottom: "clamp(0.875rem, 2.5vw, 1.25rem)",
         }}
       >
         Contact Us
@@ -322,8 +308,8 @@ export const Footer: React.FC = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "0.875rem",
-          fontSize: "0.875rem",
+          gap: "clamp(0.625rem, 1.5vw, 0.875rem)",
+          fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
@@ -407,18 +393,14 @@ export const Footer: React.FC = () => {
         className="container"
         style={{
           paddingTop: "4.5rem",
-          paddingBottom: "2.5rem",
-          position: "relative",
-          zIndex: 1,
         }}
       >
-        {/* 3 Columns matching user markup */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
-            gap: "3rem",
-            marginBottom: "3.5rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
+            gap: "clamp(1.5rem, 4vw, 3rem)",
+            marginBottom: "clamp(2rem, 5vw, 3rem)",
           }}
         >
           {footerColumns}
@@ -427,26 +409,26 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar: Copyright, Legal & Cookies (Admin Portal pill removed per diagram) */}
         <div
           style={{
-            paddingTop: "1.75rem",
+            paddingTop: "clamp(1.25rem, 3vw, 1.75rem)",
             borderTop: "1px solid rgba(255, 255, 255, 0.08)",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "1rem",
-            fontSize: "0.8125rem",
+            gap: "clamp(0.75rem, 2vw, 1rem)",
+            fontSize: "clamp(0.75rem, 1.8vw, 0.8125rem)",
             color: "#64748B",
           }}
         >
-          <div>{copyright}</div>
+          <div style={{ minWidth: 0 }}>{copyright}</div>
 
           {/* Privacy Policy & Cookies */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: "clamp(0.5rem, 1.5vw, 1rem)",
               flexWrap: "wrap",
             }}
           >
@@ -469,10 +451,12 @@ export const Footer: React.FC = () => {
               style={{
                 color: "#94A3B8",
                 textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.35rem",
+                fontSize: "clamp(0.875rem, 1.8vw, 0.9375rem)",
                 transition: "color 160ms ease",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                overflowWrap: "anywhere",
               }}
               className="hover:text-rose-400"
             >

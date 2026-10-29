@@ -818,9 +818,9 @@ export const About: React.FC = () => {
                   alignItems: "center",
                   gap: "0.5rem",
                   fontSize: "0.8125rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "var(--color-primary, #49243F)",
-                  letterSpacing: "0.18em",
+                  letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   marginBottom: "1rem",
                   fontFamily: "var(--font-body)",
@@ -829,24 +829,32 @@ export const About: React.FC = () => {
                 {storyBadge}
               </div>
 
-              <h2
-                style={{
-                  fontSize: "clamp(2rem, 3.5vw, 2.875rem)",
-                  fontWeight: 800,
-                  color: "var(--color-text-primary, #1E293B)",
-                  background: "var(--gradient-heading)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.15,
-                  margin: "0 0 1.5rem",
-                  maxWidth: "600px",
-                  fontFamily: "var(--font-heading)",
-                }}
-              >
-                {storyTitle}
-              </h2>
+              
+<h2
+  style={{
+    fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+    fontWeight: 600,
+    color: "#000000",
+    letterSpacing: "-0.02em",
+    lineHeight: 1.25,
+    margin: "0 0 1.25rem",
+    maxWidth: "600px",
+    fontFamily: "var(--font-heading)",
+  }}
+>
+  <span>{storyTitle.split(" ").slice(0, 2).join(" ")}</span>{" "}
+  <span
+    style={{
+      background: "linear-gradient(90deg, #49243F 0%, #8A315D 100%)",
+      WebkitBackgroundClip: "text",
+      backgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+    }}
+  >
+    {storyTitle.split(" ").slice(2).join(" ")}
+  </span>
+</h2>
+
 
               <p
                 style={{
@@ -917,8 +925,8 @@ export const About: React.FC = () => {
                     <div
                       className="about-highlight-title"
                       style={{
-                        fontSize: "1rem",
-                        fontWeight: 800,
+                        fontSize: "0.9375rem",
+                        fontWeight: 600,
                         color: item.color,
                         lineHeight: 1.4,
                         marginBottom: "0.25rem",
@@ -987,7 +995,7 @@ export const About: React.FC = () => {
               </div>
 
               {/* Uptime information badge */}
-              <div
+              {/* <div
                 style={{
                   position: "absolute",
                   right: "1rem",
@@ -1023,7 +1031,7 @@ export const About: React.FC = () => {
                   <div
                     style={{
                       fontSize: "0.9375rem",
-                      fontWeight: 800,
+                      fontWeight: 600,
                       color: "#1E293B",
                       lineHeight: 1.4,
                       whiteSpace: "nowrap",
@@ -1042,7 +1050,7 @@ export const About: React.FC = () => {
                     Enterprise Engineering SLA
                   </div>
                 </div>
-              </div>
+              </div> */}
             </motion.div>
           </motion.div>
         </div>
@@ -1053,8 +1061,8 @@ export const About: React.FC = () => {
         id="our-values"
         style={{
           backgroundColor: "#FFFFFF",
-          paddingTop: "5.5rem",
-          paddingBottom: "5.5rem",
+          paddingTop: "5rem",
+          paddingBottom: "5rem",
           scrollMarginTop: "5rem",
           position: "relative",
           borderTop: "1px solid #E2E8F0",
@@ -1069,8 +1077,8 @@ export const About: React.FC = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             style={{
               textAlign: "left",
-              maxWidth: "1300px",
-              margin: "0 0 3.5rem 0",
+              maxWidth: "780px",
+              margin: "0 0 3rem 0",
             }}
           >
             <div
@@ -1079,37 +1087,28 @@ export const About: React.FC = () => {
                 alignItems: "center",
                 gap: "0.5rem",
                 fontSize: "0.8125rem",
-                fontWeight: 700,
+                fontWeight: 600,
                 color: "var(--color-primary, #49243F)",
-                letterSpacing: "0.18em",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 marginBottom: "0.75rem",
                 fontFamily: "var(--font-body)",
               }}
             >
-              &mdash; CORE ENGINEERING VALUES &mdash;
+              &mdash; CORE VALUES &mdash;
             </div>
             <h2
               style={{
-                fontSize: "clamp(2rem, 3.8vw, 2.75rem)",
-                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+                fontWeight: 600,
                 color: "var(--color-text-primary, #1E293B)",
                 letterSpacing: "-0.02em",
-                lineHeight: 1.2,
+                lineHeight: 1.25,
                 marginBottom: "1rem",
                 fontFamily: "var(--font-heading)",
               }}
             >
-              Principles That Shape{" "}
-              <span
-                style={{
-                  background: "var(--gradient-heading)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Every Solution
-              </span>
+              Our Core Values
             </h2>
             <p
               style={{
@@ -1121,11 +1120,7 @@ export const About: React.FC = () => {
                 fontFamily: "var(--font-body)",
               }}
             >
-              At Azaroth Tech-Hive, our values guide how we think, engineer,
-              collaborate, and deliver. We believe great software comes from
-              understanding real problems, making thoughtful decisions,
-              maintaining high standards, and continuously improving the way
-              technology works.{" "}
+              The principles that guide how we think, engineer, collaborate, and deliver.
             </p>
           </motion.div>
 
@@ -1133,16 +1128,16 @@ export const About: React.FC = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-              gap: "2.25rem",
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+              gap: "1.5rem",
             }}
           >
             {valuesPrinciples.map((val: any, index: number) => (
               <motion.div
                 key={val.number}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-100px" }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{
                   duration: 0.5,
                   delay: index * 0.08,
@@ -1150,24 +1145,30 @@ export const About: React.FC = () => {
                 }}
               >
                 <Card
-                  variant="glass"
+                  variant="solid"
                   padding="lg"
                   style={{
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "var(--radius-xl)",
+                    border: "1px solid #E2E8F0",
+                    borderRadius: "16px",
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
-                    transition: "all 180ms ease-out",
+                    backgroundColor: "#FFFFFF",
+                    boxShadow: "0 1px 3px rgba(15, 23, 42, 0.03)",
+                    transition: "transform 200ms ease-out, box-shadow 200ms ease-out, border-color 200ms ease-out",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow =
-                      "0 12px 30px -4px rgba(73, 36, 63, 0.12)";
-                    e.currentTarget.style.borderColor = "#49243F";
+                    const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+                    if (!prefersReduced) {
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.style.boxShadow = "0 12px 24px -4px rgba(73, 36, 63, 0.08)";
+                      e.currentTarget.style.borderColor = "rgba(73, 36, 63, 0.25)";
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = "";
-                    e.currentTarget.style.borderColor = "var(--color-border)";
+                    e.currentTarget.style.transform = "";
+                    e.currentTarget.style.boxShadow = "0 1px 3px rgba(15, 23, 42, 0.03)";
+                    e.currentTarget.style.borderColor = "#E2E8F0";
                   }}
                 >
                   <div
@@ -1175,20 +1176,30 @@ export const About: React.FC = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      marginBottom: "1.5rem",
+                      marginBottom: "1.25rem",
                     }}
                   >
                     <div
                       style={{
-                        width: "3.5rem",
-                        height: "3.5rem",
-                        borderRadius: "14px",
-                        background: "rgba(73, 36, 63, 0.10)",
+                        width: "56px",
+                        height: "56px",
+                        borderRadius: "12px",
+                        backgroundColor: "rgba(73, 36, 63, 0.08)",
                         color: "#49243F",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        border: "1px solid rgba(73, 36, 63, 0.2)",
+                        border: "1px solid rgba(73, 36, 63, 0.12)",
+                        transition: "transform 200ms ease-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+                        if (!prefersReduced) {
+                          e.currentTarget.style.transform = "scale(1.06)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "";
                       }}
                     >
                       {getIcon(val.iconName)}
@@ -1196,13 +1207,13 @@ export const About: React.FC = () => {
 
                     <span
                       style={{
-                        padding: "0.25rem 0.75rem",
+                        padding: "0.125rem 0.5rem",
                         borderRadius: "9999px",
-                        fontSize: "0.75rem",
-                        fontWeight: 800,
-                        backgroundColor: "#FFF1F2",
+                        fontSize: "0.7rem",
+                        fontWeight: 600,
                         color: "#49243F",
-                        border: "1px solid #FFE4E6",
+                        backgroundColor: "rgba(73, 36, 63, 0.06)",
+                        border: "1px solid rgba(73, 36, 63, 0.1)",
                       }}
                     >
                       {val.number}
@@ -1211,10 +1222,11 @@ export const About: React.FC = () => {
 
                   <h3
                     style={{
-                      fontSize: "1.35rem",
-                      fontWeight: 800,
-                      color: "var(--color-text-primary)",
+                      fontSize: "1.25rem",
+                      fontWeight: 600,
+                      color: "var(--color-text-primary, #1E293B)",
                       marginBottom: "0.5rem",
+                      lineHeight: 1.3,
                       fontFamily: "var(--font-heading)",
                     }}
                   >
@@ -1224,7 +1236,7 @@ export const About: React.FC = () => {
                   <p
                     style={{
                       fontSize: "0.9375rem",
-                      color: "var(--color-text-secondary)",
+                      color: "var(--color-text-secondary, #64748B)",
                       lineHeight: 1.65,
                       flexGrow: 1,
                       margin: 0,
@@ -1238,6 +1250,31 @@ export const About: React.FC = () => {
             ))}
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            #our-values div[style*="gridTemplateColumns"] {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 1.25rem !important;
+            }
+          }
+
+          @media (max-width: 640px) {
+            #our-values div[style*="gridTemplateColumns"] {
+              grid-template-columns: minmax(0, 1fr) !important;
+              gap: 1rem !important;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            #our-values [style*="transition"] {
+              transition: none !important;
+            }
+            #our-values motion.div {
+              animation: none !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* SECTION 3: DELIVERY FRAMEWORK */}
@@ -1271,9 +1308,9 @@ export const About: React.FC = () => {
                 alignItems: "center",
                 gap: "0.5rem",
                 fontSize: "0.8125rem",
-                fontWeight: 700,
+                fontWeight: 600,
                 color: "var(--color-primary, #49243F)",
-                letterSpacing: "0.18em",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 marginBottom: "0.75rem",
                 fontFamily: "var(--font-body)",
@@ -1283,11 +1320,11 @@ export const About: React.FC = () => {
             </div>
             <h2
               style={{
-                fontSize: "clamp(2rem, 3.8vw, 2.75rem)",
-                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+                fontWeight: 600,
                 color: "var(--color-text-primary, #1E293B)",
                 letterSpacing: "-0.02em",
-                lineHeight: 1.2,
+                lineHeight: 1.25,
                 marginBottom: "1rem",
                 fontFamily: "var(--font-heading)",
               }}

@@ -99,7 +99,7 @@ export const InsightDetail: React.FC = () => {
             </div>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.75rem)', lineHeight: 1.2, marginBottom: '1.5rem' }}>
+          <h1 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 600, lineHeight: 1.25, marginBottom: '1.5rem' }}>
             {article.title}
           </h1>
 
@@ -120,13 +120,13 @@ export const InsightDetail: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: 800,
+              fontWeight: 600,
             }}>
               {article.author.name[0]}
             </div>
 
             <div>
-              <div style={{ fontWeight: 800, color: 'var(--color-dark-forest)', fontSize: '0.9375rem' }}>
+              <div style={{ fontWeight: 600, color: 'var(--color-dark-forest)', fontSize: '0.9375rem' }}>
                 {article.author.name}
               </div>
               <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
@@ -148,7 +148,7 @@ export const InsightDetail: React.FC = () => {
                 borderRadius: 'var(--radius-lg)',
                 padding: '1rem',
               }}>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-primary, #18181B)', fontWeight: 800, marginBottom: '0.75rem' }}>
+                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-primary, #18181B)', fontWeight: 600, marginBottom: '0.75rem' }}>
                   On this page
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -160,7 +160,7 @@ export const InsightDetail: React.FC = () => {
                       style={{
                         display: 'block',
                         color: activeSection === section.id ? 'var(--color-primary, #18181B)' : 'var(--color-text-secondary)',
-                        fontWeight: activeSection === section.id ? 700 : 600,
+                        fontWeight: activeSection === section.id ? 600 : 500,
                         fontSize: '0.875rem',
                         textDecoration: 'none',
                         padding: '0.45rem 0.6rem',
@@ -179,7 +179,7 @@ export const InsightDetail: React.FC = () => {
               <div style={{ fontSize: '1.0625rem', lineHeight: 1.8, color: 'var(--color-text-primary)' }}>
                 {sectionBlocks.map((section) => (
                   <section key={section.id} id={section.id} style={{ scrollMarginTop: '7rem', marginBottom: '2.5rem' }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-dark-maroon)', marginBottom: '1rem' }}>
+                    <h2 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--color-dark-maroon)', marginBottom: '1rem' }}>
                       {section.title}
                     </h2>
                     {section.paragraphs.map((paragraph, index) => (
@@ -200,7 +200,7 @@ export const InsightDetail: React.FC = () => {
                 gap: '0.5rem',
                 alignItems: 'center',
               }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-dark-forest)', marginRight: '0.5rem' }}>
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-dark-forest)', marginRight: '0.5rem' }}>
                   Topics:
                 </span>
                 {article.tags.map((tag) => (

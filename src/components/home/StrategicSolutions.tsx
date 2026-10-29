@@ -26,7 +26,7 @@ const projects: ProjectItem[] = [
     image: ecommercePlatformImg,
     description:
       "High-concurrency headless digital storefront with sub-second checkout and real-time inventory synchronization.",
-    link: "/products?product=omnichannel-commerce-platform",
+    link: "/portfolio#products",
   },
   {
     id: "mobile-banking-app",
@@ -35,7 +35,7 @@ const projects: ProjectItem[] = [
     image: mobileBankingAppImg,
     description:
       "Biometric-secured iOS and Android banking app featuring instant payments, budget analytics, and multi-currency accounts.",
-    link: "/portfolio#capabilities",
+    link: "/portfolio#services",
   },
   {
     id: "analytics-dashboard",
@@ -44,7 +44,7 @@ const projects: ProjectItem[] = [
     image: analyticsDashboardImg,
     description:
       "Real-time telemetry and executive data warehouse dashboard processing millions of events per minute.",
-    link: "/portfolio#capabilities",
+    link: "/portfolio#services",
   },
   {
     id: "creative-portfolio",
@@ -53,7 +53,7 @@ const projects: ProjectItem[] = [
     image: creativePortfolioImg,
     description:
       "Bespoke design portfolio and digital asset exhibition engineered with fluid micro-interactions and spatial design.",
-    link: "/portfolio#capabilities",
+    link: "/portfolio#services",
   },
 ];
 
@@ -295,10 +295,10 @@ export const StrategicSolutions: React.FC = () => {
         >
           <h2
             style={{
-              fontSize: "clamp(2.25rem, 4.2vw, 3rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.025em",
-              lineHeight: 1.15,
+              fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+              fontWeight: 600,
+              letterSpacing: "-0.02em",
+              lineHeight: 1.25,
               marginBottom: "1rem",
             }}
           >
@@ -515,7 +515,7 @@ export const StrategicSolutions: React.FC = () => {
                             background: "#49243F",
                             color: "#FFFFFF",
                             fontSize: "0.6875rem",
-                            fontWeight: 700,
+                            fontWeight: 600,
                             padding: "0.25rem 0.75rem",
                             borderRadius: "9999px",
                             boxShadow: "0 2px 10px rgba(73, 36, 63, 0.4)",
@@ -573,8 +573,8 @@ export const StrategicSolutions: React.FC = () => {
                         <div>
                           <h3
                             style={{
-                              fontSize: isCurrent ? "1.25rem" : "1.125rem",
-                              fontWeight: 700,
+                              fontSize: isCurrent ? "1.2rem" : "1.0625rem",
+                              fontWeight: 600,
                               color: "#1E293B",
                               marginBottom: "0.35rem",
                               transition: "font-size 300ms ease",
@@ -597,6 +597,7 @@ export const StrategicSolutions: React.FC = () => {
                         {/* Circular Arrow Button with Crimson Gradient Hover */}
                         <Link
                           to={proj.link}
+                          state={{ from: '/' }}
                           aria-label={`View ${proj.title}`}
                           style={{
                             width: "2.35rem",

@@ -83,7 +83,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 color: (isCompleted || isCurrent)
                   ? '#ffffff' 
                   : 'var(--color-text-muted, #6B7280)',
-                fontWeight: 800,
+                fontWeight: 600,
                 fontSize: '0.875rem',
                 display: 'flex',
                 alignItems: 'center',

@@ -178,7 +178,7 @@ export const Insights: React.FC = () => {
                       </div>
                     </div>
 
-                    <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.35, marginBottom: '0.75rem' }}>
+                    <h2 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.35, marginBottom: '0.75rem' }}>
                       <Link to={`/technology-insights/${article.slug}`} style={{ color: 'inherit', textDecoration: 'none' }} className="article-title-link">
                         {article.title}
                       </Link>
@@ -205,7 +205,7 @@ export const Insights: React.FC = () => {
                       marginTop: 'auto',
                     }}>
                       <div>
-                        <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
                           {article.author.name}
                         </div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
@@ -220,7 +220,7 @@ export const Insights: React.FC = () => {
                           alignItems: 'center',
                           gap: '0.35rem',
                           color: '#49243F',
-                          fontWeight: 700,
+                          fontWeight: 600,
                           fontSize: '0.875rem',
                           textDecoration: 'none',
                         }}

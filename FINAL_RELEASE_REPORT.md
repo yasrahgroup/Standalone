@@ -1,4 +1,5 @@
 # AZAROTH TECH-HIVE — FINAL PRODUCTION RELEASE REPORT
+
 **Date:** October 13, 2026  
 **Verification Type:** Complete Production Release Gate  
 **Decision:** READY WITH DOCUMENTED LIMITATIONS
@@ -7,7 +8,7 @@
 
 ## Executive Summary
 
-The Azaroth Tech-Hive application has undergone comprehensive final production release verification. While the core functionality is operational and build processes succeed, **critical security vulnerabilities remain in dependencies** and **end-to-end test coverage is incomplete**. The application is conditionally ready for deployment with documented limitations and required mitigations.
+The Azaroth Tech-Hive application has undergone comprehensive final production release verification. While the core functionality is operational and build processes succeed, **critical security vulnerabilities remain in dependencies** and **end-to-end test coverage is incomplete**. The application is conditionally Ready For Deployment with documented limitations and required mitigations.
 
 ---
 
@@ -15,15 +16,16 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 
 ### Frontend Vulnerabilities (7 total)
 
-| Package | Version | Severity | Vulnerability | Impact | Fix Required |
-|---------|---------|----------|---------------|--------|--------------|
-| esbuild | 0.21.5 | Moderate | GHSA-67mh-4wv8-2f99 - Dev server request exposure | Development only | vite@8.3.4 (breaking) |
-| react-router | 6.30.6 | Moderate | GHSA-wrjc-x8rr-h8h6 - Open redirect via backslash | Production runtime | react-router-dom@7.18.4 (breaking) |
-| react-router | 6.30.6 | Moderate | GHSA-337j-9hxr-rhxg - Constructor injection in SSR | Production runtime | react-router-dom@7.18.4 (breaking) |
-| tinypool | 0.8.4 | Critical | GHSA-5gmw-xhrv-c9v3 - Prototype pollution RCE | Development only | vitest@5.0.4 (breaking) |
-| tinypool | 0.8.4 | Critical | GHSA-85c8-ppgw-ccpr - Prototype pollution RCE | Development only | vitest@5.0.4 (breaking) |
+| Package      | Version | Severity | Vulnerability                                      | Impact             | Fix Required                       |
+| ------------ | ------- | -------- | -------------------------------------------------- | ------------------ | ---------------------------------- |
+| esbuild      | 0.21.5  | Moderate | GHSA-67mh-4wv8-2f99 - Dev server request exposure  | Development only   | vite@8.3.4 (breaking)              |
+| react-router | 6.30.6  | Moderate | GHSA-wrjc-x8rr-h8h6 - Open redirect via backslash  | Production runtime | react-router-dom@7.18.4 (breaking) |
+| react-router | 6.30.6  | Moderate | GHSA-337j-9hxr-rhxg - Constructor injection in SSR | Production runtime | react-router-dom@7.18.4 (breaking) |
+| tinypool     | 0.8.4   | Critical | GHSA-5gmw-xhrv-c9v3 - Prototype pollution RCE      | Development only   | vitest@5.0.4 (breaking)            |
+| tinypool     | 0.8.4   | Critical | GHSA-85c8-ppgw-ccpr - Prototype pollution RCE      | Development only   | vitest@5.0.4 (breaking)            |
 
 **Analysis:**
+
 - **Critical:** 2 critical vulnerabilities in tinypool affect development tooling only (vitest test runner)
 - **Moderate:** 4 moderate vulnerabilities including 2 in react-router affecting production routing
 - **Breaking Changes:** All fixes require major version upgrades with breaking changes
@@ -31,26 +33,27 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 
 ### Backend Vulnerabilities (4 total)
 
-| Package | Version | Severity | Vulnerability | Impact | Fix Required |
-|---------|---------|----------|---------------|--------|--------------|
-| braces | 3.0.3 | High | GHSA-vfj7-8cjw-p6xm - Stack exhaustion DoS | Development only (nodemon) | nodemon@1.14.10 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-mm7p-fcc7-pg87 - Email to unintended domain | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-c7w3-x93f-qmm8 - SMTP command injection | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-vvjj-xcjg-gr5g - CRLF injection in EHLO/HELO | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-268h-hp4c-crq3 - CRLF injection in List-* headers | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-wqvq-jvpq-h66f - jsonTransport bypasses security | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-rcmh-qjqh-p98v - DoS via recursive calls | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-p6gq-j5cr-w38f - SSRF via raw option | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-8m3c-c648-2xjj - SSRF via resolveContent() | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-wmmp-3585-3rmp - IDN/Punycode bypass | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-2x7j-588g-ccc2 - DoS via quadratic complexity | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-cc9r-2j5m-2m83 - Domain validation bypass | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-6vj9-mwq6-2f5v - DNS cache TLS credential disclosure | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-8vvx-rff5-p5rq - Stack exhaustion DoS | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-v53p-9fqp-m79j - DoS via backtracking | Production runtime | nodemailer@10.1.0 (breaking) |
-| nodemailer | 6.10.1 | High | GHSA-r7g4-qg5f-qqm2 - TLS certificate validation bypass | Production runtime | nodemailer@10.1.0 (breaking) |
+| Package    | Version | Severity | Vulnerability                                             | Impact                     | Fix Required                 |
+| ---------- | ------- | -------- | --------------------------------------------------------- | -------------------------- | ---------------------------- |
+| braces     | 3.0.3   | High     | GHSA-vfj7-8cjw-p6xm - Stack exhaustion DoS                | Development only (nodemon) | nodemon@1.14.10 (breaking)   |
+| nodemailer | 6.10.1  | High     | GHSA-mm7p-fcc7-pg87 - Email to unintended domain          | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-c7w3-x93f-qmm8 - SMTP command injection              | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-vvjj-xcjg-gr5g - CRLF injection in EHLO/HELO         | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-268h-hp4c-crq3 - CRLF injection in List-\* headers   | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-wqvq-jvpq-h66f - jsonTransport bypasses security     | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-rcmh-qjqh-p98v - DoS via recursive calls             | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-p6gq-j5cr-w38f - SSRF via raw option                 | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-8m3c-c648-2xjj - SSRF via resolveContent()           | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-wmmp-3585-3rmp - IDN/Punycode bypass                 | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-2x7j-588g-ccc2 - DoS via quadratic complexity        | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-cc9r-2j5m-2m83 - Domain validation bypass            | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-6vj9-mwq6-2f5v - DNS cache TLS credential disclosure | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-8vvx-rff5-p5rq - Stack exhaustion DoS                | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-v53p-9fqp-m79j - DoS via backtracking                | Production runtime         | nodemailer@10.1.0 (breaking) |
+| nodemailer | 6.10.1  | High     | GHSA-r7g4-qg5f-qqm2 - TLS certificate validation bypass   | Production runtime         | nodemailer@10.1.0 (breaking) |
 
 **Analysis:**
+
 - **High Risk:** 14 high-severity advisories in nodemailer affecting production email delivery
 - **Attack Surface:** SMTP injection, CRLF injection, SSRF, domain validation bypass, credential disclosure
 - **Breaking Change:** Upgrade to nodemailer@10.1.0 required (major version change)
@@ -67,12 +70,12 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 
 ### Express Routes (VERIFIED)
 
-| Endpoint | Method | Purpose | Status |
-|----------|--------|---------|--------|
-| `/api/health` | GET | Health check with database status | ✅ Correct |
-| `/api/contact` | POST | Contact form submission | ✅ Correct |
-| `/api/admin/contact-submissions` | GET | Admin endpoint for submissions | ✅ Correct |
-| `/api/rfq` | POST | RFQ submission with file upload | ✅ Correct |
+| Endpoint                         | Method | Purpose                           | Status     |
+| -------------------------------- | ------ | --------------------------------- | ---------- |
+| `/api/health`                    | GET    | Health check with database status | ✅ Correct |
+| `/api/contact`                   | POST   | Contact form submission           | ✅ Correct |
+| `/api/admin/contact-submissions` | GET    | Admin endpoint for submissions    | ✅ Correct |
+| `/api/rfq`                       | POST   | RFQ submission with file upload   | ✅ Correct |
 
 ### Frontend API Service (VERIFIED)
 
@@ -85,11 +88,13 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 ### Request/Response Formats (VERIFIED)
 
 **Contact Submission:**
+
 - Request: `{ fullName, workEmail, phone, companyName, enquiryAbout, message, consent }`
 - Response: `{ success: true, submissionId: number, message: string }`
 - Validation: Email format, field length requirements, consent required
 
 **RFQ Submission:**
+
 - Request: FormData with fields + file array
 - Response: `{ success: true, data: { referenceId: string } }`
 - Reference ID format: `AZR-RFQ-{timestamp}-{random}`
@@ -142,18 +147,21 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 ### Schema Structure (VERIFIED)
 
 **Contact Submissions Table:**
+
 - Columns: id, full_name, work_email, phone, company_name, enquiry_about, message, consent, created_at, updated_at, ip_address, user_agent
 - Constraints: Email format regex, phone format regex
 - Indexes: work_email, created_at, consent
 - Trigger: Automatic updated_at on update
 
 **RFQ Submissions Table:**
+
 - Columns: id, reference_id (unique), solution_categories (JSONB), project_scope, target_timeline, budget_range, requirements_description, nda_required, full_name, work_email, phone, company_name, country, document_paths (JSONB), status, created_at, updated_at
 - Constraints: Email format regex, status check constraint
 - Indexes: reference_id, work_email, status, created_at
 - Trigger: Automatic updated_at on update
 
 **Audit Logs Table:**
+
 - Columns: id, table_name, record_id, action, old_values (JSONB), new_values (JSONB), user_id, ip_address, user_agent, created_at
 - Constraints: Action check constraint (INSERT, UPDATE, DELETE)
 - Indexes: table_name + record_id, created_at
@@ -194,26 +202,31 @@ The Azaroth Tech-Hive application has undergone comprehensive final production r
 ### Upload Validation (VERIFIED)
 
 **MIME Type Validation:**
+
 - Allowed: PDF, DOCX, XLSX, PNG, JPG, ZIP
 - Implementation: Multer fileFilter with allowedMimes array
 - Status: ✅ Correct
 
 **Size Limits:**
+
 - Per-file limit: 15MB
 - Implementation: Multer limits.fileSize
 - Status: ✅ Correct
 
 **Count Limits:**
+
 - Max files: 10
 - Implementation: Multer limits.files
 - Status: ✅ Correct
 
 **Filename Sanitization:**
+
 - Pattern: `/[^a-zA-Z0-9._-]/g` replaced with `_`
 - Implementation: Multer filename function
 - Status: ✅ Correct
 
 **Storage Location:**
+
 - Directory: `backend/uploads/`
 - Auto-creation: ✅ Yes
 - Status: ✅ Correct
@@ -326,11 +339,13 @@ npm test
 ```
 
 **Test Coverage:**
+
 - `src/test/e2e-acceptance.test.tsx`: 7 tests
 - `src/test/routes.test.tsx`: 22 tests
 - `src/components/services/SlaMatrix.test.tsx`: 2 tests
 
 **Known Issues:**
+
 - `window.scrollTo` errors in jsdom (non-critical, test environment limitation)
 
 ### Production Build (PASSED)
@@ -347,6 +362,7 @@ npm run build
 ```
 
 **Build Output:**
+
 - HTML: 2.06 KB (0.81 KB gzipped)
 - CSS: 70.11 KB (12.40 KB gzipped)
 - JS: 574.94 KB (159.30 KB gzipped)
@@ -379,10 +395,8 @@ npm run test:e2e
 
 1. **Product catalog detail navigation** - Timeout waiting for "Explore More|Explore Details" link
    - **Cause:** UI selector mismatch (button text changed since test written)
-   
 2. **Contact form submission** - Timeout waiting for "Company Name" label
    - **Cause:** UI selector mismatch (label text changed since test written)
-   
 3. **RFQ wizard submission** - Timeout waiting for "MVP / Initial Prototype" text
    - **Cause:** UI selector mismatch (scope option text changed since test written)
 
@@ -406,6 +420,7 @@ npm run test:e2e
 ### Performance (PARTIALLY VERIFIED)
 
 **Build Analysis:**
+
 - Large image assets (620KB - 1.2MB each)
 - JS bundle size acceptable after gzip (159KB)
 - No code splitting implemented
@@ -414,6 +429,7 @@ npm run test:e2e
 **Lighthouse:** Not run (tool not available in environment)
 
 **Optimization Recommendations:**
+
 1. Compress/optimize large PNG images (use WebP format)
 2. Implement image lazy loading
 3. Consider code splitting for large routes
@@ -430,12 +446,12 @@ npm run test:e2e
 
 ### Required Infrastructure
 
-| Component | Status | Verification |
-|-----------|--------|--------------|
-| PostgreSQL Database | ⚠️ Not Verified | Connection string required, no access to production instance |
-| SMTP Email Server | ⚠️ Partially Verified | Gmail SMTP configured, credentials not verified |
-| File Storage | ✅ Verified | Local filesystem, permissions not verified |
-| Environment Variables | ❌ Not Verified | Production .env file not inspected |
+| Component             | Status                | Verification                                                 |
+| --------------------- | --------------------- | ------------------------------------------------------------ |
+| PostgreSQL Database   | ⚠️ Not Verified       | Connection string required, no access to production instance |
+| SMTP Email Server     | ⚠️ Partially Verified | Gmail SMTP configured, credentials not verified              |
+| File Storage          | ✅ Verified           | Local filesystem, permissions not verified                   |
+| Environment Variables | ❌ Not Verified       | Production .env file not inspected                           |
 
 ### Missing Infrastructure Verification
 
@@ -508,6 +524,7 @@ npm run test:e2e
 ### Rationale
 
 The application demonstrates:
+
 - ✅ Correct backend integration and API contracts
 - ✅ Proper database schema and transaction handling
 - ✅ Secure file upload validation and cleanup
@@ -515,6 +532,7 @@ The application demonstrates:
 - ✅ Partial E2E test coverage (50%)
 
 However, critical blockers remain:
+
 - ❌ **Nodemailer vulnerabilities** (14 high-severity advisories affecting production email delivery)
 - ❌ **React Router vulnerabilities** (2 moderate-severity advisories affecting production routing)
 - ❌ **No rate limiting** (brute force attack risk)
@@ -561,18 +579,18 @@ The application may proceed to production deployment ONLY if:
 
 ## 12. Verification Summary
 
-| Category | Status | Details |
-|----------|--------|---------|
-| Dependency Security | ❌ FAIL | 11 vulnerabilities (2 critical, 4 moderate, 5 high) |
-| Backend Integration | ✅ PASS | Routes, API service, database operations verified |
-| Database Schema | ✅ PASS | Schema, constraints, indexes, triggers verified |
-| File Upload Security | ✅ PASS | Validation, limits, sanitization, cleanup verified |
-| Security Hardening | ⚠️ PARTIAL | Missing rate limiting, production secrets not verified |
-| Automated Tests | ✅ PASS | Typecheck, lint, unit tests (31), build pass |
-| E2E Tests | ⚠️ PARTIAL | 3/6 tests pass (selectors outdated) |
-| Accessibility | ❌ NOT DONE | No audit performed |
-| Performance | ⚠️ WARNING | Large assets, no optimization |
-| Infrastructure | ❌ NOT DONE | Production access not available |
+| Category             | Status      | Details                                                |
+| -------------------- | ----------- | ------------------------------------------------------ |
+| Dependency Security  | ❌ FAIL     | 11 vulnerabilities (2 critical, 4 moderate, 5 high)    |
+| Backend Integration  | ✅ PASS     | Routes, API service, database operations verified      |
+| Database Schema      | ✅ PASS     | Schema, constraints, indexes, triggers verified        |
+| File Upload Security | ✅ PASS     | Validation, limits, sanitization, cleanup verified     |
+| Security Hardening   | ⚠️ PARTIAL  | Missing rate limiting, production secrets not verified |
+| Automated Tests      | ✅ PASS     | Typecheck, lint, unit tests (31), build pass           |
+| E2E Tests            | ⚠️ PARTIAL  | 3/6 tests pass (selectors outdated)                    |
+| Accessibility        | ❌ NOT DONE | No audit performed                                     |
+| Performance          | ⚠️ WARNING  | Large assets, no optimization                          |
+| Infrastructure       | ❌ NOT DONE | Production access not available                        |
 
 **Overall Status:** READY WITH DOCUMENTED LIMITATIONS
 

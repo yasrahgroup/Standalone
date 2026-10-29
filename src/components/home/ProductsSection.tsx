@@ -70,11 +70,11 @@ export const ProductsSection: React.FC = () => {
           />
           <h2
             style={{
-              fontSize: "clamp(2rem, 3.8vw, 2.75rem)",
-              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+              fontWeight: 600,
               color: "var(--color-text-primary, #1F2937)",
               letterSpacing: "-0.02em",
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               marginBottom: "1rem",
             }}
           >
@@ -91,7 +91,7 @@ export const ProductsSection: React.FC = () => {
           </h2>
           <p
             style={{
-              fontSize: "1.0625rem",
+              fontSize: "clamp(0.9375rem, 1.8vw, 1.0625rem)",
               color: "var(--color-text-secondary, #4B5563)",
               lineHeight: 1.65,
             }}
@@ -181,7 +181,7 @@ export const ProductsSection: React.FC = () => {
                 </div>
 
                 <div className="featured-product-actions">
-                  <Link to="/products" className="featured-product-learn">
+                  <Link to="/portfolio#products" className="featured-product-learn">
                     LEARN MORE <ArrowRight size={13} />
                   </Link>
                 </div>
@@ -199,7 +199,7 @@ export const ProductsSection: React.FC = () => {
           style={{ textAlign: "center", marginTop: "3rem" }}
         >
           <Link
-            to="/products"
+            to="/portfolio#products"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -208,7 +208,7 @@ export const ProductsSection: React.FC = () => {
               borderRadius: "9999px",
               background: "var(--gradient-button)",
               color: "#FFFFFF",
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: "0.9375rem",
               textDecoration: "none",
               boxShadow: "0 4px 18px rgba(73, 36, 63, 0.35)",

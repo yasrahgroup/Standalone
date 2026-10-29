@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Hero } from '../components/home/Hero';
 import { ProductsSection } from '../components/home/ProductsSection';

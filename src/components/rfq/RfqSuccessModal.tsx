@@ -59,7 +59,7 @@ export const RfqSuccessModal: React.FC<RfqSuccessModalProps> = ({
         <CheckCircle2 size={42} />
       </div>
 
-      <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-dark-forest)', marginBottom: '0.5rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--color-dark-forest)', marginBottom: '0.5rem' }}>
         Request for Quote Confirmed
       </h2>
 
@@ -81,10 +81,10 @@ export const RfqSuccessModal: React.FC<RfqSuccessModalProps> = ({
         marginBottom: '2rem',
       }}>
         <div style={{ textAlign: 'left' }}>
-          <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             {issuedByServer ? 'Official Tracking Reference ID' : 'Session reference (quote this when you follow up)'}
           </span>
-          <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-primary-green)', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--color-primary-green)', fontFamily: 'var(--font-mono)' }}>
             {referenceId}
           </span>
           {!issuedByServer && (

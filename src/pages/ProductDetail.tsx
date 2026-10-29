@@ -105,15 +105,15 @@ export const ProductDetail: React.FC = () => {
                 {product.badge && product.badge !== 'Under Development' && <Badge variant="gold">{product.badge}</Badge>}
                 <ProductStatusBadge status={product.status || 'Under Development'} size="md" />
               </div>
-              <h1 style={{ fontSize: 'clamp(2.25rem, 4vw, 3.25rem)', color: 'var(--color-text-primary)', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(1.85rem, 3.5vw, 2.5rem)', fontWeight: 600, color: 'var(--color-text-primary)', margin: 0 }}>
                 {product.name}
               </h1>
             </div>
           </div>
 
           <p style={{
-            fontSize: '1.25rem',
-            fontWeight: 600,
+            fontSize: '1.125rem',
+            fontWeight: 500,
             color: getProductColors(product.id).color,
             marginBottom: '1rem',
             maxWidth: '800px',
@@ -146,7 +146,7 @@ export const ProductDetail: React.FC = () => {
       <section className="section" style={{ backgroundColor: '#ffffff' }}>
         <Reveal className="container">
           
-          <h2 style={{ fontSize: '2rem', marginBottom: '0.75rem', color: 'var(--color-text-primary)' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 1.85rem)', fontWeight: 600, marginBottom: '0.75rem', color: 'var(--color-text-primary)' }}>
             Architecture design goals
           </h2>
           <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-secondary)', marginBottom: '2rem' }}>
@@ -162,9 +162,9 @@ export const ProductDetail: React.FC = () => {
             <Card variant="solid" padding="md" style={{ backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-subtle)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: getProductColors(product.id).color, marginBottom: '0.5rem' }}>
                 <Zap size={18} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Latency Design Target</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Latency Design Target</span>
               </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
                 {product.techSpecs.latency}
               </div>
             </Card>
@@ -172,9 +172,9 @@ export const ProductDetail: React.FC = () => {
             <Card variant="solid" padding="md" style={{ backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-subtle)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: getProductColors(product.id).color, marginBottom: '0.5rem' }}>
                 <Zap size={18} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Concurrency Design Target</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Concurrency Design Target</span>
               </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text-primary)' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
                 {product.techSpecs.concurrency}
               </div>
             </Card>
@@ -182,9 +182,9 @@ export const ProductDetail: React.FC = () => {
             <Card variant="solid" padding="md" style={{ backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-subtle)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: getProductColors(product.id).color, marginBottom: '0.5rem' }}>
                 <FileCheck size={18} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Compliance Posture</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Compliance Posture</span>
               </div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
                 {product.techSpecs.compliancePosture}
               </div>
             </Card>
@@ -192,9 +192,9 @@ export const ProductDetail: React.FC = () => {
             <Card variant="solid" padding="md" style={{ backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-subtle)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: getProductColors(product.id).color, marginBottom: '0.5rem' }}>
                 <Globe size={18} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Supported Protocols</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Supported Protocols</span>
               </div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
                 {product.techSpecs.protocols.join(', ')}
               </div>
             </Card>
@@ -207,21 +207,21 @@ export const ProductDetail: React.FC = () => {
             gap: '3rem',
           }}>
             <div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1.5rem', color: 'var(--color-dark-maroon)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem', color: 'var(--color-dark-maroon)' }}>
                 Key Architectural Capabilities
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {product.keyCapabilities.map((cap, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                     <CheckCircle2 size={20} style={{ color: 'var(--color-primary-maroon)', flexShrink: 0, marginTop: '0.15rem' }} />
-                    <span style={{ fontSize: '1rem', color: 'var(--color-text-primary)', fontWeight: 600 }}>{cap}</span>
+                    <span style={{ fontSize: '0.9375rem', color: 'var(--color-text-primary)', fontWeight: 500 }}>{cap}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1.5rem', color: 'var(--color-dark-maroon)' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem', color: 'var(--color-dark-maroon)' }}>
                 Enterprise Integration Features
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

@@ -7,6 +7,10 @@ import {
   Cloud,
   PenTool,
   BarChart3,
+  Users,
+  GitBranch,
+  Cpu,
+  ShieldCheck,
 } from "lucide-react";
 import { heroWorkspaceImg } from "../../assets/images";
 import { useCMS } from "../../context/CMSContext";
@@ -21,6 +25,38 @@ export const Hero: React.FC = () => {
   // const kicker = heroContent.badge || '- DRIVING DIGITAL EXCELLENCE -';
   const ctaServicesText = heroContent.primaryCtaText || "Explore Services";
 
+  const metrics = [
+    {
+      value: "95%",
+      label: "Client Satisfaction",
+      icon: <Users size={19} />,
+      backgroundColor: "#EDE9FE",
+      iconColor: "#7C3AED",
+    },
+    {
+      value: "100%",
+      label: "Commitment to Quality",
+      icon: <GitBranch size={19} />,
+      backgroundColor: "#D1FAE5",
+      iconColor: "#059669",
+    },
+    {
+      value: "90%",
+      label: "On-Time Delivery",
+      icon: <Cpu size={19} />,
+      backgroundColor: "#FFF1F2",
+      iconColor: "#49243F",
+    },
+    {
+      value: "98%",
+      label: "System Reliability",
+      icon: <ShieldCheck size={19} />,
+      backgroundColor: "#E0F2FE",
+      iconColor: "#0878E8",
+    },
+  ];
+
+  
   return (
     <section
       style={{
@@ -78,12 +114,12 @@ export const Hero: React.FC = () => {
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: "clamp(2.25rem, 5.2vw, 3.5rem)",
-                fontWeight: 800,
-                color: "var(--color-text-primary, #0F172A)",
-                lineHeight: 1.15,
+                fontSize: "clamp(1.9rem, 4.2vw, 2.25rem)",
+                fontWeight: 700,
+                color: "var(--color-text-primary, #1F2937)",
                 letterSpacing: "-0.025em",
-                marginBottom: "1.5rem",
+                lineHeight: 1.15,
+                marginBottom: "clamp(1rem, 2.5vw, 1.35rem)",
               }}
             >
               Intelligence Engineered{" "}
@@ -103,10 +139,10 @@ export const Hero: React.FC = () => {
             <p
               className="hero-subtitle"
               style={{
-                fontSize: "1.125rem",
+                fontSize: "1.0625rem",
                 color: "var(--color-text-secondary, #475569)",
-                lineHeight: 1.7,
-                marginBottom: "2.5rem",
+                lineHeight: 1.65,
+                marginBottom: "2.25rem",
                 maxWidth: "520px",
                 textAlign: "justify",
               }}
@@ -122,25 +158,25 @@ export const Hero: React.FC = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "1rem",
+                gap: "clamp(0.75rem, 2vw, 1rem)",
                 flexWrap: "wrap",
               }}
             >
               {/* Primary Action Button (Brand Berry-Plum Gradient) */}
               <Link
-                to="/services"
+                to="/portfolio#services"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "0.625rem",
-                  padding: "0.9rem 1.85rem",
+                  gap: "0.5rem",
+                  padding: "clamp(0.6rem, 1.5vw, 0.75rem) clamp(1.25rem, 3vw, 1.5rem)",
                   borderRadius: "9999px",
                   background: "var(--gradient-button)",
                   color: "#FFFFFF",
                   fontWeight: 600,
-                  fontSize: "0.975rem",
+                  fontSize: "clamp(0.8125rem, 1.5vw, 0.9rem)",
                   textDecoration: "none",
-                  boxShadow: "0 6px 20px -2px rgba(73, 36, 63, 0.4)",
+                  boxShadow: "0 4px 16px -2px rgba(73, 36, 63, 0.4)",
                   transition: "all 200ms ease-out",
                 }}
                 className="hover:scale-105 hover:opacity-95"
@@ -153,7 +189,7 @@ export const Hero: React.FC = () => {
                 }}
               >
                 <span>{ctaServicesText}</span>
-                <ArrowRight size={17} />
+                <ArrowRight size={15} />
               </Link>
             </div>
           </Reveal>
@@ -281,7 +317,7 @@ export const Hero: React.FC = () => {
               <span
                 style={{
                   fontSize: "0.775rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
@@ -331,7 +367,7 @@ export const Hero: React.FC = () => {
               <span
                 style={{
                   fontSize: "0.775rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
                 }}
@@ -379,7 +415,7 @@ export const Hero: React.FC = () => {
               <span
                 style={{
                   fontSize: "0.775rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
@@ -429,7 +465,7 @@ export const Hero: React.FC = () => {
               <span
                 style={{
                   fontSize: "0.775rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
                 }}
@@ -477,7 +513,7 @@ export const Hero: React.FC = () => {
               <span
                 style={{
                   fontSize: "0.775rem",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   color: "#1E293B",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
@@ -489,6 +525,80 @@ export const Hero: React.FC = () => {
             </div>
           </Reveal>
         </div>
+
+        {/* Metrics Row - Full width below content and image */}
+        <Reveal delay={0.2}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8rem",
+              marginTop: "3rem",
+              paddingTop: "1.5rem",
+              borderTop: "1px solid #E2E8F0",
+              flexWrap: "wrap",
+            }}
+          >
+            {metrics.map((metric, index) => (
+              <div
+                key={`${metric.label}-${index}`}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {/* Metric Icon */}
+                <div
+                  style={{
+                    flex: "0 0 42px",
+                    width: "42px",
+                    height: "42px",
+                    borderRadius: "50%",
+                    backgroundColor: metric.backgroundColor,
+                    color: metric.iconColor,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {metric.icon}
+                </div>
+
+                {/* Metric Text */}
+                <div>
+                  <div
+                    style={{
+                      fontSize: "1.15rem",
+                      fontWeight: 600,
+                      color: "#1E293B",
+                      lineHeight: 1.2,
+                      whiteSpace: "nowrap",
+                      marginBottom: "2px",
+                    }}
+                  >
+                    {metric.value}
+                  </div>
+
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#64748B",
+                      fontWeight: 500,
+                      lineHeight: 1.4,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {metric.label}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
 
       <style>{`

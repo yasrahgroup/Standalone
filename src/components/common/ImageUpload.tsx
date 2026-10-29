@@ -369,7 +369,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         >
           <input
             type="url"
-            placeholder="https://example.com/image.png"
+            placeholder="https://example.com/your-image.jpg"
             value={manualUrl}
             onChange={(e) => setManualUrl(e.target.value)}
             style={{

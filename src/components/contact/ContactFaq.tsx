@@ -89,7 +89,7 @@ export const ContactFaq: React.FC = () => {
         .contact-faq-heading {
           margin: 0 0 0.875rem;
           font-size: 1rem;
-          font-weight: 800;
+          font-weight: 600;
           color: #1e293b;
           letter-spacing: -0.01em;
         }
@@ -121,7 +121,7 @@ export const ContactFaq: React.FC = () => {
           color: #1e293b;
           font-family: var(--font-body);
           font-size: 0.875rem;
-          font-weight: 700;
+          font-weight: 600;
           text-align: left;
           cursor: pointer;
         }

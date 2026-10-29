@@ -98,7 +98,7 @@ export const Testimonials: React.FC = () => {
                 alignItems: 'center',
                 gap: '0.5rem',
                 fontSize: '0.8125rem',
-                fontWeight: 700,
+                fontWeight: 600,
                 color: '#49243F',
                 letterSpacing: '0.18em',
                 textTransform: 'uppercase',
@@ -110,11 +110,11 @@ export const Testimonials: React.FC = () => {
 
             <h2
               style={{
-                fontSize: 'clamp(2.25rem, 4vw, 3rem)',
-                fontWeight: 800,
+                fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+                fontWeight: 600,
                 color: '#1E293B',
                 letterSpacing: '-0.02em',
-                lineHeight: 1.15,
+                lineHeight: 1.25,
                 marginBottom: '1.25rem',
               }}
             >
@@ -256,7 +256,7 @@ export const Testimonials: React.FC = () => {
                 />
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                    <span style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#1E293B' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: 600, color: '#1E293B' }}>
                       {current.author}
                     </span>
                     <div style={{ display: 'flex', gap: '2px', color: '#C99B52' }}>

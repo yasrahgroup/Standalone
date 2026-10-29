@@ -54,7 +54,7 @@ export const ProcessTimeline: React.FC = () => {
                 border: isSelected ? "1px solid #49243F" : "1px solid #E2E8F0",
                 background: isSelected ? "#49243F" : "#FFFFFF",
                 color: isSelected ? "#FFFFFF" : "#1E293B",
-                fontWeight: 700,
+                fontWeight: 600,
                 fontSize: "0.875rem",
                 cursor: "pointer",
                 transition: "all 200ms ease-out",
@@ -76,7 +76,7 @@ export const ProcessTimeline: React.FC = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "0.75rem",
-                  fontWeight: 800,
+                  fontWeight: 600,
                 }}
               >
                 {stage.stageNumber}
@@ -138,8 +138,8 @@ export const ProcessTimeline: React.FC = () => {
 
                 <h2
                   style={{
-                    fontSize: "1.75rem",
-                    fontWeight: 800,
+                    fontSize: "1.45rem",
+                    fontWeight: 600,
                     color: "var(--color-dark-maroon)",
                     marginBottom: "0.375rem",
                   }}
@@ -194,8 +194,8 @@ export const ProcessTimeline: React.FC = () => {
               >
                 <h4
                   style={{
-                    fontSize: "1rem",
-                    fontWeight: 700,
+                    fontSize: "0.9375rem",
+                    fontWeight: 600,
                     color: "var(--color-dark-maroon)",
                     marginBottom: "1.25rem",
                     display: "flex",
@@ -254,8 +254,8 @@ export const ProcessTimeline: React.FC = () => {
               >
                 <h4
                   style={{
-                    fontSize: "1rem",
-                    fontWeight: 700,
+                    fontSize: "0.9375rem",
+                    fontWeight: 600,
                     color: "var(--color-dark-maroon)",
                     marginBottom: "1.25rem",
                     display: "flex",
@@ -320,8 +320,8 @@ export const ProcessTimeline: React.FC = () => {
               >
                 <h4
                   style={{
-                    fontSize: "1rem",
-                    fontWeight: 700,
+                    fontSize: "0.9375rem",
+                    fontWeight: 600,
                     color: "#1E293B",
                     marginBottom: "1.25rem",
                     display: "flex",

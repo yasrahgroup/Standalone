@@ -208,8 +208,8 @@ export const Chatbot: React.FC = () => {
             position: 'fixed',
             bottom: 'clamp(1rem, 4vw, 2rem)',
             right: 'clamp(1rem, 4vw, 2rem)',
-            width: '3.5rem',
-            height: '3.5rem',
+            width: 'clamp(3rem, 6vw, 3.5rem)',
+            height: 'clamp(3rem, 6vw, 3.5rem)',
             borderRadius: '50%',
             background: 'var(--gradient-button)',
             color: '#FFFFFF',
@@ -247,9 +247,9 @@ export const Chatbot: React.FC = () => {
             position: 'fixed',
             bottom: 'clamp(1rem, 4vw, 2rem)',
             right: 'clamp(1rem, 4vw, 2rem)',
-            width: isMinimized ? 'min(300px, calc(100vw - 2rem))' : 'min(400px, calc(100vw - 2rem))',
+            width: isMinimized ? 'min(280px, calc(100vw - 2rem))' : 'min(380px, calc(100vw - 2rem))',
             maxWidth: 'calc(100vw - 2rem)',
-            maxHeight: isMinimized ? 'auto' : 'min(600px, calc(100vh - 6rem))',
+            maxHeight: isMinimized ? 'auto' : 'min(580px, calc(100vh - 6rem))',
             backgroundColor: '#FFFFFF',
             borderRadius: '16px',
             boxShadow: '0 20px 50px rgba(15, 23, 42, 0.25), 0 0 1px rgba(73, 36, 63, 0.4)',
@@ -265,41 +265,41 @@ export const Chatbot: React.FC = () => {
           <div
             style={{
               background: '#49243F',
-              padding: '1rem',
+              padding: 'clamp(0.75rem, 2vw, 1rem)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
               <img
                 src={faviconImg}
                 alt={botDisplayName}
                 style={{
-                  width: '2.5rem',
-                  height: '2.5rem',
+                  width: 'clamp(2rem, 4vw, 2.5rem)',
+                  height: 'clamp(2rem, 4vw, 2.5rem)',
                   borderRadius: '8px',
                   objectFit: 'contain',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
                 }}
               />
               <div>
-                <div id="chat-assistant-title" style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '0.9375rem' }}>
+                <div id="chat-assistant-title" style={{ color: '#FFFFFF', fontWeight: 600, fontSize: 'clamp(0.875rem, 2vw, 0.9375rem)' }}>
                   {botDisplayName}
                 </div>
-                <div style={{ color: '#FFE4E6', fontSize: '0.75rem', fontWeight: 500 }}>
+                <div style={{ color: '#FFE4E6', fontSize: 'clamp(0.6875rem, 1.5vw, 0.75rem)', fontWeight: 500 }}>
                   {botDisplayRole}
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: 'clamp(0.375rem, 1vw, 0.5rem)' }}>
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
                 aria-label={isMinimized ? 'Expand site guide' : 'Minimize site guide'}
                 style={{
-                  width: '2rem',
-                  height: '2rem',
+                  width: 'clamp(1.75rem, 4vw, 2rem)',
+                  height: 'clamp(1.75rem, 4vw, 2rem)',
                   borderRadius: '8px',
                   border: 'none',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -326,8 +326,8 @@ export const Chatbot: React.FC = () => {
                 }}
                 aria-label="Close site guide"
                 style={{
-                  width: '2rem',
-                  height: '2rem',
+                  width: 'clamp(1.75rem, 4vw, 2rem)',
+                  height: 'clamp(1.75rem, 4vw, 2rem)',
                   borderRadius: '8px',
                   border: 'none',
                   backgroundColor: 'rgba(255, 255, 255, 0.15)',

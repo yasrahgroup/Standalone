@@ -70,13 +70,13 @@ export const IndustryExpertise: React.FC = () => {
           <h2
             id="industry-expertise-heading"
             style={{
-              fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
-              fontWeight: 800,
+              fontSize: 'clamp(1.75rem, 3.2vw, 2.25rem)',
+              fontWeight: 600,
                maxWidth: "1300px",
               marginBottom: '1rem',
               color: 'var(--color-text-primary)',
               letterSpacing: '-0.02em',
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               fontFamily: 'var(--font-heading)',
             }}
           >
@@ -155,7 +155,7 @@ export const IndustryExpertise: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '0.9375rem',
-                          fontWeight: 800,
+                          fontWeight: 600,
                           lineHeight: 1.25,
                           color: selected ? 'var(--color-white)' : 'var(--color-text-primary)',
                         }}
@@ -269,12 +269,12 @@ export const IndustryExpertise: React.FC = () => {
 
               <h3
                 style={{
-                  fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                  fontWeight: 800,
+                  fontSize: 'clamp(1.35rem, 2.5vw, 1.75rem)',
+                  fontWeight: 600,
                   color: 'var(--color-text-primary)',
-                  margin: '0 0 1.5rem 0',
-                  letterSpacing: '-0.01em',
-                  lineHeight: 1.2,
+                  margin: '0 0 1.25rem 0',
+                  letterSpacing: '-0.015em',
+                  lineHeight: 1.25,
                   fontFamily: 'var(--font-heading)',
                 }}
               >
@@ -312,11 +312,11 @@ export const IndustryExpertise: React.FC = () => {
                       <span
                         style={{
                           fontFamily: 'var(--font-body)',
-                          fontSize: '0.875rem',
-                          fontWeight: 800,
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
                           color: style.text,
                           textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
+                          letterSpacing: '0.04em',
                           lineHeight: 1.2,
                         }}
                       >
