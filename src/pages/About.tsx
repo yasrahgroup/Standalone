@@ -1253,6 +1253,7 @@ export const About: React.FC = () => {
 
         <style>{`
           @media (max-width: 1024px) {
+            #our-values div[style*="grid-template-columns"],
             #our-values div[style*="gridTemplateColumns"] {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 1.25rem !important;
@@ -1260,6 +1261,7 @@ export const About: React.FC = () => {
           }
 
           @media (max-width: 640px) {
+            #our-values div[style*="grid-template-columns"],
             #our-values div[style*="gridTemplateColumns"] {
               grid-template-columns: minmax(0, 1fr) !important;
               gap: 1rem !important;
@@ -1370,14 +1372,25 @@ export const About: React.FC = () => {
       </section>
 
       <style>{`
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           .about-story-grid {
             grid-template-columns: minmax(0, 1fr) !important;
             gap: 2.5rem !important;
           }
 
           .about-highlights {
-            flex-wrap: wrap;
+            flex-wrap: wrap !important;
+            gap: 1.25rem !important;
+            padding: 1.25rem !important;
+          }
+
+          .about-highlight-title,
+          .about-highlight-subtitle {
+            white-space: normal !important;
+          }
+
+          .about-story-image {
+            height: clamp(300px, 45vw, 420px) !important;
           }
         }
 
@@ -1387,11 +1400,6 @@ export const About: React.FC = () => {
             align-items: flex-start !important;
             gap: 1rem !important;
             padding: 1.25rem !important;
-          }
-
-          .about-highlight-title,
-          .about-highlight-subtitle {
-            white-space: normal !important;
           }
 
           .about-story-image {

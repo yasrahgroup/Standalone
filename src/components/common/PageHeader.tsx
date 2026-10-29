@@ -250,6 +250,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
             padding-bottom: 3rem;
           }
           .page-header-content {
+            padding: 0 1rem !important;
             transform: translateY(-1.75rem);
           }
         }

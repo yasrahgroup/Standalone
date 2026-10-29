@@ -475,16 +475,19 @@ export const ContactForm: React.FC = () => {
           grid-column: 1 / -1;
         }
 
+        @media (max-width: 768px) {
+          .contact-form-grid {
+            grid-template-columns: 1fr;
+            gap: 0.9rem;
+          }
+        }
+
         @media (max-width: 600px) {
           .contact-form-header {
             padding: 1.15rem 1.25rem;
           }
           .contact-form-body {
             padding: 1.25rem;
-          }
-          .contact-form-grid {
-            grid-template-columns: 1fr;
-            gap: 0.9rem;
           }
         }
 

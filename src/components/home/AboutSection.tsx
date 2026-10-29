@@ -368,6 +368,7 @@ export const AboutSection: React.FC = () => {
       <div className="container">
         {/* Main About Section */}
         <div
+          className="about-home-grid"
           style={{
             display: "grid",
             gridTemplateColumns:
@@ -479,6 +480,16 @@ export const AboutSection: React.FC = () => {
 
         {/* Metrics Section */}
       </div>
+
+      <style>{`
+        @media (max-width: 960px) {
+          .about-home-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2.5rem !important;
+            margin-bottom: 2.5rem !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

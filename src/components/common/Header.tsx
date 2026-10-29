@@ -215,8 +215,10 @@ export const Header: React.FC = () => {
   return (
     <header
       style={{
-        position: "sticky",
+        position: "fixed",
         top: 0,
+        left: 0,
+        right: 0,
         zIndex: 100,
         width: "100%",
         backgroundColor: isScrolled
@@ -857,6 +859,13 @@ export const Header: React.FC = () => {
 
       {/* Theme-matched hover and keyboard focus styles */}
       <style>{`
+        @media (min-width: 1024px) {
+          div[role="dialog"][aria-label="Mobile navigation menu"],
+          #mobile-navigation {
+            display: none !important;
+          }
+        }
+
         @media (max-width: 640px) {
           .header-connect-cta {
             display: none !important;

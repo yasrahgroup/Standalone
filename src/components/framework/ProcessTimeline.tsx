@@ -17,10 +17,20 @@ export const ProcessTimeline: React.FC = () => {
     <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
       {/* Stage Selector Pills (Horizontal on desktop, stacked on mobile) */}
       <style>{`
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .process-matrix-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.5rem !important;
+          }
+        }
         @media (max-width: 640px) {
           .process-pill-button {
             padding: 0.5rem 0.875rem !important;
             font-size: 0.8rem !important;
+          }
+          .process-matrix-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.25rem !important;
           }
         }
       `}</style>
@@ -177,6 +187,7 @@ export const ProcessTimeline: React.FC = () => {
 
             {/* Activities & Deliverables 3-Column Detailed Matrix */}
             <div
+              className="process-matrix-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",

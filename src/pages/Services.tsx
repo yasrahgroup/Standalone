@@ -934,23 +934,29 @@ export const Services: React.FC = () => {
           text-decoration: none;
         }
 
-        @media (max-width: 960px) {
+        @media (max-width: 1024px) {
           .services-hero-grid {
             grid-template-columns: 1fr;
           }
 
           .services-start-card {
             max-width: 620px;
+            margin: 0 auto;
+            width: 100%;
           }
 
           .services-process-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .services-next-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
         @media (max-width: 820px) {
           .services-practice-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
           }
 
           .services-domain-grid {

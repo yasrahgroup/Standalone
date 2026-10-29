@@ -628,15 +628,31 @@ export const Hero: React.FC = () => {
         }
 
         /* Responsive badge placement for small viewports */
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .hero-badge-1 { top: -1.25rem !important; left: 2% !important; }
+          .hero-badge-2 { top: -2.5rem !important; left: 34% !important; }
+          .hero-badge-3 { top: -1.25rem !important; right: 2% !important; }
+          .hero-badge-4 { top: 26% !important; right: -0.25rem !important; }
+          .hero-badge-5 { top: 62% !important; right: -0.25rem !important; }
+        }
+
         @media (max-width: 768px) {
           .hero-badge-1 { top: -0.5rem !important; left: 1% !important; }
           .hero-badge-2 { top: -0.25rem !important; left: 30% !important; }
           .hero-badge-3 { top: -0.5rem !important; right: 1% !important; }
-          .hero-badge-4 { top: 20% !important; right: -0.5rem !important; }
-          .hero-badge-5 { top: 58% !important; right: -0.25rem !important; }
+          .hero-badge-4 { top: 20% !important; right: 0.25rem !important; }
+          .hero-badge-5 { top: 58% !important; right: 0.25rem !important; }
         }
 
-        /* Phones: remove decorative overlays that can crowd the image. */
+        /* Responsive metrics row for tablet & mobile */
+        @media (max-width: 1100px) {
+          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
+            gap: clamp(1.5rem, 4vw, 3rem) !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+          }
+        }
+
         @media (max-width: 640px) {
           .hero-badge-interactive,
           .hero-badge-traces {
@@ -645,6 +661,20 @@ export const Hero: React.FC = () => {
 
           .hero-subtitle {
             text-align: left !important;
+          }
+
+          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.25rem 0.75rem !important;
+            justify-items: start !important;
+          }
+        }
+
+        @media (max-width: 400px) {
+          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
           }
         }
       `}</style>

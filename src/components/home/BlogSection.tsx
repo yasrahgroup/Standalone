@@ -80,12 +80,15 @@ export const BlogSection: React.FC = () => {
         </motion.div>
 
         {/* Insights Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-          gap: '2rem',
-          marginBottom: '3rem',
-        }}>
+        <div
+          className="blog-cards-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+            gap: '2rem',
+            marginBottom: '3rem',
+          }}
+        >
           {displayArticles.map((article: any, index: number) => (
             <motion.div
               key={article.id}
@@ -286,6 +289,18 @@ export const BlogSection: React.FC = () => {
         }
         .blog-card-link:hover .arrow-icon {
           transform: translateX(5px);
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .blog-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.5rem !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .blog-cards-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.25rem !important;
+          }
         }
       `}</style>
     </section>

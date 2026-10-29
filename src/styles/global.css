@@ -3290,7 +3290,7 @@ button {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .grid-layout-4x4 {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
@@ -3366,7 +3366,7 @@ button {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .featured-services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3655,7 +3655,7 @@ button {
 }
 
 /* Tablet */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .about-metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3685,6 +3685,130 @@ button {
 .featured-product-image-wrapper {
   position: relative;
 }
+
+/* ============================================================
+   RESPONSIVE LAYOUT STABILITY & ADAPTIVE BREAKPOINTS
+   Strictly fixes cross-screen responsiveness without altering design
+   ============================================================ */
+
+/* 1. Global Viewport Overflow Protection */
+html,
+body,
+#root {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 2. Media Elements Bounded Scaling */
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3. Text and Link Overflow Prevention across mobile screens */
+h1, h2, h3, h4, h5, h6, p, span, a, li, button, label, strong {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* 4. Touchscreen Custom Cursor Cleanup */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor-dot,
+  .custom-cursor-ring {
+    display: none !important;
+  }
+}
+
+/* 5. Mobile-to-Desktop Transition: Dismiss Mobile Drawer Overlay on Desktop */
+@media (min-width: 1024px) {
+  div[role="dialog"][aria-label="Mobile navigation menu"],
+  #mobile-navigation {
+    display: none !important;
+  }
+}
+
+/* 6. Responsive Card Padding on Mobile */
+@media (max-width: 640px) {
+  .glass-card,
+  .glass-card-dark {
+    padding: 1.25rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .glass-card,
+  .glass-card-dark {
+    padding: 1rem !important;
+  }
+}
+
+/* 7. RFQ Wizard Step Indicator Mobile Responsiveness */
+@media (max-width: 640px) {
+  div[role="progressbar"] + ol li span {
+    display: none !important;
+  }
+  div[role="progressbar"] + ol li[aria-current="step"] span {
+    display: block !important;
+    font-size: 0.7rem !important;
+    max-width: 110px !important;
+    line-height: 1.2 !important;
+  }
+  div[role="progressbar"] + ol li div {
+    width: 2rem !important;
+    height: 2rem !important;
+    font-size: 0.8125rem !important;
+  }
+}
+
+/* 8. Products Specification Modal Mobile Adaptability */
+@media (max-width: 640px) {
+  div[role="dialog"][aria-labelledby="modal-product-title"] {
+    max-height: 95vh !important;
+    border-radius: 1.25rem !important;
+    margin: 0.5rem !important;
+  }
+  div[role="dialog"][aria-labelledby="modal-product-title"] > div:first-child {
+    padding: 1.25rem 1rem !important;
+  }
+  div[role="dialog"][aria-labelledby="modal-product-title"] > div:nth-child(2) {
+    padding: 1.25rem 1rem !important;
+    gap: 1.25rem !important;
+  }
+  div[role="dialog"][aria-labelledby="modal-product-title"] > div:last-child {
+    padding: 1rem !important;
+  }
+}
+
+/* 9. Prevent iOS Auto-Zoom on Form Field Focus */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* 10. Our Values Responsive Grid Fallback */
+@media (max-width: 1024px) {
+  #our-values div[style*="grid-template-columns"],
+  #our-values div[style*="gridTemplateColumns"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #our-values div[style*="grid-template-columns"],
+  #our-values div[style*="gridTemplateColumns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem !important;
+  }
+}
+
 
 
 

@@ -102,6 +102,7 @@ export const IndustryExpertise: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: '-100px' }}
             transition={{ duration: 0.6 }}
+            className="industry-buttons-list"
             style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}
           >
             {industryExpertiseData.map((item, idx) => {
@@ -350,6 +351,13 @@ export const IndustryExpertise: React.FC = () => {
         @media (min-width: 1024px) {
           .industry-expertise-grid {
             grid-template-columns: 340px 1fr !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+          .industry-buttons-list {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.75rem !important;
           }
         }
         @media (max-width: 768px) {

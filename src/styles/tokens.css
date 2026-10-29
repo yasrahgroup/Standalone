@@ -353,22 +353,22 @@ button,
 }
 
 .container {
-  width: min(100% - 2.5rem, 1280px);
+  width: 100%;
+  max-width: 1280px;
   margin-inline: auto;
   padding-inline: 1.25rem;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1024px) {
   .container {
-    width: min(100% - 2rem, 1280px);
     padding-inline: 1rem;
   }
 }
 
 @media (max-width: 768px) {
   .container {
-    width: min(100% - 1.5rem, 1280px);
-    padding-inline: 0.75rem;
+    padding-inline: 1rem;
   }
 
   h1 {
@@ -382,8 +382,7 @@ button,
 
 @media (max-width: 480px) {
   .container {
-    width: min(100% - 1rem, 1280px);
-    padding-inline: 0.5rem;
+    padding-inline: 0.75rem;
   }
 
   h1 {
@@ -397,7 +396,7 @@ button,
 
 @media (max-width: 375px) {
   .container {
-    padding-inline: 0.75rem;
+    padding-inline: 0.625rem;
   }
 }
 

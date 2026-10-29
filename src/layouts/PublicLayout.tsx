@@ -71,7 +71,7 @@ export const PublicLayout: React.FC = () => {
         <ErrorBoundary>
           <Header />
         </ErrorBoundary>
-        <main id="main-content" ref={mainRef} style={{ flex: '1 0 auto' }}>
+        <main id="main-content" ref={mainRef} style={{ flex: '1 0 auto', paddingTop: 'clamp(3.5rem, 5vw, 4.75rem)' }}>
           <ErrorBoundary>
             <Outlet />
           </ErrorBoundary>

@@ -791,7 +791,7 @@ export const Portfolio: React.FC = () => {
   border-top: 1px solid var(--color-border-subtle, #E2E8F0);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .portfolio-products-showcase {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1319,13 +1319,15 @@ export const Portfolio: React.FC = () => {
           }
         }
 
-        @media (max-width: 960px) {
+        @media (max-width: 1024px) {
           .portfolio-hero-grid {
             grid-template-columns: 1fr;
           }
 
           .portfolio-snapshot {
-            max-width: 560px;
+            max-width: 620px;
+            margin: 0 auto;
+            width: 100%;
           }
 
           .portfolio-featured-card {
@@ -1336,16 +1338,16 @@ export const Portfolio: React.FC = () => {
             min-height: 300px;
             aspect-ratio: 16 / 9;
           }
+
+          .portfolio-approach-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
         }
 
         @media (max-width: 860px) {
           .portfolio-platform-grid,
           .portfolio-cap-grid {
             grid-template-columns: 1fr;
-          }
-
-          .portfolio-approach-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
@@ -1376,6 +1378,49 @@ export const Portfolio: React.FC = () => {
 
           .portfolio-hero-title {
             font-size: clamp(2rem, 9vw, 2.6rem);
+          }
+
+          .portfolio-featured-card {
+            border-radius: 1.25rem !important;
+            margin-bottom: 1.75rem !important;
+          }
+
+          .portfolio-featured-media {
+            min-height: 200px !important;
+            aspect-ratio: 16 / 9 !important;
+          }
+
+          .portfolio-featured-body {
+            padding: 1.25rem !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .portfolio-snapshot {
+            padding: 1.15rem !important;
+            border-radius: 1.15rem !important;
+          }
+
+          .portfolio-snapshot-row {
+            grid-template-columns: 1.75rem minmax(0, 1fr) auto !important;
+            gap: 0.5rem !important;
+            padding: 0.75rem 0 !important;
+          }
+
+          .portfolio-snapshot-label,
+          .portfolio-snapshot-value {
+            font-size: 0.8125rem !important;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .portfolio-snapshot-row {
+            grid-template-columns: 1.5rem minmax(0, 1fr) !important;
+          }
+
+          .portfolio-snapshot-value {
+            grid-column: 2 / -1 !important;
+            text-align: left !important;
           }
         }
 
