@@ -11,7 +11,7 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
-import { ArrowRight, CheckCircle2, X, Cpu, Layers, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, X, Layers, Zap } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
 import { PageHeader } from "../components/common/PageHeader";
 import { productsCatalog } from "../data/productsData";

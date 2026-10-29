@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -36,34 +36,8 @@ const serviceIcon = (name: string) => {
 
 export const Portfolio: React.FC = () => {
   const location = useLocation();
-  const [activeSection, setActiveSection] = useState<"products" | "services">("products");
+  const [_activeSection, setActiveSection] = useState<"products" | "services">("products");
   const isUserScrollingRef = useRef(false);
-
-  const scrollToSection = useCallback((sectionId: string, smooth = true) => {
-    const targetId =
-      sectionId === "platforms"
-        ? "products"
-        : sectionId === "capabilities"
-          ? "services"
-          : sectionId;
-
-    setActiveSection(targetId === "services" ? "services" : "products");
-    isUserScrollingRef.current = true;
-
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: smooth ? "smooth" : "auto",
-        block: "start",
-      });
-      window.history.pushState(null, "", `#${targetId}`);
-    }
-
-    // Re-enable observer tracking after smooth scroll completes
-    setTimeout(() => {
-      isUserScrollingRef.current = false;
-    }, 700);
-  }, []);
 
   // Handle anchor navigation on initial load and route/hash changes
   useEffect(() => {
