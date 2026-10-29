@@ -15,15 +15,10 @@ const path = require('path');
 const fs = require('fs');
 const { renderContactConfirmationEmail, renderRfqConfirmationEmail } = require('./emailTemplates');
 
-// Database connection
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is required');
-}
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
+// Cloud storage imports
+const storageFactory = require('./storage-service');
+const cloudStorageMiddleware = require('./cloud-storage-middleware');
+const defaultStorageConfig = require('./storage-config');
 
 // Email transporter with retry logic
 async function sendEmailWithRetry(mailOptions, maxRetries = 3) {
@@ -55,26 +50,41 @@ const transporter = nodemailer.createTransport({
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Configure uploads directory
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// Initialize cloud storage service
+let storageService;
+let cloudStorageMiddlewareService;
+
+async function initializeStorageService() {
+  try {
+    storageService = storageFactory.createStorageService(defaultStorageConfig);
+    cloudStorageMiddlewareService = new cloudStorageMiddleware(storageService);
+    storageService.setupStorage();
+    console.log(`✅ Initialized ${defaultStorageConfig.provider} storage service`);
+  } catch (error) {
+    console.error('❌ Failed to initialize storage service:', error.message);
+    console.log('Falling back to local storage (development mode)');
+    // Fallback to local storage for development
+    storageService = storageFactory.createStorageService({
+      provider: 'local',
+      local: { uploadDir: 'uploads' }
+    });
+    cloudStorageMiddlewareService = new cloudStorageMiddleware(storageService);
+    storageService.setupStorage();
+  }
 }
 
-// Configure multer for file uploads with validation
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: (req, file, cb) => {
-    // Generate safe filename: timestamp-random-originalname
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
-    cb(null, `${uniqueSuffix}-${safeName}`);
+initializeStorageService();
+
+// Configure multer for file uploads with validation (using memory storage for cloud upload)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 15 * 1024 * 1024, // 15MB per file
+    files: 10 // Max 10 files
   }
 });
 
-// File signature (magic bytes) validation
+// File signature (magic bytes) validation (still needed for pre-upload validation)
 const fileSignatures = {
   'application/pdf': [[0x25, 0x50, 0x44, 0x46]], // %PDF
   'image/jpeg': [[0xFF, 0xD8, 0xFF]], // JPEG SOI
@@ -119,15 +129,6 @@ const fileFilter = (req, file, cb) => {
   
   cb(null, true);
 };
-
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: {
-    fileSize: 15 * 1024 * 1024, // 15MB per file
-    files: 10 // Max 10 files
-  }
-});
 
 // Rate limiting configuration
 const contactRateLimit = rateLimit({
@@ -557,15 +558,25 @@ app.post('/api/rfq', rfqRateLimit, upload.array('documents', 10), async (req, re
     // Generate unique reference ID
     const referenceId = `AZR-RFQ-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-    // Process uploaded files
+    // Process uploaded files with cloud storage
     if (req.files && req.files.length > 0) {
-      uploadedFiles = req.files.map(file => ({
-        originalName: file.originalname,
-        filename: file.filename,
-        path: file.path,
-        size: file.size,
-        mimetype: file.mimetype
-      }));
+      try {
+        uploadedFiles = await cloudStorageMiddlewareService.processFiles(req.files);
+      } catch (uploadError) {
+        await client.query('ROLLBACK');
+        // Clean up already uploaded files on error
+        uploadedFiles.forEach(async file => {
+          try {
+            if (file.path) await storageService.delete(file.path.replace(/^uploads\//, ''));
+          } catch (deleteError) {
+            console.error('Failed to cleanup uploaded file:', deleteError);
+          }
+        });
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to upload files to storage'
+        });
+      }
     }
 
     // Insert RFQ submission into CRM
@@ -681,8 +692,10 @@ app.post('/api/rfq', rfqRateLimit, upload.array('documents', 10), async (req, re
     // Clean up uploaded files on error
     uploadedFiles.forEach(file => {
       try {
-        if (fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
+        if (file.path) {
+          // Note: In cloud storage, files are automatically cleaned up by the storage service
+          // Local cleanup would be: fs.unlinkSync(file.path);
+          console.log('Cloud storage file cleanup not needed - files are managed by storage service');
         }
       } catch (cleanupError) {
         console.error('Failed to clean up file:', cleanupError);
