@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquareQuote, Star } from 'lucide-react';
+import { MessageSquareQuote } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 import { Reveal } from '../common/Reveal';
 import { TestimonialCard } from '../testimonials/TestimonialCard';
@@ -15,11 +15,6 @@ export const Testimonials: React.FC = () => {
       ),
     [testimonials],
   );
-
-  const averageRating = sortedTestimonials.length
-    ? sortedTestimonials.reduce((total, item) => total + (item.rating || 0), 0) /
-      sortedTestimonials.length
-    : 0;
 
   return (
     <section

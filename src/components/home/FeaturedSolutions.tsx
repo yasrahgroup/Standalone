@@ -944,7 +944,6 @@ const styles = `
 export default function FeaturedSolutions({
   className = "",
   allServicesHref = "/services",
-  serviceLinks = {},
 }: AzarothServicesProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
@@ -1023,7 +1022,7 @@ export default function FeaturedSolutions({
 
         <div className="ath-timeline">
           <div className="ath-list">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <article className="ath-card ath-reveal" key={service.id}>
                 {/* <span className="ath-badge" aria-label={`Service ${index + 1}`}>
                   {String(index + 1).padStart(2, "0")}

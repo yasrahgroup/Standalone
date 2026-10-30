@@ -154,7 +154,7 @@ export const defaultTheme: ThemeConfig = {
 const defaultSettings: WebsiteSettings = {
   id: "global",
   companyName: companyInfo.name,
-  tagline: companyInfo.tagline,
+  tagline: "Enterprise software engineering for complex systems.",
   supportEmail: companyInfo.headquarters.email,
   phone: companyInfo.headquarters.phone,
   headquarters: companyInfo.headquarters.address,
