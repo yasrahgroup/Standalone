@@ -97,7 +97,7 @@ export const defaultModules: WebsiteModuleSetting[] = [
     id: "mod-testimonials",
     name: "Client Testimonials & Endorsements",
     slug: "testimonials",
-    path: "#testimonials",
+    path: "/testimonials",
     isEnabled: true,
     order: 5,
     description: "Executive reviews and verified client endorsements.",
@@ -206,9 +206,16 @@ const defaultNavigation: NavigationItem[] = [
   },
   {
     id: "nav-5",
+    label: "Testimonials",
+    path: "/testimonials",
+    order: 5,
+    isVisible: true,
+  },
+  {
+    id: "nav-6",
     label: "Connect With Us",
     path: "/connect-with-us",
-    order: 5,
+    order: 6,
     isVisible: true,
   },
 ];

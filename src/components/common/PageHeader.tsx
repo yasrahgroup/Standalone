@@ -222,8 +222,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 
       <style>{`
         .page-header-section {
-          padding-top: 9rem;
-          padding-bottom: 5rem;
+          padding-top: 5rem;
+          padding-bottom: 3rem;
         }
         .page-header-section--with-actions {
           padding-bottom: 4rem;

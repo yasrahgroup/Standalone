@@ -19,6 +19,7 @@ export const AdminFloatingBadge: React.FC = () => {
   else if (location.pathname.startsWith('/services')) editTarget = '/admin/services';
   else if (location.pathname.startsWith('/portfolio')) editTarget = '/admin/portfolio';
   else if (location.pathname.startsWith('/technology-insights') || location.pathname.startsWith('/resource-hub')) editTarget = '/admin/insights';
+  else if (location.pathname.startsWith('/testimonials')) editTarget = '/admin/testimonials';
   else if (location.pathname.startsWith('/connect-with-us')) editTarget = '/admin/inquiries';
   else if (location.pathname.startsWith('/request-for-quote')) editTarget = '/admin/rfqs';
 

@@ -18,6 +18,7 @@ import { Services } from './pages/Services';
 import { Portfolio } from './pages/Portfolio';
 import { Insights } from './pages/Insights';
 import { InsightDetail } from './pages/InsightDetail';
+import { TestimonialsPage } from './pages/Testimonials';
 import { Connect } from './pages/Connect';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
@@ -108,6 +109,9 @@ export const App: React.FC = () => {
               <Route path="/resource-hub" element={<Insights />} />
               <Route path="/resource-hub/:slug" element={<InsightDetail />} />
               <Route path="/insights" element={<Navigate to="/technology-insights" replace />} />
+
+              {/* Client Testimonials & Endorsements */}
+              <Route path="/testimonials" element={<TestimonialsPage />} />
 
               {/* Direct Communication & Conversion Portals */}
               <Route path="/connect-with-us" element={<Connect />} />

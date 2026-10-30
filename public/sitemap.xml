@@ -41,6 +41,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://azaroth-test.vercel.app/testimonials</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://azaroth-test.vercel.app/connect-with-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>

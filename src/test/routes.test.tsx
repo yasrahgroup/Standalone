@@ -16,6 +16,7 @@ const routes: Array<{ path: string }> = [
   { path: '/portfolio' },
   { path: '/technology-insights' },
   { path: '/technology-insights/scaling-event-streaming-zero-data-loss' },
+  { path: '/testimonials' },
   { path: '/connect-with-us' },
   { path: '/request-for-quote' },
   { path: '/privacy-policy' },

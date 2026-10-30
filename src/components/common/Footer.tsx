@@ -286,6 +286,20 @@ export const Footer: React.FC = () => {
             Resource Hub
           </Link>
         </li>
+        <li>
+          <Link
+            to="/testimonials"
+            style={{
+              color: "#94A3B8",
+              textDecoration: "none",
+              fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
+              transition: "color 160ms",
+            }}
+            className="hover:text-rose-400"
+          >
+            Testimonials
+          </Link>
+        </li>
       </ul>
     </div>
   );

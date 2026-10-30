@@ -90,6 +90,11 @@ export const siteNavItems: NavItem[] = [
       p.startsWith("/technology-insights") ||
       p.startsWith("/insights"),
   },
+  {
+    name: "Testimonials",
+    href: "/testimonials",
+    isActive: (p) => p.startsWith("/testimonials"),
+  },
   // {
   //   name: 'Connect With Us',
   //   href: '/connect-with-us',
@@ -274,7 +279,7 @@ export const Header: React.FC = () => {
             <span
               className="header-brand-name"
               style={{
-                fontSize: "clamp(1rem, 3vw, 1.25rem)",
+                fontSize: "clamp(1rem, 3vw, 1rem)",
                 fontWeight: 700,
                 color: "var(--color-primary, #49243F)",
                 fontFamily: "serif",

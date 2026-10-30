@@ -16,6 +16,7 @@ import { SEOHead } from "../components/common/SEOHead";
 import { Button } from "../components/common/Button";
 import { Reveal } from "../components/common/Reveal";
 import { FinalCTA } from "../components/home/FinalCTA";
+import { StrategicSolutions } from "../components/home/StrategicSolutions";
 import { productsCatalog } from "../data/productsData";
 import { ProductStatusBadge } from "../components/common/ProductStatusBadge";
 import { serviceOfferings } from "../data/servicesData";
@@ -365,6 +366,9 @@ export const Portfolio: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Featured Projects Slider */}
+      <StrategicSolutions />
 
       <FinalCTA />
 
