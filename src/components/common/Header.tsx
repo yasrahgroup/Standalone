@@ -90,11 +90,11 @@ export const siteNavItems: NavItem[] = [
       p.startsWith("/technology-insights") ||
       p.startsWith("/insights"),
   },
-  {
-    name: "Testimonials",
-    href: "/testimonials",
-    isActive: (p) => p.startsWith("/testimonials"),
-  },
+  // {
+  //   name: "Testimonials",
+  //   href: "/testimonials",
+  //   isActive: (p) => p.startsWith("/testimonials"),
+  // },
   // {
   //   name: 'Connect With Us',
   //   href: '/connect-with-us',
@@ -143,7 +143,7 @@ export const Header: React.FC = () => {
 
   // Ignore the legacy "/Logo.png" override so the bundled brand logo is used.
   const cmsLogo = settings?.logoUrl;
-  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : logoImg;
+  const brandIcon = cmsLogo && cmsLogo !== "/logo-footer.png" ? cmsLogo : logoImg;
 
   // Close menus on route change
   useEffect(() => {
@@ -267,7 +267,7 @@ export const Header: React.FC = () => {
             alt={settings?.companyName || "Azaroth Tech-Hive Logo"}
             className="header-brand-logo"
             style={{
-              maxHeight: "clamp(2rem, 4vw, 2.5rem)",
+              maxHeight: "clamp(3.5rem, 6vw, 2.5rem)",
               maxWidth: "clamp(6rem, 15vw, 8rem)",
               objectFit: "contain",
               flexShrink: 0,

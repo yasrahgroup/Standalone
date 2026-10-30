@@ -1126,6 +1126,7 @@ export const About: React.FC = () => {
 
           {/* Values Grid */}
           <div
+            className="our-values-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -1205,19 +1206,19 @@ export const About: React.FC = () => {
                       {getIcon(val.iconName)}
                     </div>
 
-                    <span
-                      style={{
-                        padding: "0.125rem 0.5rem",
-                        borderRadius: "9999px",
-                        fontSize: "0.7rem",
-                        fontWeight: 600,
-                        color: "#49243F",
-                        backgroundColor: "rgba(73, 36, 63, 0.06)",
-                        border: "1px solid rgba(73, 36, 63, 0.1)",
-                      }}
-                    >
-                      {val.number}
-                    </span>
+                      {/* <span
+                        style={{
+                          padding: "0.125rem 0.5rem",
+                          borderRadius: "9999px",
+                          fontSize: "0.7rem",
+                          fontWeight: 600,
+                          color: "#49243F",
+                          backgroundColor: "rgba(73, 36, 63, 0.06)",
+                          border: "1px solid rgba(73, 36, 63, 0.1)",
+                        }}
+                      >
+                        {val.number}
+                      </span> */}
                   </div>
 
                   <h3

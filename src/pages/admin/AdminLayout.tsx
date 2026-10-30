@@ -247,30 +247,33 @@ export const AdminLayout: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 1.5rem',
+            padding: '0 clamp(0.75rem, 2vw, 1.5rem)',
             position: 'sticky',
             top: 0,
             zIndex: 30,
             boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
+            boxSizing: 'border-box',
+            maxWidth: '100%',
           }}
         >
           {/* Mobile hamburger & environment status */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 1.5vw, 1rem)', minWidth: 0 }}>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', padding: '0.25rem' }}
+              style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', padding: '0.25rem', flexShrink: 0 }}
               className="md:hidden"
+              aria-label={mobileMenuOpen ? 'Close admin navigation' : 'Open admin navigation'}
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#047857' }} />
-              <span style={{ fontSize: '0.8125rem', color: '#475569', fontWeight: 500 }}>Production CMS Control</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#047857', flexShrink: 0 }} />
+              <span className="hidden sm:inline" style={{ fontSize: '0.8125rem', color: '#475569', fontWeight: 500, whiteSpace: 'nowrap' }}>Production CMS Control</span>
             </div>
           </div>
 
           {/* User controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 1.5vw, 1rem)', flexShrink: 0 }}>
             <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>{user?.name || 'Administrator'}</span>
               <span

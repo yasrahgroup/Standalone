@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Linkedin, Cookie } from "lucide-react";
-import logoImg from "../../assets/Logo.png";
+import logoImg from "../../assets/logo-footer-transparent.png";
 import { useCMS } from "../../context/CMSContext";
 
 export const Footer: React.FC = () => {
@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
 
   // Ignore the legacy "/Logo.png" override so the bundled brand logo is used.
   const cmsLogo = settings?.logoUrl;
-  const brandIcon = cmsLogo && cmsLogo !== "/Logo.png" ? cmsLogo : logoImg;
+  const brandIcon = cmsLogo && cmsLogo !== "/logo-footer.png" ? cmsLogo : logoImg;
 
   const phone = settings?.phone || settings?.primary_phone || "+974 1234 5678";
   const email =
@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
     settings?.headquarters || settings?.headquarters_address || "Doha, Qatar";
   const copyright =
     settings?.copyright_text || "All rights reserved © 2026 Azaroth Tech-Hive ";
-  const isReversed = (settings?.footerLayout || "reversed") === "reversed";
+  const isReversed = (settings?.footerLayout || "standard") === "reversed";
 
   // Social Icons Component
   const socialIcons = (
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
           marginBottom: "0.75rem",
         }}
       >
-        Follow Us
+        Follow Us On:
       </div>
       <div
         style={{
@@ -171,7 +171,7 @@ export const Footer: React.FC = () => {
           src={brandIcon}
           alt="Azaroth Tech-Hive Logo"
           style={{
-            maxHeight: "clamp(2rem, 4vw, 2.5rem)",
+            maxHeight: "clamp(3.5rem, 6vw, 2.5rem)",
             maxWidth: "clamp(6rem, 15vw, 8rem)",
             objectFit: "contain",
             filter: "drop-shadow(0 2px 4px rgba(73, 36, 63, 0.15))",
@@ -182,7 +182,7 @@ export const Footer: React.FC = () => {
             style={{
               fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
               fontWeight: 700,
-              color: "var(--color-primary, #49243F)",
+             color: "#ffffff",
               fontFamily: "serif",
               letterSpacing: "0.04em",
               lineHeight: 1.1,
@@ -202,20 +202,7 @@ export const Footer: React.FC = () => {
             TECH-HIVE
           </span>
         </div>
-      </div>
-
-      <p
-        style={{
-          fontSize: "clamp(0.875rem, 1.8vw, 0.9375rem)",
-          color: "#64748B",
-          lineHeight: 1.6,
-          marginBottom: "clamp(1rem, 2.5vw, 1.25rem)",
-        }}
-      >
-        {settings?.tagline ||
-          "Engineering resilient software ecosystems for modern enterprises."}
-      </p>
-
+      </div>  
       {socialIcons}
     </div>
   );
@@ -248,7 +235,7 @@ export const Footer: React.FC = () => {
           <Link
             to="/portfolio#products"
             style={{
-              color: "#94A3B8",
+              color: "#FFFFFF",
               textDecoration: "none",
               fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
@@ -262,7 +249,7 @@ export const Footer: React.FC = () => {
           <Link
             to="/portfolio#services"
             style={{
-              color: "#94A3B8",
+              color: "#FFFFFF",
               textDecoration: "none",
               fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
@@ -276,7 +263,7 @@ export const Footer: React.FC = () => {
           <Link
             to="/resource-hub"
             style={{
-              color: "#94A3B8",
+              color: "#FFFFFF",
               textDecoration: "none",
               fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
               transition: "color 160ms",
@@ -286,20 +273,7 @@ export const Footer: React.FC = () => {
             Resource Hub
           </Link>
         </li>
-        <li>
-          <Link
-            to="/testimonials"
-            style={{
-              color: "#94A3B8",
-              textDecoration: "none",
-              fontSize: "clamp(0.8125rem, 1.8vw, 0.875rem)",
-              transition: "color 160ms",
-            }}
-            className="hover:text-rose-400"
-          >
-            Testimonials
-          </Link>
-        </li>
+      
       </ul>
     </div>
   );
@@ -327,10 +301,10 @@ export const Footer: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
-          <Phone size={15} style={{ color: "#49243F", flexShrink: 0 }} />
+          <Phone size={15} style={{ color: "#ffffff", flexShrink: 0 }} />
           <a
             href={`tel:${phone.replace(/\s+/g, "")}`}
-            style={{ color: "#94A3B8", textDecoration: "none" }}
+            style={{ color: "#FFFFFF", textDecoration: "none" }}
             className="hover:text-white"
           >
             {phone}
@@ -338,10 +312,10 @@ export const Footer: React.FC = () => {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
-          <Mail size={15} style={{ color: "#49243F", flexShrink: 0 }} />
+          <Mail size={15} style={{ color: "#ffffff", flexShrink: 0 }} />
           <a
             href={`mailto:${email}`}
-            style={{ color: "#94A3B8", textDecoration: "none" }}
+            style={{ color: "#FFFFFF", textDecoration: "none" }}
             className="hover:text-white"
           >
             {email}
@@ -353,9 +327,9 @@ export const Footer: React.FC = () => {
         >
           <MapPin
             size={15}
-            style={{ color: "#49243F", flexShrink: 0, marginTop: "0.2rem" }}
+            style={{ color: "#ffffff", flexShrink: 0, marginTop: "0.2rem" }}
           />
-          <span style={{ color: "#94A3B8", lineHeight: 1.5 }}>{address}</span>
+          <span style={{ color: "#FFFFFF", lineHeight: 1.5 }}>{address}</span>
         </div>
       </div>
     </div>
@@ -370,38 +344,13 @@ export const Footer: React.FC = () => {
     <footer
       style={{
         backgroundColor: "#0A1118",
-        color: "#94A3B8",
+        color: "#FFFFFF",
         borderTop: "1px solid rgba(255, 255, 255, 0.08)",
         position: "relative",
         overflow: "hidden",
       }}
       id="site-footer"
     >
-      {/* Background ambient lighting */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "20%",
-          width: "500px",
-          height: "250px",
-          background:
-            "radial-gradient(ellipse at center, rgba(73, 36, 63, 0.2) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: "20%",
-          width: "450px",
-          height: "220px",
-          background:
-            "radial-gradient(ellipse at center, rgba(201, 155, 82, 0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
 
       <div
         className="container"
@@ -449,7 +398,7 @@ export const Footer: React.FC = () => {
             <Link
               to="/privacy-policy"
               style={{
-                color: "#94A3B8",
+                color: "#FFFFFF",
                 textDecoration: "none",
                 transition: "color 160ms ease",
               }}
@@ -463,7 +412,7 @@ export const Footer: React.FC = () => {
             <Link
               to="/privacy-policy#cookies"
               style={{
-                color: "#94A3B8",
+                color: "#FFFFFF",
                 textDecoration: "none",
                 fontSize: "clamp(0.875rem, 1.8vw, 0.9375rem)",
                 transition: "color 160ms ease",

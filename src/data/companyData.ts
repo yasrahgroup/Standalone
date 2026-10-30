@@ -7,14 +7,14 @@ export interface ValuePrinciple {
 
 export const companyInfo = {
   name: 'Azaroth Tech-Hive',
-  tagline: 'Enterprise software engineering for complex systems.',
+  // tagline: 'Enterprise software engineering for complex systems.',
   logoUrl: '/Logo.png',
   faviconUrl: '/Favicon.png',
   description: 'Azaroth Tech-Hive delivers practical software engineering solutions that help enterprises overcome technical challenges, improve operations, and turn ideas into dependable digital products. We partner with organizations to build systems that scale, evolve, and drive meaningful business outcomes.',
   establishedYear: '2024',
   headquarters: {
     title: 'Chennai — Head Office',
-    address: '24, Malaviya Avenue, Thiruvanmiyur, Chennai, India',
+    address: 'Malaviya Avenue, Thiruvanmiyur, Chennai, India',
     phone: '+91 6379480931',
     whatsapp: '+916379480931',
     email: 'hello@azaroth-techhive.com',

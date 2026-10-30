@@ -128,12 +128,22 @@ export const Hero: React.FC = () => {
                   marginBottom: "clamp(1rem, 2.5vw, 1.35rem)",
                 }}
               >
-                Intelligence Engineered{" "}
                 <span
                   style={{
                     background: "var(--gradient-heading)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
+                    display: "inline-block",
+                  }}
+                >
+                  Intelligence Engineered{" "}
+                </span>
+                <span
+                  style={{
+                    // background: "var(--gradient-heading)",
+                    // WebkitBackgroundClip: "text",
+                    // WebkitTextFillColor: "transparent",
+                    color: " #C18B40",
                     display: "inline-block",
                   }}
                 >
@@ -551,6 +561,7 @@ export const Hero: React.FC = () => {
           </div>
 
           <div
+            className="hero-metrics-row"
             style={{
               display: "flex",
               alignItems: "center",
@@ -668,6 +679,7 @@ export const Hero: React.FC = () => {
 
         /* Responsive metrics row for tablet & mobile */
         @media (max-width: 1100px) {
+          .hero-metrics-row,
           section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
             gap: clamp(1.5rem, 4vw, 3rem) !important;
             justify-content: center !important;
@@ -685,6 +697,7 @@ export const Hero: React.FC = () => {
             text-align: left !important;
           }
 
+          .hero-metrics-row,
           section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -694,6 +707,7 @@ export const Hero: React.FC = () => {
         }
 
         @media (max-width: 400px) {
+          .hero-metrics-row,
           section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
             grid-template-columns: 1fr !important;
             gap: 1rem !important;

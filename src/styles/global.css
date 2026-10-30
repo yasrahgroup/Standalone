@@ -3792,8 +3792,9 @@ h1, h2, h3, h4, h5, h6, p, span, a, li, button, label, strong {
   }
 }
 
-/* 10. Our Values Responsive Grid Fallback */
+/* 10. Our Values Responsive Grid */
 @media (max-width: 1024px) {
+  .our-values-grid,
   #our-values div[style*="grid-template-columns"],
   #our-values div[style*="gridTemplateColumns"] {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -3802,6 +3803,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, li, button, label, strong {
 }
 
 @media (max-width: 640px) {
+  .our-values-grid,
   #our-values div[style*="grid-template-columns"],
   #our-values div[style*="gridTemplateColumns"] {
     grid-template-columns: minmax(0, 1fr) !important;
@@ -3809,6 +3811,67 @@ h1, h2, h3, h4, h5, h6, p, span, a, li, button, label, strong {
   }
 }
 
+/* ============================================================
+   11. COMPREHENSIVE CROSS-DEVICE RESPONSIVE OPTIMIZATIONS
+   ============================================================ */
 
+/* A. Universal Media & Asset Constrained Scaling */
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
 
+/* B. Responsive Data Tables Across Viewports */
+table {
+  max-width: 100%;
+}
 
+div:has(> table) {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* C. Safe Area & Dynamic Viewport Support */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* D. Dialog and Popover Viewport Boundaries */
+[role="dialog"] {
+  max-width: calc(100vw - 1rem);
+  box-sizing: border-box;
+}
+
+/* E. Touch Target Ergonomics on Coarse Pointer Devices */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  .azaroth-nav-link,
+  .azaroth-dropdown-item {
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+}
+
+/* F. Phone Desktop View & Tablet Desktop Site Viewport Protection */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
+
+  /* Prevent oversized grid cells in tablet / desktop-site mode */
+  .grid-2col {
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+}
+
+/* G. Ultra-Wide Screen (1920px - 2560px+) Layout Integrity */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1440px;
+  }
+}

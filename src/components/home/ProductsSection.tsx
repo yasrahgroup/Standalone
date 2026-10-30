@@ -182,7 +182,7 @@ export const ProductsSection: React.FC = () => {
 
                 <div className="featured-product-actions">
                   <Link to="/portfolio#products" className="featured-product-learn">
-                    LEARN MORE <ArrowRight size={13} />
+                    Explore Platform <ArrowRight size={13} />
                   </Link>
                 </div>
                 </motion.div>

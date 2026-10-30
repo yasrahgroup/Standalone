@@ -47,7 +47,7 @@ Header Navigation:
 Footer:
 
 - Admin Portal removed
-- Contact info verified: 24, Malaviya Avenue, Thiruvanmiyur, Chennai, India
+- Contact info verified:Malaviya Avenue, Thiruvanmiyur, Chennai, India
 - Phone: +91 6379480931
 - Email: hello@azaroth-techhive.com
 - Copyright: © 2026 Azaroth Tech-Hive .

@@ -296,9 +296,7 @@ export const Portfolio: React.FC = () => {
         className="portfolio-section"
         style={{ scrollMarginTop: "5.5rem" }}
       >
-        {/* Alias for backwards compatibility with legacy #capabilities links */}
-        <div id="capabilities" style={{ position: "relative", top: "-5.5rem", height: 0 }} aria-hidden="true" />
-        <div className="container">
+        <div id="capabilities" className="container">
           <Reveal className="portfolio-section-head">
             <div className="portfolio-section-heading">
               <div className="portfolio-kicker">
@@ -351,15 +349,12 @@ export const Portfolio: React.FC = () => {
 
                 <div className="portfolio-card-footer">
                   <Link
-                    to={`/services#${service.slug}`}
+                    to={`/connect-with-us`}
                     className="portfolio-inline-link"
                   >
-                    <span>Explore This Service</span>
+                    <span>Get Started</span>
                     <ArrowRight size={15} />
                   </Link>
-                  <Button to="/connect-with-us" variant="outline" size="sm">
-                    Discuss This Service
-                  </Button>
                 </div>
               </Reveal>
             ))}

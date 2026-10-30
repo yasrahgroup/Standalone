@@ -17,8 +17,8 @@ test('capability cards align icon, category, and title consistently', async ({ p
     }),
   );
 
-  expect(Math.abs(titles[0].x - titles[1].x)).toBeLessThanOrEqual(1);
-  expect(Math.abs(titles[2].x - titles[3].x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(titles[0].x - titles[2].x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(titles[1].x - titles[3].x)).toBeLessThanOrEqual(1);
   expect(Math.abs(titles[0].y - titles[1].y)).toBeLessThanOrEqual(1);
   expect(Math.abs(titles[2].y - titles[3].y)).toBeLessThanOrEqual(1);
 

@@ -12,8 +12,9 @@ import {
   insightEnterpriseAiImg,
   insightCloudModImg,
 } from '../assets/images';
-import { FinalCTA } from "../components/home/FinalCTA";
-import { Reveal } from '../components/common/Reveal';
+import { Testimonials } from '../components/home/Testimonials';
+import { FinalCTA } from '../components/home/FinalCTA';
+import Reveal from '../components/common/Reveal';
 
 export const Insights: React.FC = () => {
   const [selectedCategory] = useState<string>('All');
@@ -237,6 +238,17 @@ export const Insights: React.FC = () => {
           )}
 
         </div>
+
+         <div>
+              <SEOHead
+                title="Client Testimonials — Enterprise Engineering Endorsements | Azaroth Tech-Hive"
+                description="Read verified client testimonials and executive endorsements from enterprises that partner with Azaroth Tech-Hive for software engineering, architecture modernization, and dedicated engineering pods."
+                canonicalPath="/testimonials"
+              />
+        
+              <Testimonials />
+        
+            </div>
       </section>
 
           {/* Global Conversion Portal */}

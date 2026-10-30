@@ -120,7 +120,7 @@ export const AdminPortfolioManager: React.FC = () => {
       </div>
 
       {/* Portfolio Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '1.5rem' }}>
         {filteredPortfolio.length === 0 ? (
           <div style={{ gridColumn: 'span 3', padding: '3.5rem', textAlign: 'center', color: adminColors.slate.textMuted, backgroundColor: adminColors.slate.card, borderRadius: '12px', border: `1px dashed ${adminColors.slate.borderStrong}` }}>
             <p style={{ margin: 0, fontSize: '0.9375rem', color: adminColors.slate.textSecondary }}>No case studies found. Click "Add Case Study" above to create one.</p>

@@ -62,10 +62,10 @@ async function initCmsDatabase() {
         ) VALUES (
           'global',
           'Azaroth Tech-Hive',
-          'Enterprise software engineering for complex systems.',
+         
           'hello@azaroth-techhive.com',
           '+91 6379480931',
-          '24, Malaviya Avenue, Thiruvanmiyur, Chennai, India',
+          'Malaviya Avenue, Thiruvanmiyur, Chennai, India',
           'https://linkedin.com/company/azaroth-tech-hive',
           'https://twitter.com/azarothtech',
           'https://github.com/azaroth-tech',

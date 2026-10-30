@@ -27,8 +27,11 @@ export const AdminFloatingBadge: React.FC = () => {
     <div
       style={{
         position: 'fixed',
-        bottom: '24px',
-        left: '24px',
+        bottom: 'clamp(10px, 3vw, 24px)',
+        left: 'clamp(10px, 3vw, 24px)',
+        maxWidth: 'calc(100vw - 20px)',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
         zIndex: 9999,
         display: 'flex',
         alignItems: 'center',
