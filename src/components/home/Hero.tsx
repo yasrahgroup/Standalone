@@ -15,7 +15,6 @@ import {
 import { heroWorkspaceImg } from "../../assets/images";
 import { useCMS } from "../../context/CMSContext";
 import { MediaRenderer } from "../common/MediaRenderer";
-import { Reveal } from "../common/Reveal";
 
 export const Hero: React.FC = () => {
   const { pages } = useCMS();
@@ -61,7 +60,7 @@ export const Hero: React.FC = () => {
     <section
       style={{
         backgroundColor: "#FFFFFF",
-        paddingTop: "clamp(2.5rem, 6vw, 4.5rem)",
+        paddingTop: "clamp(6.5rem, 6vw, 4.5rem)",
         paddingBottom: "clamp(3rem, 6vw, 4rem)",
         position: "relative",
         overflow: "hidden",
@@ -92,8 +91,8 @@ export const Hero: React.FC = () => {
             alignItems: "center",
           }}
         >
-          {/* Left Column: Typography & CTAs */}
-          <Reveal style={{ maxWidth: "580px" }}>
+{/* Left Column: Typography & CTAs */}
+           <div style={{ maxWidth: "580px", paddingBottom: "clamp(0rem, 2vw, 1.5rem)" }}>
             {/* Kicker Pill */}
             {/* <div
               style={{
@@ -192,18 +191,17 @@ export const Hero: React.FC = () => {
                 <ArrowRight size={15} />
               </Link>
             </div>
-          </Reveal>
+          </div>
 
-          {/* Right Column: Hero Visual with Desk Laptop & Connected Badges */}
-          <Reveal
-            delay={0.15}
-            style={{
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+{/* Right Column: Hero Visual with Desk Laptop & Connected Badges */}
+           <div
+             style={{
+               position: "relative",
+               display: "flex",
+               justifyContent: "center",
+               alignItems: "center",
+             }}
+           >
             {/* Main Laptop Desk Showcase Image */}
             <div
               style={{
@@ -522,24 +520,23 @@ export const Hero: React.FC = () => {
               >
                 Analytics
               </span>
+</div>
             </div>
-          </Reveal>
         </div>
 
-        {/* Metrics Row - Full width below content and image */}
-        <Reveal delay={0.2}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8rem",
-              marginTop: "3rem",
-              paddingTop: "1.5rem",
-              borderTop: "1px solid #E2E8F0",
-              flexWrap: "wrap",
-            }}
-          >
+{/* Metrics Row - Full width below content and image */}
+         <div
+           style={{
+             display: "flex",
+             alignItems: "center",
+             justifyContent: "center",
+             gap: "8rem",
+             marginTop: "3rem",
+             paddingTop: "1.5rem",
+             borderTop: "1px solid #E2E8F0",
+             flexWrap: "wrap",
+           }}
+         >
             {metrics.map((metric, index) => (
               <div
                 key={`${metric.label}-${index}`}
@@ -597,9 +594,8 @@ export const Hero: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </Reveal>
-      </div>
+</div>
+        </div>
 
       <style>{`
         @keyframes heroBadgeFloat1 {
