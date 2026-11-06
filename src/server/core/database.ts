@@ -20,8 +20,8 @@ export function tbl(tableName: string): string {
   return schema ? `${schema}.${tableName}` : tableName;
 }
 
-const DEFAULT_DATABASE_URL =
-  'postgresql://neondb_owner:npg_Ql5db3fxCeop@ep-lingering-salad-b5imxpwy-pooler.c-7.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
+// No default database URL - must be configured via environment variables
+// This prevents accidental use of hardcoded credentials
 
 const neonClientCache = new Map<string, any>();
 
@@ -32,25 +32,25 @@ const neonClientCache = new Map<string, any>();
  */
 export function getDatabaseConnection(type: ConnectionType = 'app') {
   const env = process.env;
-  
+
   let url: string | undefined;
-  
+
   switch (type) {
     case 'migrator':
-      url = env.DATABASE_URL_MIGRATOR || env.DATABASE_URL_UNPOOLED || env.DATABASE_URL || DEFAULT_DATABASE_URL;
+      url = env.DATABASE_URL_MIGRATOR || env.DATABASE_URL_UNPOOLED || env.DATABASE_URL;
       break;
     case 'app':
-      url = env.DATABASE_URL_APP || env.DATABASE_URL || DEFAULT_DATABASE_URL;
+      url = env.DATABASE_URL_APP || env.DATABASE_URL;
       break;
     case 'public_ro':
-      url = env.DATABASE_URL_PUBLIC_RO || env.DATABASE_URL || DEFAULT_DATABASE_URL;
+      url = env.DATABASE_URL_PUBLIC_RO || env.DATABASE_URL;
       break;
   }
-  
+
   if (!url) {
-    url = DEFAULT_DATABASE_URL;
+    throw new Error(`Database connection URL not configured for type: ${type}. Set DATABASE_URL_${type.toUpperCase()} or DATABASE_URL environment variable.`);
   }
-  
+
   url = url.trim().replace(/^["']|["']$/g, '');
 
   let client = neonClientCache.get(url);
@@ -58,7 +58,7 @@ export function getDatabaseConnection(type: ConnectionType = 'app') {
     client = neon(url);
     neonClientCache.set(url, client);
   }
-  
+
   return client;
 }
 

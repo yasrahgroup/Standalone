@@ -15,6 +15,7 @@ interface MediaRendererProps {
   playsInline?: boolean;
   decorative?: boolean;
   onError?: () => void;
+  fallbackSrc?: string;
 }
 
 /**
@@ -37,26 +38,33 @@ export const MediaRenderer: React.FC<MediaRendererProps> = ({
   playsInline = true,
   decorative = false,
   onError,
+  fallbackSrc,
 }) => {
+  const [currentSrc, setCurrentSrc] = useState(src);
   const [mediaType, setMediaType] = useState<'image' | 'video' | 'unknown'>('image');
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    setCurrentSrc(src);
     setHasError(false);
-    if (!src) {
+  }, [src]);
+
+  useEffect(() => {
+    const activeSrc = currentSrc;
+    if (!activeSrc) {
       setMediaType('unknown');
       return;
     }
-    if (src.startsWith('data:image/')) {
+    if (activeSrc.startsWith('data:image/')) {
       setMediaType('image');
       return;
     }
-    if (src.startsWith('data:video/')) {
+    if (activeSrc.startsWith('data:video/')) {
       setMediaType('video');
       return;
     }
-    const cleanPath = src.split('?')[0].split('#')[0];
+    const cleanPath = activeSrc.split('?')[0].split('#')[0];
     const lastSegment = cleanPath.split('/').pop() || '';
     const extension = lastSegment.includes('.')
       ? lastSegment.split('.').pop()?.toLowerCase() || ''
@@ -66,16 +74,20 @@ export const MediaRenderer: React.FC<MediaRendererProps> = ({
       setMediaType('video');
     } else if (
       ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'avif'].includes(extension) ||
-      src.includes('images.unsplash.com') ||
-      src.startsWith('/api/admin/media/preview/')
+      activeSrc.includes('images.unsplash.com') ||
+      activeSrc.startsWith('/api/admin/media/preview/')
     ) {
       setMediaType('image');
     } else {
       setMediaType('image');
     }
-  }, [src]);
+  }, [currentSrc]);
 
   const handleError = () => {
+    if (fallbackSrc && currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+      return;
+    }
     setHasError(true);
     if (onError) onError();
   };
@@ -105,7 +117,7 @@ export const MediaRenderer: React.FC<MediaRendererProps> = ({
   if (mediaType === 'image') {
     return (
       <img
-        src={src}
+        src={currentSrc}
         alt={decorative ? '' : alt}
         aria-hidden={decorative ? 'true' : undefined}
         className={className}
@@ -126,7 +138,7 @@ export const MediaRenderer: React.FC<MediaRendererProps> = ({
     return (
       <video
         ref={videoRef}
-        src={src}
+        src={currentSrc}
         poster={poster}
         className={className}
         style={{

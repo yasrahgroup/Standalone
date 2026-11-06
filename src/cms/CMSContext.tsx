@@ -909,14 +909,14 @@ const defaultNavigation: NavigationItem[] = [
     label: "Testimonials",
     path: "/testimonials",
     order: 5,
-    isVisible: true,
+    isVisible: false,
   },
   {
     id: "nav-6",
     label: "Connect With Us",
     path: "/connect-with-us",
     order: 6,
-    isVisible: true,
+    isVisible: false,
   },
 ];
 
@@ -1062,7 +1062,7 @@ export const defaultPages: Record<string, any> = {
           id: "badge-1",
           text: "Web Development",
           iconName: "Code2",
-          position: { top: "-1.5rem", left: "2%" },
+          position: { top: "-0.75rem", left: "2%" },
           zIndex: 4,
           maxWidth: "45vw",
           animation: {
@@ -1090,7 +1090,7 @@ export const defaultPages: Record<string, any> = {
           },
           isVisible: true,
           responsive: {
-            tablet: { top: "-1.25rem", left: "2%" },
+            tablet: { top: "-0.5rem", left: "2%" },
             mobile: { top: "-0.5rem", left: "1%" },
             hideBelow: 640,
           },
@@ -1099,7 +1099,7 @@ export const defaultPages: Record<string, any> = {
           id: "badge-2",
           text: "Mobile Apps",
           iconName: "Smartphone",
-          position: { top: "-3.25rem", left: "34%" },
+          position: { top: "-1.25rem", left: "34%" },
           zIndex: 4,
           maxWidth: "40vw",
           animation: {
@@ -1127,7 +1127,7 @@ export const defaultPages: Record<string, any> = {
           },
           isVisible: true,
           responsive: {
-            tablet: { top: "-2.5rem", left: "34%" },
+            tablet: { top: "-1rem", left: "32%" },
             mobile: { top: "-0.25rem", left: "30%" },
             hideBelow: 640,
           },
@@ -1136,7 +1136,7 @@ export const defaultPages: Record<string, any> = {
           id: "badge-3",
           text: "Cloud Solutions",
           iconName: "Cloud",
-          position: { top: "-1.5rem", right: "2%" },
+          position: { top: "-0.75rem", right: "2%" },
           zIndex: 4,
           maxWidth: "40vw",
           animation: {
@@ -1164,7 +1164,7 @@ export const defaultPages: Record<string, any> = {
           },
           isVisible: true,
           responsive: {
-            tablet: { top: "-1.25rem", right: "2%" },
+            tablet: { top: "-0.5rem", right: "2%" },
             mobile: { top: "-0.5rem", right: "1%" },
             hideBelow: 640,
           },
@@ -1173,7 +1173,7 @@ export const defaultPages: Record<string, any> = {
           id: "badge-4",
           text: "UI/UX Design",
           iconName: "PenTool",
-          position: { top: "28%", right: "-1.25rem" },
+          position: { top: "30%", right: "-0.5rem" },
           zIndex: 4,
           maxWidth: "45vw",
           animation: {
@@ -1201,7 +1201,7 @@ export const defaultPages: Record<string, any> = {
           },
           isVisible: true,
           responsive: {
-            tablet: { top: "26%", right: "-0.25rem" },
+            tablet: { top: "28%", right: "0rem" },
             mobile: { top: "20%", right: "0.25rem" },
             hideBelow: 640,
           },
@@ -1210,7 +1210,7 @@ export const defaultPages: Record<string, any> = {
           id: "badge-5",
           text: "Analytics",
           iconName: "BarChart3",
-          position: { top: "65%", right: "-0.75rem" },
+          position: { top: "66%", right: "0rem" },
           zIndex: 4,
           maxWidth: "45vw",
           animation: {
@@ -1238,7 +1238,7 @@ export const defaultPages: Record<string, any> = {
           },
           isVisible: true,
           responsive: {
-            tablet: { top: "62%", right: "-0.25rem" },
+            tablet: { top: "64%", right: "0rem" },
             mobile: { top: "58%", right: "0.25rem" },
             hideBelow: 640,
           },
@@ -2052,6 +2052,7 @@ interface CMSContextType {
   reorderNavItems: (fromIndex: number, toIndex: number) => Promise<void>;
   updatePage: (slug: string, data: any, title?: string) => Promise<void>;
   publishPage: (slug: string) => Promise<void>;
+  publishAll: () => Promise<{ success: boolean; count: number; message?: string }>;
   saveProduct: (prod: Partial<CmsProduct>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   saveService: (serv: Partial<CmsService>) => Promise<void>;
@@ -2470,6 +2471,12 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({
     await cmsService.publishPage(slug);
   };
 
+  const publishAll = async () => {
+    const res = await cmsService.publishAll();
+    await refreshContent();
+    return res;
+  };
+
   const saveProduct = async (prod: Partial<CmsProduct>) => {
     let nextList: CmsProduct[];
     if (prod.id && products.some((p) => p.id === prod.id)) {
@@ -2767,6 +2774,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({
         reorderNavItems,
         updatePage,
         publishPage,
+        publishAll,
         saveProduct,
         deleteProduct,
         saveService,

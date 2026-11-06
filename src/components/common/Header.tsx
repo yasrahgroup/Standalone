@@ -275,6 +275,7 @@ export const Header: React.FC = () => {
         right: 0,
         zIndex: 100,
         width: "100%",
+        height: "var(--header-height, 4.25rem)",
         backgroundColor: isScrolled
           ? "rgba(255, 255, 255, 0.98)"
           : "rgba(255, 255, 255, 0.95)",
@@ -294,8 +295,7 @@ export const Header: React.FC = () => {
           alignItems: "center",
           justifyContent: "space-between",
           gap: "clamp(0.5rem, 2vw, 1rem)",
-          height: "clamp(3.5rem, 5vw, 4.75rem)",
-          minHeight: "3.5rem",
+          height: "100%",
         }}
       >
         {/* Brand Logo */}
@@ -316,8 +316,8 @@ export const Header: React.FC = () => {
             alt={settings?.companyName || "Azaroth Tech-Hive Logo"}
             className="header-brand-logo"
             style={{
-              maxHeight: "clamp(3.5rem, 6vw, 2.5rem)",
-              maxWidth: "clamp(6rem, 15vw, 8rem)",
+              maxHeight: "2.5rem",
+              maxWidth: "clamp(5.5rem, 12vw, 7.5rem)",
               objectFit: "contain",
               flexShrink: 0,
               filter: "drop-shadow(0 2px 4px rgba(73, 36, 63, 0.15))",
@@ -658,7 +658,7 @@ export const Header: React.FC = () => {
             style={{
               position: "fixed",
               inset: 0,
-              top: "clamp(3.5rem, 5vw, 4.75rem)",
+              top: "var(--header-height, 4.25rem)",
               left: 0,
               right: 0,
               bottom: 0,
@@ -683,7 +683,7 @@ export const Header: React.FC = () => {
               display: "flex",
               flexDirection: "column",
               gap: "0.5rem",
-              maxHeight: "calc(100vh - clamp(3.5rem, 5vw, 4.75rem))",
+              maxHeight: "calc(100vh - var(--header-height, 4.25rem))",
               overflowY: "auto",
               WebkitOverflowScrolling: "touch",
               position: "relative",

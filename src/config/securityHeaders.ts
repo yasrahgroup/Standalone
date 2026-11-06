@@ -25,7 +25,15 @@ export function buildContentSecurityPolicy(options: SecurityHeadersOptions = {})
       'https://*.r2.cloudflarestorage.com'
   );
 
-  const imgSources = ["'self'", 'data:', 'blob:', r2PublicOrigin, 'https://images.unsplash.com']
+  const imgSources = [
+    "'self'",
+    'data:',
+    'blob:',
+    r2PublicOrigin,
+    r2PrivateOrigin,
+    'https://images.unsplash.com',
+    'https://*.unsplash.com',
+  ]
     .filter(Boolean)
     .join(' ');
   const mediaSources = ["'self'", r2PublicOrigin].filter(Boolean).join(' ');

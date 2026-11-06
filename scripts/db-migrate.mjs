@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
 
 const MIGRATIONS_DIR = path.resolve(process.cwd(), 'db/migrations');

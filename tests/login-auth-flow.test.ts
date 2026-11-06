@@ -5,6 +5,7 @@ import { handleCmsRequest, resolveCmsPath } from '../api/cms/[...path]';
 import * as authService from '../src/server/services/authService';
 import * as sessionRepository from '../src/server/repositories/sessionRepository';
 import * as accountRepository from '../src/server/repositories/accountRepository';
+import { extractClientIp, normalizeIp } from '../src/server/core/security';
 
 describe('Production Authentication & Login Flow Test Suite', () => {
   describe('1. Path Resolution & Environment Compatibility', () => {
@@ -49,33 +50,55 @@ describe('Production Authentication & Login Flow Test Suite', () => {
   });
 
   describe('2. CORS & Preflight Support', () => {
-    it('handles OPTIONS preflight for /api/auth/login with 204 and CORS headers', async () => {
-      const req = new Request('https://azaroth-techhive.com/api/auth/login', {
+    it('handles OPTIONS preflight for /api/auth/login with 204 and CORS headers (staging)', async () => {
+      const req = new Request('https://azaroth-tech-hive-cms-testing.vercel.app/api/auth/login', {
         method: 'OPTIONS',
         headers: {
-          Origin: 'https://azaroth-techhive.com',
+          Origin: 'https://azaroth-tech-hive-cms-testing.vercel.app',
           'Access-Control-Request-Method': 'POST',
         },
       });
       const res = await handleAuthRequest(req);
       assert.equal(res.status, 204);
-      assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://azaroth-techhive.com');
+      assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://azaroth-tech-hive-cms-testing.vercel.app');
       assert.equal(res.headers.get('Access-Control-Allow-Credentials'), 'true');
       assert.ok(res.headers.get('Access-Control-Allow-Methods')?.includes('POST'));
     });
 
-    it('handles OPTIONS preflight for /api/cms/settings with 204 and CORS headers', async () => {
-      const req = new Request('https://azaroth-techhive.com/api/cms/settings', {
+    it('handles OPTIONS preflight for /api/cms/settings with 204 and CORS headers (staging)', async () => {
+      const req = new Request('https://azaroth-tech-hive-cms-testing.vercel.app/api/cms/settings', {
         method: 'OPTIONS',
         headers: {
-          Origin: 'https://azaroth-techhive.com',
+          Origin: 'https://azaroth-tech-hive-cms-testing.vercel.app',
           'Access-Control-Request-Method': 'PUT',
         },
       });
       const res = await handleCmsRequest(req);
       assert.equal(res.status, 204);
-      assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://azaroth-techhive.com');
+      assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://azaroth-tech-hive-cms-testing.vercel.app');
       assert.equal(res.headers.get('Access-Control-Allow-Credentials'), 'true');
+    });
+
+    it('rejects untrusted origins and substring spoofing (e.g. localhost.evil.com)', async () => {
+      const spoofReq = new Request('https://azaroth-tech-hive-cms-testing.vercel.app/api/auth/login', {
+        method: 'OPTIONS',
+        headers: {
+          Origin: 'https://localhost.evil.com',
+          'Access-Control-Request-Method': 'POST',
+        },
+      });
+      const spoofRes = await handleAuthRequest(spoofReq);
+      assert.equal(spoofRes.headers.get('Access-Control-Allow-Origin'), null);
+
+      const attackerReq = new Request('https://azaroth-tech-hive-cms-testing.vercel.app/api/cms/settings', {
+        method: 'OPTIONS',
+        headers: {
+          Origin: 'https://attacker-site.com',
+          'Access-Control-Request-Method': 'GET',
+        },
+      });
+      const attackerRes = await handleCmsRequest(attackerReq);
+      assert.equal(attackerRes.headers.get('Access-Control-Allow-Origin'), null);
     });
   });
 
@@ -156,6 +179,35 @@ describe('Production Authentication & Login Flow Test Suite', () => {
       const cookie = res.headers.get('set-cookie');
       assert.ok(cookie, 'Must set cookie header');
       assert.ok(cookie.includes('Max-Age=0') || cookie.includes('max-age=0'));
+    });
+  });
+
+  describe('5. Trusted Client IP Extraction & Spoofing Resistance', () => {
+    it('prioritizes x-vercel-forwarded-for over x-forwarded-for', () => {
+      const req = new Request('https://azaroth-techhive.com/api/auth/login', {
+        headers: {
+          'x-vercel-forwarded-for': '198.51.100.42',
+          'x-forwarded-for': '10.0.0.1, 10.0.0.2',
+        },
+      });
+      assert.equal(extractClientIp(req), '198.51.100.42');
+    });
+
+    it('rejects spoofed leftmost x-forwarded-for and uses rightmost hop', () => {
+      const req = new Request('https://azaroth-techhive.com/api/auth/login', {
+        headers: {
+          'x-forwarded-for': '203.0.113.195, 198.51.100.99',
+        },
+      });
+      // Rightmost hop is 198.51.100.99 (appended by proxy), not spoofable leftmost 203.0.113.195
+      assert.equal(extractClientIp(req), '198.51.100.99');
+    });
+
+    it('normalizes IPv6 and port-appended IP strings', () => {
+      assert.equal(normalizeIp('192.168.1.1:8080'), '192.168.1.1');
+      assert.equal(normalizeIp('::ffff:192.0.2.1'), '192.0.2.1');
+      assert.equal(normalizeIp('[2001:db8::1]:443'), '2001:db8::1');
+      assert.equal(normalizeIp('127.0.0.1'), '127.0.0.1');
     });
   });
 });

@@ -7,12 +7,11 @@ import { createServer as createViteServer } from 'vite';
 import { handleLivenessHealth, handleReadinessHealth } from './src/server/core/health';
 import { getSecurityHeadersMap, type SecurityHeadersOptions } from './src/config/securityHeaders';
 import { REDIRECT_RULES } from './src/config/redirects';
-import contactHandler from './api/contact.ts';
-import authHandler from './api/auth/[...path].ts';
-import cmsHandler from './api/cms/[...path].ts';
-import { handleRfqRequest } from './api/rfq.ts';
-import { handleUploadRequest } from './api/media/upload.ts';
-import { handleMediaFileRequest } from './api/media/file/[id].ts';
+import contactHandler from './api-cms/contact.ts';
+import authHandler from './api-cms/auth/[...path].ts';
+import cmsHandler from './api-cms/cms/[...path].ts';
+import { handleRfqRequest } from './api-cms/rfq.ts';
+import { handleUploadRequest } from './api-cms/media/upload.ts';
 
 type FetchApiHandler = {
   fetch(request: Request): Promise<Response>;
@@ -139,7 +138,6 @@ async function startServer() {
   app.use('/api/auth', bridgeApiHandler(authHandler));
   app.use('/api/cms/media/upload', bridgeApiHandler({ fetch: handleUploadRequest }));
   app.use('/api/media/upload', bridgeApiHandler({ fetch: handleUploadRequest }));
-  app.use('/api/media/file', bridgeApiHandler({ fetch: handleMediaFileRequest }));
   app.use('/api/cms', bridgeApiHandler(cmsHandler));
   app.use('/api/rfq', bridgeApiHandler({ fetch: handleRfqRequest }));
 

@@ -3,6 +3,7 @@ import * as cmsService from '../src/server/services/cmsService';
 import { productsCatalog } from '../src/data/productsData';
 import { serviceOfferings } from '../src/data/servicesData';
 import { SEED_INSIGHTS_ARTICLES } from '../src/seed/seedData';
+import { isAllowedOrigin } from '../src/server/core/security';
 
 /**
  * Public Content API
@@ -14,10 +15,11 @@ import { SEED_INSIGHTS_ARTICLES } from '../src/seed/seedData';
  * Deployed on the CMS deployment to allow the public site to fetch content via CORS.
  */
 
-const CACHE_TTL = 300; // 5 minutes cache
+const CACHE_TTL = 30; // 30 seconds cache for rapid sync
 const contentCache = new Map<string, { data: any; timestamp: number }>();
 
-function getCachedData(key: string): any | null {
+function getCachedData(key: string, request?: Request): any | null {
+  if (request?.headers.get('cache-control')?.includes('no-cache')) return null;
   const cached = contentCache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL * 1000) {
     return cached.data;
@@ -32,24 +34,27 @@ function setCachedData(key: string, data: any): void {
 function getCorsHeaders(request: Request): Headers {
   const origin = request.headers.get('origin');
   const headers = new Headers();
-  
-  // Allow requests from the public site
-  const publicSiteUrl = process.env.PUBLIC_SITE_URL || 'https://azaroth-tech-hive-test.vercel.app';
-  
-  if (origin === publicSiteUrl || 
-      origin?.includes('localhost') || 
-      origin?.includes('127.0.0.1') ||
-      origin?.includes('vercel.app')) {
-    headers.set('Access-Control-Allow-Origin', origin || '*');
-  } else {
-    headers.set('Access-Control-Allow-Origin', publicSiteUrl);
+
+  const allowedOrigins = [
+    process.env.PUBLIC_SITE_URL,
+    process.env.SITE_URL,
+    'https://azaroth-tech-hive-test.vercel.app',
+    'https://azaroth-tech-hive.vercel.app',
+    'https://www.azaroth-techhive.com',
+    'https://azaroth-techhive.com',
+    'https://azaroth-tech-hive-cms-testing.vercel.app',
+    'https://azaroth-tech-hive-cms.vercel.app',
+  ];
+
+  if (origin && isAllowedOrigin(origin, allowedOrigins)) {
+    headers.set('Access-Control-Allow-Origin', origin);
   }
-  
+
   headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
   headers.set('Access-Control-Allow-Headers', 'Content-Type');
   headers.set('Access-Control-Max-Age', '86400');
   headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
-  
+
   return headers;
 }
 
@@ -69,7 +74,7 @@ export async function GET(request: Request): Promise<Response> {
 
   try {
     // Check cache first
-    const cached = getCachedData(cacheKey);
+    const cached = getCachedData(cacheKey, request);
     if (cached) {
       const headers = getCorsHeaders(request);
       headers.set('content-type', 'application/json');

@@ -28,8 +28,8 @@ export const Testimonials: React.FC = () => {
       id="testimonials"
       style={{
         backgroundColor: '#FFFFFF',
-        paddingTop: '5rem',
-        paddingBottom: '5.5rem',
+        paddingTop: 'clamp(3rem, 5vw, 4.5rem)',
+        paddingBottom: 'clamp(3rem, 5vw, 4.5rem)',
         position: 'relative',
         overflow: 'hidden',
       }}

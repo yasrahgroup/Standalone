@@ -443,6 +443,40 @@ export async function publishPage(slug: string, account: StoredAccount | null) {
   }
 }
 
+export async function publishAll(account: StoredAccount | null) {
+  if (!account) {
+    return { success: false, message: 'Authentication required.' };
+  }
+
+  if (!isCmsAdminRole(account.role)) {
+    return { success: false, message: 'Admin privileges required to publish.' };
+  }
+
+  try {
+    const published = await cmsRepository.publishAllContent(account.id);
+    await cmsRepository.recordAuditLogEntry({
+      eventType: 'ALL_CONTENT_PUBLISHED',
+      actorUserId: account.id,
+      actorEmail: account.email,
+      actorRole: account.role,
+      targetType: 'system',
+      targetId: 'all',
+      metadata: { publishedCount: published.length },
+    });
+    return {
+      success: true,
+      message: `Published ${published.length} document(s) to production successfully.`,
+      count: published.length,
+      publishedScopes: published.map((p) => p.scopeKey),
+    };
+  } catch (error) {
+    logger.error('cms_service.publish_all.error', {
+      meta: { error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+    return { success: false, message: 'Failed to publish all content in database.' };
+  }
+}
+
 /**
  * Generic Collection Helpers for Products, Services, Portfolio, Insights, Testimonials
  */

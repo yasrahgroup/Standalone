@@ -164,8 +164,8 @@ export const Hero: React.FC = () => {
     <section
       style={{
         backgroundColor: "#FFFFFF",
-        paddingTop: "clamp(6.5rem, 6vw, 4.5rem)",
-        paddingBottom: "clamp(3rem, 6vw, 4rem)",
+        paddingTop: "clamp(2.5rem, 4.5vw, 3.75rem)",
+        paddingBottom: "clamp(2.5rem, 4vw, 3.5rem)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -189,30 +189,32 @@ export const Hero: React.FC = () => {
       <div className="container" style={{ position: "relative", zIndex: 2 }}>
         <Reveal>
           <div
+            className="hero-grid-layout"
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
-              gap: "clamp(2rem, 5vw, 3.5rem)",
+                "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+              gap: "clamp(2rem, 4vw, 3.5rem)",
               alignItems: "center",
             }}
           >
             {/* Left Column: Typography & CTAs */}
             <div
+              className="hero-content-col"
               style={{
                 maxWidth: "580px",
-                paddingBottom: "clamp(0rem, 4vw, 1.5rem)",
+                paddingBottom: "clamp(0rem, 2vw, 1rem)",
               }}
             >
               {/* Main Headline */}
               <h1
                 style={{
-                  fontSize: "clamp(1.9rem, 4.2vw, 2.25rem)",
-                  fontWeight: 700,
+                  fontSize: "clamp(1.75rem, 3vw, 2.15rem)",
+                  fontWeight: 600,
                   color: "var(--color-text-primary, #1F2937)",
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.15,
-                  marginBottom: "clamp(1rem, 2.5vw, 1.35rem)",
+                  letterSpacing: "-0.015em",
+                  lineHeight: 1.2,
+                  marginBottom: "clamp(0.875rem, 2vw, 1.15rem)",
                 }}
               >
                 <span
@@ -239,10 +241,10 @@ export const Hero: React.FC = () => {
               <p
                 className="hero-subtitle"
                 style={{
-                  fontSize: "1.0625rem",
+                  fontSize: "0.9375rem",
                   color: "var(--color-text-secondary, #475569)",
-                  lineHeight: 1.65,
-                  marginBottom: "2.25rem",
+                  lineHeight: 1.6,
+                  marginBottom: "1.75rem",
                   maxWidth: "520px",
                   textAlign: "justify",
                 }}
@@ -294,11 +296,15 @@ export const Hero: React.FC = () => {
 
             {/* Right Column: Hero Visual with Desk Laptop & Connected Badges */}
             <div
+              className="hero-visual-col"
               style={{
                 position: "relative",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                width: "100%",
+                maxWidth: "520px",
+                margin: "0 auto",
               }}
             >
               {/* Main Laptop Desk Showcase Image */}
@@ -306,18 +312,21 @@ export const Hero: React.FC = () => {
                 style={{
                   position: "relative",
                   zIndex: 2,
-                  borderRadius: "20px",
+                  borderRadius: "16px",
                   overflow: "hidden",
-                  boxShadow: "0 24px 50px -12px rgba(15, 23, 42, 0.15)",
+                  boxShadow: "0 20px 45px -10px rgba(15, 23, 42, 0.12)",
                   border:
                     "1px solid var(--color-border, rgba(226, 232, 240, 0.9))",
-                  maxWidth: "560px",
+                  maxWidth: "520px",
                   width: "100%",
-                  maxHeight: "410px",
+                  maxHeight: "380px",
+                  aspectRatio: "16 / 10",
+                  backgroundColor: "#F8FAFC",
                 }}
               >
                 <MediaRenderer
                   src={heroImage}
+                  fallbackSrc={heroWorkspaceImg}
                   alt={heroImageAlt}
                   objectFit={heroImageFit}
                   loading="eager"
@@ -537,7 +546,7 @@ export const Hero: React.FC = () => {
                           ? `transform ${badge.hoverAnimation?.duration}s ${badge.hoverAnimation?.easing}, box-shadow ${badge.hoverAnimation?.duration}s ease-out`
                           : 'none',
                       }}
-                      className="hero-badge-interactive"
+                      className={`hero-badge-interactive hero-${badge.id} hero-badge-${index + 1}`}
                       onMouseEnter={(e) => {
                         if (badge.hoverAnimation?.enabled) {
                           e.currentTarget.style.transform = `scale(${badge.hoverAnimation?.scale || 1}) translateY(${badge.hoverAnimation?.translateY || 0}px)`;
@@ -589,7 +598,7 @@ export const Hero: React.FC = () => {
                   <div
                     style={{
                       position: "absolute",
-                      top: "-1.5rem",
+                      top: "-0.75rem",
                       left: "2%",
                       zIndex: 4,
                       display: "flex",
@@ -635,11 +644,11 @@ export const Hero: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* 2. Mobile Apps - Raised up to -3.25rem and positioned at 34% with zero overlap */}
+                  {/* 2. Mobile Apps */}
                   <div
                     style={{
                       position: "absolute",
-                      top: "-3.25rem",
+                      top: "-1.25rem",
                       left: "34%",
                       zIndex: 4,
                       display: "flex",
@@ -683,11 +692,11 @@ export const Hero: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* 3. Cloud Solutions - Placed at right: 2% */}
+                  {/* 3. Cloud Solutions */}
                   <div
                     style={{
                       position: "absolute",
-                      top: "-1.5rem",
+                      top: "-0.75rem",
                       right: "2%",
                       zIndex: 4,
                       display: "flex",
@@ -737,8 +746,8 @@ export const Hero: React.FC = () => {
                   <div
                     style={{
                       position: "absolute",
-                      top: "28%",
-                      right: "-1.25rem",
+                      top: "30%",
+                      right: "-0.5rem",
                       zIndex: 4,
                       display: "flex",
                       alignItems: "center",
@@ -785,8 +794,8 @@ export const Hero: React.FC = () => {
                   <div
                     style={{
                       position: "absolute",
-                      top: "65%",
-                      right: "-0.75rem",
+                      top: "66%",
+                      right: "0rem",
                       zIndex: 4,
                       display: "flex",
                       alignItems: "center",
@@ -841,8 +850,8 @@ export const Hero: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "8rem",
-              marginTop: "3rem",
+              gap: "clamp(1.5rem, 4vw, 4rem)",
+              marginTop: "clamp(2rem, 3.5vw, 3rem)",
               paddingTop: "1.5rem",
               borderTop: "1px solid #E2E8F0",
               flexWrap: "wrap",
@@ -851,12 +860,13 @@ export const Hero: React.FC = () => {
             {metrics.map((metric, index) => (
               <div
                 key={`${metric.label}-${index}`}
+                className="hero-metric-item"
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   gap: "0.75rem",
-                  whiteSpace: "nowrap",
+                  minWidth: 0,
                 }}
               >
                 {/* Metric Icon */}
@@ -877,14 +887,13 @@ export const Hero: React.FC = () => {
                 </div>
 
                 {/* Metric Text */}
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div
                     style={{
-                      fontSize: "1.15rem",
+                      fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
                       fontWeight: 600,
                       color: "#1E293B",
                       lineHeight: 1.2,
-                      whiteSpace: "nowrap",
                       marginBottom: "2px",
                     }}
                   >
@@ -896,8 +905,7 @@ export const Hero: React.FC = () => {
                       fontSize: "0.75rem",
                       color: "#64748B",
                       fontWeight: 500,
-                      lineHeight: 1.4,
-                      whiteSpace: "nowrap",
+                      lineHeight: 1.35,
                     }}
                   >
                     {metric.label}
@@ -935,55 +943,68 @@ export const Hero: React.FC = () => {
           }
         }
 
-        /* Responsive badge placement for small viewports */
-        @media (min-width: 641px) and (max-width: 1024px) {
-          .hero-badge-1 { top: -1.25rem !important; left: 2% !important; }
-          .hero-badge-2 { top: -2.5rem !important; left: 34% !important; }
-          .hero-badge-3 { top: -1.25rem !important; right: 2% !important; }
-          .hero-badge-4 { top: 26% !important; right: -0.25rem !important; }
-          .hero-badge-5 { top: 62% !important; right: -0.25rem !important; }
-        }
-
-        @media (max-width: 768px) {
-          .hero-badge-1 { top: -0.5rem !important; left: 1% !important; }
-          .hero-badge-2 { top: -0.25rem !important; left: 30% !important; }
-          .hero-badge-3 { top: -0.5rem !important; right: 1% !important; }
-          .hero-badge-4 { top: 20% !important; right: 0.25rem !important; }
-          .hero-badge-5 { top: 58% !important; right: 0.25rem !important; }
-        }
-
-        /* Responsive metrics row for tablet & mobile */
-        @media (max-width: 1100px) {
-          .hero-metrics-row,
-          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
-            gap: clamp(1.5rem, 4vw, 3rem) !important;
-            justify-content: center !important;
-            flex-wrap: wrap !important;
+        @media (max-width: 960px) {
+          .hero-grid-layout {
+            grid-template-columns: 1fr !important;
+            gap: 2.25rem !important;
+          }
+          .hero-content-col {
+            max-width: 100% !important;
+          }
+          .hero-visual-col {
+            max-width: 500px !important;
+            margin: 0 auto !important;
           }
         }
 
-        @media (max-width: 640px) {
+        .hero-badge-1 { top: -0.75rem !important; left: 2% !important; }
+        .hero-badge-2 { top: -1.25rem !important; left: 34% !important; }
+        .hero-badge-3 { top: -0.75rem !important; right: 2% !important; }
+        .hero-badge-4 { top: 30% !important; right: -0.5rem !important; }
+        .hero-badge-5 { top: 66% !important; right: 0rem !important; }
+
+        /* Responsive badge placement for tablet viewports */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .hero-badge-1 { top: -0.5rem !important; left: 2% !important; }
+          .hero-badge-2 { top: -1rem !important; left: 32% !important; }
+          .hero-badge-3 { top: -0.5rem !important; right: 2% !important; }
+          .hero-badge-4 { top: 28% !important; right: 0rem !important; }
+          .hero-badge-5 { top: 64% !important; right: 0rem !important; }
+          .hero-badge-interactive {
+            padding: 0.35rem 0.65rem !important;
+          }
+          .hero-badge-interactive span {
+            font-size: 0.725rem !important;
+          }
+        }
+
+        @media (max-width: 768px) {
           .hero-badge-interactive,
           .hero-badge-traces {
             display: none !important;
           }
+        }
 
+        /* Responsive metrics row for mobile */
+        @media (max-width: 640px) {
           .hero-subtitle {
             text-align: left !important;
           }
 
-          .hero-metrics-row,
-          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
+          .hero-metrics-row {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 1.25rem 0.75rem !important;
             justify-items: start !important;
           }
+
+          .hero-metric-item {
+            width: 100%;
+          }
         }
 
-        @media (max-width: 400px) {
-          .hero-metrics-row,
-          section[aria-label="Introduction & Primary Value Proposition"] div[style*="8rem"] {
+        @media (max-width: 380px) {
+          .hero-metrics-row {
             grid-template-columns: 1fr !important;
             gap: 1rem !important;
           }

@@ -362,7 +362,7 @@ export const AdminPagesManager: React.FC = () => {
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <a
-            href={`${pageTabs.find((t) => t.key === activeTab)?.route || "/"}?cms-preview=draft`}
+            href={`/preview${pageTabs.find((t) => t.key === activeTab)?.route === "/" ? "" : (pageTabs.find((t) => t.key === activeTab)?.route || "")}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{

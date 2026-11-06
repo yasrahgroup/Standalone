@@ -230,6 +230,48 @@ export async function publishContent(
 }
 
 /**
+ * Publish all pending draft content across all scopes
+ */
+export async function publishAllContent(
+  publishedBy: string
+): Promise<ContentDocument[]> {
+  try {
+    const results = await executeQuery<ContentDocument>(
+      `UPDATE ${tbl('content_documents')}
+      SET published_payload = draft_payload,
+          published_version = draft_version,
+          published_at = NOW(),
+          published_by = $1
+      WHERE draft_payload IS NOT NULL
+        AND (draft_version > published_version OR published_version = 0 OR published_payload IS NULL)
+      RETURNING
+        scope_key as "scopeKey",
+        draft_payload as "draftPayload",
+        draft_version as "draftVersion",
+        draft_updated_at as "draftUpdatedAt",
+        draft_updated_by as "draftUpdatedBy",
+        published_payload as "publishedPayload",
+        published_version as "publishedVersion",
+        published_revision_id as "publishedRevisionId",
+        published_at as "publishedAt",
+        published_by as "publishedBy"`,
+      [publishedBy]
+    );
+
+    logger.info('cms_repository.all_content_published', {
+      meta: { count: results.length, publishedBy },
+    });
+
+    return results;
+  } catch (error) {
+    logger.error('cms_repository.publish_all.error', {
+      meta: { publishedBy, error: error instanceof Error ? error.message : 'Unknown error' },
+    });
+    throw error;
+  }
+}
+
+/**
  * Create content document
  */
 export async function createContentDocument(

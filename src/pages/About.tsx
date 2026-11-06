@@ -379,6 +379,7 @@ export const About: React.FC = () => {
               >
                 <MediaRenderer
                   src={storyImg}
+                  fallbackSrc={heroWorkspaceImg}
                   alt={storyAlt}
                   objectFit="cover"
                   loading="lazy"

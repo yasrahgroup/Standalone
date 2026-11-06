@@ -1,6 +1,7 @@
 import { logger } from '../../src/server/core/logger';
 import { executeQuery, checkDatabaseConnection, tbl } from '../../src/server/core/database';
 import { cleanupExpiredSessions } from '../../src/server/repositories/sessionRepository';
+import * as rateLimiter from '../../src/server/services/rateLimiter';
 
 export async function handleReconcileRequest(request: Request): Promise<Response> {
   const method = request.method;
@@ -52,6 +53,7 @@ export async function handleReconcileRequest(request: Request): Promise<Response
     const startTime = Date.now();
     let expiredSessionsCleaned = 0;
     let cachePurgesProcessed = 0;
+    let rateLimitRecordsCleaned = 0;
     let heartbeatRecorded = false;
 
     const dbAvailable = await checkDatabaseConnection('app');
@@ -59,12 +61,20 @@ export async function handleReconcileRequest(request: Request): Promise<Response
       // 1. Clean up expired user sessions
       expiredSessionsCleaned = await cleanupExpiredSessions();
 
-      // 2. Process cache purge queue if table exists
+      // 2. Clean up old rate limit records (24-hour retention)
+      try {
+        await rateLimiter.cleanupOldRateLimitRecords();
+        rateLimitRecordsCleaned = 1; // Function doesn't return count, just success
+      } catch {
+        // Rate limit table might not exist yet if migration not applied
+      }
+
+      // 3. Process cache purge queue if table exists
       try {
         const purges = await executeQuery<{ id: string }>(
-          `UPDATE ${tbl('cache_purge_queue')} 
-           SET status = 'succeeded', updated_at = NOW() 
-           WHERE status = 'pending' 
+          `UPDATE ${tbl('cache_purge_queue')}
+           SET status = 'succeeded', updated_at = NOW()
+           WHERE status = 'pending'
            RETURNING id`
         );
         cachePurgesProcessed = purges.length;
@@ -72,7 +82,7 @@ export async function handleReconcileRequest(request: Request): Promise<Response
         // Table might not exist yet if not migrated
       }
 
-      // 3. Record heartbeat in system_heartbeats table
+      // 4. Record heartbeat in system_heartbeats table
       try {
         await executeQuery(
           `INSERT INTO ${tbl('system_heartbeats')} (job_name, last_run_at, last_success_at, last_status, details, updated_at)
@@ -83,7 +93,7 @@ export async function handleReconcileRequest(request: Request): Promise<Response
              last_status = 'ok',
              details = EXCLUDED.details,
              updated_at = NOW()`,
-          [JSON.stringify({ expiredSessionsCleaned, cachePurgesProcessed })]
+          [JSON.stringify({ expiredSessionsCleaned, cachePurgesProcessed, rateLimitRecordsCleaned })]
         );
         heartbeatRecorded = true;
       } catch {
@@ -96,7 +106,7 @@ export async function handleReconcileRequest(request: Request): Promise<Response
       method: 'POST',
       statusCode: 200,
       durationMs: Date.now() - startTime,
-      meta: { expiredSessionsCleaned, cachePurgesProcessed, heartbeatRecorded },
+      meta: { expiredSessionsCleaned, cachePurgesProcessed, rateLimitRecordsCleaned, heartbeatRecorded },
     });
 
     return new Response(JSON.stringify({
@@ -106,6 +116,7 @@ export async function handleReconcileRequest(request: Request): Promise<Response
       results: {
         expiredSessionsCleaned,
         cachePurgesProcessed,
+        rateLimitRecordsCleaned,
         heartbeatRecorded,
       },
     }), {

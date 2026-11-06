@@ -85,6 +85,11 @@ export const AboutSection: React.FC = () => {
               <img
                 src={workspaceImg}
                 alt={workspaceAlt}
+                onError={(e) => {
+                  if (e.currentTarget.src !== heroWorkspaceImg) {
+                    e.currentTarget.src = heroWorkspaceImg;
+                  }
+                }}
                 style={{
                   width: "100%",
                   height: "auto",

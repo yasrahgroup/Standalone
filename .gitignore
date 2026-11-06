@@ -13,3 +13,6 @@ test-results/
 !.env.example
 !.env.cms.example
 !.env.public.example
+
+api/
+.vercel

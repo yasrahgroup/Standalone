@@ -1,4 +1,10 @@
 /**
+ * @deprecated THIS MODULE IS DEPRECATED AND PRESERVED ONLY FOR LEGACY COMPATIBILITY.
+ * Live authentication and CMS routing are handled by:
+ * - api-cms/auth/[...path].ts (or api/auth/[...path].ts) -> src/server/services/authService.ts
+ * - api-cms/cms/[...path].ts (or api/cms/[...path].ts) -> src/server/services/cmsService.ts
+ * Do NOT wire this router into live server paths.
+ *
  * Class B Node Server Module — Authentication, Session Management & CMS API Router
  * Covers: SEC-1, SEC-5, AUTH-1a, AUDIT-1a, CMS-1..CMS-6, PUB-1..PUB-7
  *
@@ -18,6 +24,7 @@ import { checkDatabaseConnection, executeQuery, tbl } from '../core/database';
 import * as accountRepository from '../repositories/accountRepository';
 import * as sessionRepository from '../repositories/sessionRepository';
 import * as cmsRepository from '../repositories/cmsRepository';
+import * as cmsService from '../services/cmsService';
 import * as totpService from '../services/totpService';
 import * as r2Service from '../services/r2Service';
 import {
@@ -814,6 +821,31 @@ export function createAuthAndCmsRouter(): express.Router {
         },
       });
       res.status(500).json({ success: false, message: 'Failed to publish page.' });
+    }
+  });
+
+  router.post('/api/cms/publish-all', async (req: ExpressRequest, res: ExpressResponse) => {
+    const userSession = await getAuthenticatedUser(req, true);
+    if (!userSession) {
+      res.status(401).json({ success: false, message: 'Authentication required.' });
+      return;
+    }
+
+    if (userSession.account.role !== 'SUPER_ADMIN' && userSession.account.role !== 'CMS_ADMIN') {
+      res.status(403).json({ success: false, message: 'Admin privileges required to publish.' });
+      return;
+    }
+
+    try {
+      const result = await cmsService.publishAll(userSession.account);
+      res.status(200).json(result);
+    } catch (error) {
+      logger.error('cms.publish_all.error', {
+        meta: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+      });
+      res.status(500).json({ success: false, message: 'Failed to publish all content.' });
     }
   });
 

@@ -3692,10 +3692,16 @@ button {
    ============================================================ */
 
 /* 1. Global Viewport Overflow Protection */
-html,
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body,
 #root {
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 

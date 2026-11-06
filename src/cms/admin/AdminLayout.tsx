@@ -28,6 +28,7 @@ import {
   PanelLeftOpen,
   PanelBottom,
   Sparkles,
+  Eye,
 } from "lucide-react";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { useCMS } from "../CMSContext";
@@ -374,7 +375,7 @@ export const AdminLayout: React.FC = () => {
                 <div
                   style={{
                     fontSize: "0.9375rem",
-                    fontWeight: 800,
+                    fontWeight: 650,
                     color: "#0F172A",
                     letterSpacing: "-0.01em",
                   }}
@@ -385,7 +386,7 @@ export const AdminLayout: React.FC = () => {
                   style={{
                     fontSize: "0.6875rem",
                     color: "#D97706",
-                    fontWeight: 700,
+                    fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
                   }}
@@ -578,7 +579,7 @@ export const AdminLayout: React.FC = () => {
               </div>
 
               <a
-                href="/"
+                href="/preview"
                 target="_blank"
                 rel="noreferrer"
                 style={{
@@ -589,9 +590,9 @@ export const AdminLayout: React.FC = () => {
                   width: "100%",
                   padding: "0.5rem",
                   borderRadius: "6px",
-                  backgroundColor: "#FFFFFF",
-                  border: "1px solid #CBD5E1",
-                  color: "#334155",
+                  backgroundColor: "#3B0B2E",
+                  border: "1px solid #3B0B2E",
+                  color: "#FFFFFF",
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   textDecoration: "none",
@@ -599,7 +600,30 @@ export const AdminLayout: React.FC = () => {
                   transition: "background 0.2s",
                 }}
               >
-                <ExternalLink size={13} color="#18181B" /> View Live Website
+                <Eye size={13} color="#FFFFFF" /> Preview Draft Site
+              </a>
+              <a
+                href="https://azaroth-tech-hive-test.vercel.app"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  width: "100%",
+                  padding: "0.4rem",
+                  borderRadius: "6px",
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid #CBD5E1",
+                  color: "#64748B",
+                  fontSize: "0.7rem",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  marginTop: "0.35rem",
+                }}
+              >
+                <ExternalLink size={12} color="#64748B" /> View Live Production
               </a>
             </>
           )}
@@ -734,6 +758,28 @@ export const AdminLayout: React.FC = () => {
               flexShrink: 0,
             }}
           >
+            <a
+              href="/preview"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                padding: "0.45rem 0.85rem",
+                borderRadius: "8px",
+                backgroundColor: "#3B0B2E",
+                color: "#FFFFFF",
+                fontSize: "0.8125rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                boxShadow: "0 2px 6px rgba(59, 11, 46, 0.25)",
+                transition: "all 0.15s ease",
+              }}
+              title="Open full site in Live Draft Preview Mode"
+            >
+              <Eye size={15} /> Preview Site
+            </a>
             <button
               onClick={handleOpenProfile}
               title="Click to view and edit user profile"

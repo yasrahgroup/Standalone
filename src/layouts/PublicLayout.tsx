@@ -8,6 +8,8 @@ import { ErrorBoundary } from '../components/common/ErrorBoundary';
 import { Chatbot } from '../components/common/Chatbot';
 import { CustomCursor } from '../components/common/CustomCursor';
 import { AdminFloatingBadge } from '../components/common/AdminFloatingBadge';
+import { PreviewBanner } from '../components/common/PreviewBanner';
+import { authService } from '../services/authService';
 import { useCMS } from '../context/CMSContext';
 
 const RouteEffects: React.FC = () => {
@@ -38,6 +40,14 @@ export const PublicLayout: React.FC = () => {
   const mainRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
   const { settings } = useCMS();
+
+  const isPreview = (
+    typeof window !== 'undefined' && (
+      location.search.includes('preview') ||
+      location.pathname.startsWith('/preview') ||
+      (window.location.hostname.includes('cms') && authService.isAuthenticated())
+    )
+  );
 
   useEffect(() => {
     mainRef.current?.setAttribute('tabindex', '-1');
@@ -116,10 +126,19 @@ export const PublicLayout: React.FC = () => {
           Skip to main content
         </a>
         <RouteEffects />
+        {isPreview && <PreviewBanner />}
         <ErrorBoundary>
           <Header />
         </ErrorBoundary>
-        <main id="main-content" ref={mainRef} style={{ flex: '1 0 auto', paddingTop: 'clamp(3.5rem, 5vw, 4.75rem)' }}>
+        <main
+          id="main-content"
+          ref={mainRef}
+          style={{
+            flex: '1 0 auto',
+            paddingTop: 'var(--header-height, 4.25rem)',
+            width: '100%',
+          }}
+        >
           <ErrorBoundary>
             <Outlet />
           </ErrorBoundary>

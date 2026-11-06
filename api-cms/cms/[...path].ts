@@ -4,23 +4,27 @@ import * as cmsService from '../../src/server/services/cmsService';
 import { productsCatalog } from '../../src/data/productsData';
 import { serviceOfferings } from '../../src/data/servicesData';
 import { SEED_INSIGHTS_ARTICLES } from '../../src/seed/seedData';
+import { isAllowedOrigin } from '../../src/server/core/security';
 
 function getCorsHeaders(request: Request): Headers {
-  const origin = request.headers.get('origin') || '*';
+  const origin = request.headers.get('origin');
   const headers = new Headers();
 
-  const isAllowedOrigin =
-    origin === '*' ||
-    origin.includes('localhost') ||
-    origin.includes('127.0.0.1') ||
-    origin.includes('azaroth-techhive.com') ||
-    origin.includes('vercel.app');
+  const allowedOrigins = [
+    process.env.SITE_URL,
+    process.env.CMS_SITE_URL,
+    process.env.PUBLIC_SITE_URL,
+    'https://azaroth-tech-hive-cms-testing.vercel.app',
+    'https://azaroth-tech-hive-cms.vercel.app',
+    'https://azaroth-tech-hive-test.vercel.app',
+    'https://azaroth-tech-hive.vercel.app',
+    'https://www.azaroth-techhive.com',
+    'https://azaroth-techhive.com',
+  ];
 
-  if (isAllowedOrigin && origin !== '*') {
+  if (origin && isAllowedOrigin(origin, allowedOrigins)) {
     headers.set('Access-Control-Allow-Origin', origin);
     headers.set('Access-Control-Allow-Credentials', 'true');
-  } else {
-    headers.set('Access-Control-Allow-Origin', '*');
   }
 
   headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -164,6 +168,8 @@ export async function handleCmsRequest(request: Request): Promise<Response> {
     } else if (path.startsWith('/pages/') && method === 'POST') {
       const slug = path.replace('/pages/', '');
       result = await cmsService.publishPage(slug, account);
+    } else if (path === '/publish-all' && method === 'POST') {
+      result = await cmsService.publishAll(account);
     }
     // Products Collection
     else if (path === '/products' && method === 'GET') {

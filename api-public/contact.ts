@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { executeQuery, checkDatabaseConnection, tbl } from '../src/server/core/database';
 import { logger } from '../src/server/core/logger';
+import { extractClientIp } from '../src/server/core/security';
 import { sendCompanyNotification, sendCustomerAcknowledgement, FormSubmissionRecord, verifyEmailProvider } from '../src/server/services/emailService';
 
 // Cache the provider verification result so the (relatively expensive) Brevo
@@ -76,7 +77,7 @@ export async function handleContactRequest(request: Request): Promise<Response> 
 
     if (dbAvailable) {
       const submissionId = crypto.randomUUID();
-      const ipAddress = request.headers.get('x-forwarded-for') || '127.0.0.1';
+      const ipAddress = extractClientIp(request);
       const ipHash = crypto.createHash('sha256').update(ipAddress).digest('hex').slice(0, 32);
       const payloadDigest = crypto.createHash('sha256').update(JSON.stringify(body)).digest('hex');
 

@@ -1,22 +1,26 @@
 import * as authService from '../../src/server/services/authService';
 import { logger } from '../../src/server/core/logger';
+import { extractClientIp, isAllowedOrigin } from '../../src/server/core/security';
 
 function getCorsHeaders(request: Request): Headers {
-  const origin = request.headers.get('origin') || '*';
+  const origin = request.headers.get('origin');
   const headers = new Headers();
 
-  const isAllowedOrigin =
-    origin === '*' ||
-    origin.includes('localhost') ||
-    origin.includes('127.0.0.1') ||
-    origin.includes('azaroth-techhive.com') ||
-    origin.includes('vercel.app');
+  const allowedOrigins = [
+    process.env.SITE_URL,
+    process.env.CMS_SITE_URL,
+    process.env.BETTER_AUTH_URL,
+    'https://azaroth-tech-hive-cms-testing.vercel.app',
+    'https://azaroth-tech-hive-cms.vercel.app',
+    'https://azaroth-tech-hive-test.vercel.app',
+    'https://azaroth-tech-hive.vercel.app',
+    'https://www.azaroth-techhive.com',
+    'https://azaroth-techhive.com',
+  ];
 
-  if (isAllowedOrigin && origin !== '*') {
+  if (origin && isAllowedOrigin(origin, allowedOrigins)) {
     headers.set('Access-Control-Allow-Origin', origin);
     headers.set('Access-Control-Allow-Credentials', 'true');
-  } else {
-    headers.set('Access-Control-Allow-Origin', '*');
   }
 
   headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -100,10 +104,8 @@ export async function handleAuthRequest(request: Request): Promise<Response> {
     // Check bearer token first, fallback to cookie token
     const token = bearerToken || cookieToken || null;
 
-    const ipAddress =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('cf-connecting-ip') ||
-      '127.0.0.1';
+    // Extract trusted client IP safely using centralized security utility
+    const ipAddress = extractClientIp(request);
     const userAgent = request.headers.get('user-agent') || '';
 
     let result: any;

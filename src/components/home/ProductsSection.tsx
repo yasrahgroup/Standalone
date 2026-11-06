@@ -27,8 +27,8 @@ export const ProductsSection: React.FC = () => {
       id="software-solutions"
       style={{
         backgroundColor: "#FFFFFF",
-        paddingTop: "5.5rem",
-        paddingBottom: "5.5rem",
+        paddingTop: "clamp(3rem, 5vw, 4.5rem)",
+        paddingBottom: "clamp(3rem, 5vw, 4.5rem)",
         position: "relative",
         borderTop: "1px solid rgba(226, 232, 240, 0.8)",
       }}

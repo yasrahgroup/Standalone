@@ -5,8 +5,8 @@
   "outputDirectory": "dist-cms",
   "framework": "vite",
   "functions": {
-    "api-cms/**/*": {
-      "runtime": "nodejs20.x"
+    "api/**/*": {
+      "maxDuration": 30
     }
   },
   "crons": [
@@ -16,6 +16,11 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/",
+      "destination": "/admin/login",
+      "permanent": false
+    },
     {
       "source": "/who-we-are",
       "destination": "/about",
@@ -108,7 +113,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.r2.dev; media-src 'self' https://*.r2.dev; connect-src 'self' https://*.r2.dev https://*.r2.cloudflarestorage.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.r2.dev https://*.r2.cloudflarestorage.com https://images.unsplash.com https://*.unsplash.com; media-src 'self' https://*.r2.dev; connect-src 'self' https://*.r2.dev https://*.r2.cloudflarestorage.com https://images.unsplash.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
         }
       ]
     },

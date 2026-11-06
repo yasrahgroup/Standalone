@@ -2,6 +2,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PublicLayout } from './layouts/PublicLayout';
+import { authService } from './services/authService';
 
 // Context Providers
 import { AdminAuthProvider, ProtectedAdminRoute } from './context/AdminAuthContext';
@@ -94,6 +95,18 @@ const AdminUsersManager = lazy(() =>
 );
 
 export const App: React.FC = () => {
+  // Determine if this instance is running on the dedicated CMS host/domain
+  const isCmsHost = (
+    (typeof window !== 'undefined' && (
+      window.location.hostname.includes('cms') ||
+      window.location.hostname.startsWith('admin.') ||
+      window.location.search.includes('cms=true')
+    )) ||
+    (typeof process !== 'undefined' && (process.env as any)?.VITE_APP_TARGET === 'cms')
+  );
+
+  const isAuthenticated = authService.isAuthenticated();
+
   return (
     <AdminAuthProvider>
       <CMSProvider>
@@ -129,60 +142,105 @@ export const App: React.FC = () => {
                 <Route path="users" element={<AdminUsersManager />} />
               </Route>
 
-              {/* 3. Public Web Application */}
-              <Route element={<PublicLayout />}>
-                {/* Canonical Homepage */}
-                <Route path="/" element={<Home />} />
-
-                {/* Company & Values */}
-                <Route path="/about" element={<About />} />
-                <Route path="/who-we-are" element={<Navigate to="/about" replace />} />
-                <Route path="/values" element={<Values />} />
-
-                {/* Methodology & Delivery */}
-                <Route path="/delivery-framework" element={<DeliveryFramework />} />
-                <Route path="/how-we-work" element={<Navigate to="/delivery-framework" replace />} />
-
-                {/* Software Platforms & Catalogs */}
-                <Route path="/products" element={<Products />} />
-                <Route path="/products/:slug" element={<ProductDetail />} />
-
-                {/* Enterprise Services & SLAs */}
-                <Route path="/services" element={<Services />} />
-                <Route path="/service" element={<Navigate to="/services" replace />} />
-
-                {/* Portfolio & Case Studies */}
-                <Route path="/portfolio" element={<Portfolio />} />
-                <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
-                <Route path="/projects" element={<Navigate to="/portfolio" replace />} />
-
-                {/* Resource Hub & Technology Insights */}
-                <Route path="/technology-insights" element={<Insights />} />
-                <Route path="/technology-insights/:slug" element={<InsightDetail />} />
-                <Route path="/resource-hub" element={<Insights />} />
-                <Route path="/resource-hub/:slug" element={<InsightDetail />} />
-                <Route path="/insights" element={<Navigate to="/technology-insights" replace />} />
-
-                {/* Client Testimonials & Endorsements */}
-                <Route path="/testimonials" element={<TestimonialsPage />} />
-
-                {/* Direct Communication & Conversion Portals */}
-                <Route path="/connect-with-us" element={<Connect />} />
-                <Route path="/contact" element={<Navigate to="/connect-with-us" replace />} />
-                <Route path="/connect" element={<Navigate to="/connect-with-us" replace />} />
-
-                {/* RFQ routes redirected to Connect */}
-                <Route path="/request-for-quote" element={<Navigate to="/connect-with-us" replace />} />
-                <Route path="/rfq" element={<Navigate to="/connect-with-us" replace />} />
-                <Route path="/quote" element={<Navigate to="/connect-with-us" replace />} />
-
-                {/* Legal Pages */}
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-
-                {/* Catch-all 404 Route */}
-                <Route path="*" element={<NotFound />} />
+              {/* Dedicated Preview Route for CMS admins */}
+              <Route
+                path="/preview/*"
+                element={
+                  <ProtectedAdminRoute>
+                    <PublicLayout />
+                  </ProtectedAdminRoute>
+                }
+              >
+                <Route index element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="values" element={<Values />} />
+                <Route path="delivery-framework" element={<DeliveryFramework />} />
+                <Route path="products" element={<Products />} />
+                <Route path="products/:slug" element={<ProductDetail />} />
+                <Route path="services" element={<Services />} />
+                <Route path="portfolio" element={<Portfolio />} />
+                <Route path="portfolio/:slug" element={<PortfolioDetail />} />
+                <Route path="technology-insights" element={<Insights />} />
+                <Route path="technology-insights/:slug" element={<InsightDetail />} />
+                <Route path="resource-hub" element={<Insights />} />
+                <Route path="resource-hub/:slug" element={<InsightDetail />} />
+                <Route path="testimonials" element={<TestimonialsPage />} />
+                <Route path="connect-with-us" element={<Connect />} />
+                <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="terms-of-service" element={<TermsOfService />} />
               </Route>
+
+              {/* On dedicated CMS host when not authenticated: all routes land in /admin/login */}
+              {isCmsHost && !isAuthenticated ? (
+                <>
+                  <Route path="/" element={<Navigate to="/admin/login" replace />} />
+                  <Route path="*" element={<Navigate to="/admin/login" replace />} />
+                </>
+              ) : (
+                /* 3. Public Web Application (or CMS Live Preview for logged-in admin) */
+                <Route element={<PublicLayout />}>
+                  {/* Canonical Homepage - On CMS host without ?preview=true, redirect to /admin */}
+                  <Route
+                    path="/"
+                    element={
+                      isCmsHost && !window.location.search.includes('preview') ? (
+                        <Navigate to="/admin" replace />
+                      ) : (
+                        <Home />
+                      )
+                    }
+                  />
+
+                  {/* Company & Values */}
+                  <Route path="/about" element={<About />} />
+                  <Route path="/who-we-are" element={<Navigate to="/about" replace />} />
+                  <Route path="/values" element={<Values />} />
+
+                  {/* Methodology & Delivery */}
+                  <Route path="/delivery-framework" element={<DeliveryFramework />} />
+                  <Route path="/how-we-work" element={<Navigate to="/delivery-framework" replace />} />
+
+                  {/* Software Platforms & Catalogs */}
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/products/:slug" element={<ProductDetail />} />
+
+                  {/* Enterprise Services & SLAs */}
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/service" element={<Navigate to="/services" replace />} />
+
+                  {/* Portfolio & Case Studies */}
+                  <Route path="/portfolio" element={<Portfolio />} />
+                  <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
+                  <Route path="/projects" element={<Navigate to="/portfolio" replace />} />
+
+                  {/* Resource Hub & Technology Insights */}
+                  <Route path="/technology-insights" element={<Insights />} />
+                  <Route path="/technology-insights/:slug" element={<InsightDetail />} />
+                  <Route path="/resource-hub" element={<Insights />} />
+                  <Route path="/resource-hub/:slug" element={<InsightDetail />} />
+                  <Route path="/insights" element={<Navigate to="/technology-insights" replace />} />
+
+                  {/* Client Testimonials & Endorsements */}
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+
+                  {/* Direct Communication & Conversion Portals */}
+                  <Route path="/connect-with-us" element={<Connect />} />
+                  <Route path="/contact" element={<Navigate to="/connect-with-us" replace />} />
+                  <Route path="/connect" element={<Navigate to="/connect-with-us" replace />} />
+
+                  {/* RFQ routes redirected to Connect */}
+                  <Route path="/request-for-quote" element={<Navigate to="/connect-with-us" replace />} />
+                  <Route path="/rfq" element={<Navigate to="/connect-with-us" replace />} />
+                  <Route path="/quote" element={<Navigate to="/connect-with-us" replace />} />
+
+                  {/* Legal Pages */}
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
+
+                  {/* Catch-all 404 Route */}
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              )}
             </Routes>
           </Suspense>
         </BrowserRouter>

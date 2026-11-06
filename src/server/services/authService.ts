@@ -11,9 +11,7 @@ import * as cmsRepository from '../repositories/cmsRepository';
 import { checkDatabaseConnection, executeQuery, executeQueryOne, tbl } from '../core/database';
 import { logger } from '../core/logger';
 import * as totpService from './totpService';
-
-// In-memory rate limiting map (transient IP security counter)
-const loginRateLimits = new Map<string, { count: number; resetAt: number }>();
+import * as rateLimiter from './rateLimiter';
 
 // In-memory flag to ensure bootstrap accounts are checked at most once per process lifetime
 let initialAdminSynced = false;
@@ -102,15 +100,14 @@ export async function handleLogin(credentials: {
 
   const email = credentials.email.trim().toLowerCase();
   const ip = credentials.ipAddress || '127.0.0.1';
-  const now = Date.now();
 
-  // Rate limiting (15 attempts per IP per minute)
-  const rateEntry = loginRateLimits.get(ip);
-  if (rateEntry && now < rateEntry.resetAt && rateEntry.count >= 15) {
-    logger.warn('auth_service.rate_limit_exceeded', { meta: { ip, email } });
+  // Database-backed rate limiting
+  const rateLimitCheck = await rateLimiter.checkLoginRateLimit(ip, email);
+  if (!rateLimitCheck.allowed) {
+    logger.warn('auth_service.rate_limit_exceeded', { meta: { ip, email, reason: rateLimitCheck.reason } });
     return {
       success: false,
-      message: 'Too many login attempts. Please wait a minute before trying again.',
+      message: rateLimitCheck.reason || 'Too many login attempts. Please try again later.',
     };
   }
 
@@ -125,11 +122,8 @@ export async function handleLogin(credentials: {
 
     const result = await accountRepository.verifyCredentials(email, credentials.password);
     if (!result || !result.valid || !result.account) {
-      const prev = loginRateLimits.get(ip);
-      loginRateLimits.set(ip, {
-        count: (prev && now < prev.resetAt ? prev.count : 0) + 1,
-        resetAt: now + 60_000,
-      });
+      // Record failed attempt for rate limiting
+      await rateLimiter.recordLoginAttempt(ip, email, false);
 
       logger.warn('auth_service.login_failed', { meta: { ip, email } });
       return {
@@ -147,8 +141,8 @@ export async function handleLogin(credentials: {
       };
     }
 
-    // Clear rate limit on successful credential verification
-    loginRateLimits.delete(ip);
+    // Record successful login attempt
+    await rateLimiter.recordLoginAttempt(ip, email, true);
 
     // Create session in database - MFA removed so sessions are immediately verified
     const maxAgeSeconds = 7 * 24 * 60 * 60; // 7 days
@@ -286,12 +280,23 @@ export async function handleChangePassword(
   }
 
   try {
+    // Rate limiting for password changes
+    const rateLimitCheck = await rateLimiter.checkPasswordChangeRateLimit(account.id);
+    if (!rateLimitCheck.allowed) {
+      logger.warn('auth_service.password_change_rate_limit_exceeded', { meta: { userId: account.id } });
+      return { success: false, message: rateLimitCheck.reason || 'Too many password change attempts. Please try again later.' };
+    }
+
     const verification = await accountRepository.verifyCredentials(account.email, currentPassword);
     if (!verification || !verification.valid) {
       return { success: false, message: 'Current password is incorrect.' };
     }
 
     await accountRepository.updatePassword(account.id, newPassword);
+    
+    // Record password change attempt
+    await rateLimiter.recordPasswordChangeAttempt(account.id);
+    
     logger.info('auth_service.password_changed', { meta: { userId: account.id } });
     return { success: true, message: 'Password updated successfully.' };
   } catch (error) {

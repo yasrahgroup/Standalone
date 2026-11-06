@@ -403,12 +403,28 @@ export class CmsApiService {
   }
 
   async fetchBundle(): Promise<CmsBundle> {
-    const res = await this.fetchWithSession(`${API_BASE_URL}/api/cms/all`, {
-      headers: this.getHeaders(false),
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error(json.message || 'Failed to fetch CMS content bundle');
-    return json.data;
+    const isCmsAdmin = typeof window !== 'undefined' && Boolean(authService.getToken());
+    const endpoints = isCmsAdmin
+      ? [`${API_BASE_URL}/api/cms/all`, `${API_BASE_URL}/api/content`]
+      : [`${API_BASE_URL}/api/content`, `${API_BASE_URL}/api/cms/all`];
+
+    let lastError: Error | null = null;
+    for (const url of endpoints) {
+      try {
+        const res = await this.fetchWithSession(url, {
+          headers: this.getHeaders(false),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            return json.data;
+          }
+        }
+      } catch (err) {
+        lastError = err instanceof Error ? err : new Error(String(err));
+      }
+    }
+    throw lastError || new Error('Failed to fetch CMS content bundle');
   }
 
   async fetchStats(): Promise<any> {
@@ -457,6 +473,17 @@ export class CmsApiService {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message || 'Failed to publish page content');
+  }
+
+  async publishAll(): Promise<{ success: boolean; count: number; message?: string }> {
+    const res = await this.fetchWithSession(`${API_BASE_URL}/api/cms/publish-all`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({}),
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message || 'Failed to publish all content');
+    return json;
   }
 
   // Products CRUD

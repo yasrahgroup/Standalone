@@ -12,7 +12,6 @@ import { handleRfqRequest } from '../../api/rfq';
 import { handleAuthRequest } from '../../api/auth/[...path]';
 import { handleCmsRequest } from '../../api/cms/[...path]';
 import { handleUploadRequest } from '../../api/media/upload';
-import { handleMediaFileRequest } from '../../api/media/file/[id]';
 import { handleReconcileRequest } from '../../api/internal/reconcile';
 
 export interface Env {
@@ -124,8 +123,6 @@ export async function handleCloudflareFetch(
       response = await handleCmsRequest(request);
     } else if (pathname === '/api/media/upload') {
       response = await handleUploadRequest(request);
-    } else if (pathname.startsWith('/api/media/file/')) {
-      response = await handleMediaFileRequest(request);
     } else if (pathname === '/api/internal/reconcile') {
       response = await handleReconcileRequest(request);
     } else {

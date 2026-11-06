@@ -1,4 +1,4 @@
-﻿// src/pages/admin/AdminDashboard.tsx
+// src/pages/admin/AdminDashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -13,16 +13,37 @@ import {
   RefreshCw,
   ExternalLink,
   Shield,
-  FileText
+  FileText,
+  CheckCircle,
 } from 'lucide-react';
 import { useCMS } from '../CMSContext';
 import { cmsService } from '../cmsService';
 
 export const AdminDashboard: React.FC = () => {
-  const { products, services, insights, pages, refreshContent, isLive } = useCMS();
+  const { products, services, insights, pages, refreshContent, isLive, publishAll } = useCMS();
   const [stats, setStats] = useState<any>(null);
   const [recentAudits, setRecentAudits] = useState<any[]>([]);
   const [recentEnquiries, setRecentEnquiries] = useState<any[]>([]);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishResult, setPublishResult] = useState<string | null>(null);
+
+  const handlePublishAll = async () => {
+    if (!window.confirm('Publish all pending CMS drafts to the live public production website?')) {
+      return;
+    }
+    setIsPublishing(true);
+    setPublishResult(null);
+    try {
+      const res = await publishAll();
+      setPublishResult(`✓ ${res.message || 'Published to production successfully!'}`);
+      setTimeout(() => setPublishResult(null), 5000);
+    } catch (err) {
+      setPublishResult(`Error: ${err instanceof Error ? err.message : 'Publish failed'}`);
+      setTimeout(() => setPublishResult(null), 5000);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -82,14 +103,14 @@ export const AdminDashboard: React.FC = () => {
         <div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#ECFDF5', padding: '0.25rem 0.75rem', borderRadius: '9999px', marginBottom: '0.75rem', border: '1px solid #A7F3D0' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#047857' }} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#047857' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#047857' }}>
               {isLive ? 'Real-Time Neon Database Sync Active' : 'Offline / Standalone Active'}
             </span>
           </div>
-          <h1 style={{ fontSize: '1.875rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#0F172A', margin: 0, letterSpacing: '-0.01em' }}>
             Azaroth Executive CMS Control
           </h1>
-          <p style={{ fontSize: '0.9375rem', color: '#475569', marginTop: '0.5rem', maxWidth: '650px', lineHeight: 1.5 }}>
+          <p style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.4rem', maxWidth: '650px', lineHeight: 1.5 }}>
             Modify all pages, navigation, service tiers, products, and articles without code deployments. All changes persist instantly to the production database.
           </p>
         </div>
@@ -119,7 +140,7 @@ export const AdminDashboard: React.FC = () => {
             <RefreshCw size={16} color="#18181B" /> Sync Database
           </button>
           <a
-            href="/"
+            href="/preview"
             target="_blank"
             rel="noreferrer"
             style={{
@@ -127,21 +148,60 @@ export const AdminDashboard: React.FC = () => {
               alignItems: 'center',
               gap: '0.5rem',
               padding: '0.75rem 1.25rem',
-              backgroundColor: '#18181B',
-              border: '1px solid #09090B',
+              backgroundColor: '#3B0B2E',
+              border: '1px solid #3B0B2E',
               borderRadius: '8px',
               color: '#FFFFFF',
               fontSize: '0.875rem',
               fontWeight: 600,
               textDecoration: 'none',
-              boxShadow: '0 4px 12px rgba(0, 108, 53, 0.25)',
+              boxShadow: '0 4px 12px rgba(59, 11, 46, 0.25)',
               transition: 'background 0.15s ease',
             }}
           >
             <ExternalLink size={16} /> Preview Site
           </a>
+          <button
+            onClick={handlePublishAll}
+            disabled={isPublishing}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.75rem 1.25rem',
+              backgroundColor: '#059669',
+              border: '1px solid #047857',
+              borderRadius: '8px',
+              color: '#FFFFFF',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              cursor: isPublishing ? 'wait' : 'pointer',
+              opacity: isPublishing ? 0.7 : 1,
+              boxShadow: '0 4px 12px rgba(5, 150, 105, 0.25)',
+              transition: 'background 0.15s ease',
+            }}
+          >
+            <CheckCircle size={16} /> {isPublishing ? 'Publishing...' : 'Publish to Live Site'}
+          </button>
         </div>
       </div>
+
+      {publishResult && (
+        <div
+          style={{
+            marginBottom: '1.5rem',
+            padding: '0.75rem 1.25rem',
+            borderRadius: '8px',
+            backgroundColor: publishResult.startsWith('✓') ? '#ECFDF5' : '#FEF2F2',
+            color: publishResult.startsWith('✓') ? '#065F46' : '#991B1B',
+            border: `1px solid ${publishResult.startsWith('✓') ? '#A7F3D0' : '#FECACA'}`,
+            fontWeight: 600,
+            fontSize: '0.875rem',
+          }}
+        >
+          {publishResult}
+        </div>
+      )}
 
       {/* KPI Cards Grid */}
       <div
@@ -186,10 +246,10 @@ export const AdminDashboard: React.FC = () => {
                 <ArrowUpRight size={18} color={card.color} />
               </div>
               <div>
-                <div style={{ fontSize: '1.875rem', fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
+                <div style={{ fontSize: '1.625rem', fontWeight: 650, color: '#0F172A', lineHeight: 1 }}>
                   {card.count}
                 </div>
-                <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#64748B', marginTop: '0.5rem' }}>
+                <div style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#64748B', marginTop: '0.4rem' }}>
                   {card.title}
                 </div>
               </div>

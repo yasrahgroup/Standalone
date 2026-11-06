@@ -330,4 +330,36 @@ describe('Production Readiness Regression Test Suite', () => {
       assert.match(rfqRef, /^AZR-RFQ-[A-Z0-9]{8}$/);
     });
   });
+
+  describe('9. Responsive Layout Stability & Header-Hero Alignment', () => {
+    it('verifies synchronized header height tokens between CSS and layout', async () => {
+      const fs = await import('fs');
+      const path = await import('path');
+      
+      const tokensCss = fs.readFileSync(path.join(process.cwd(), 'src/styles/tokens.css'), 'utf-8');
+      const publicLayout = fs.readFileSync(path.join(process.cwd(), 'src/layouts/PublicLayout.tsx'), 'utf-8');
+      const headerTsx = fs.readFileSync(path.join(process.cwd(), 'src/components/common/Header.tsx'), 'utf-8');
+      const heroTsx = fs.readFileSync(path.join(process.cwd(), 'src/components/home/Hero.tsx'), 'utf-8');
+      const globalCss = fs.readFileSync(path.join(process.cwd(), 'src/styles/global.css'), 'utf-8');
+
+      // 1. Tokens define --header-height
+      assert.ok(tokensCss.includes('--header-height:'), 'tokens.css must define --header-height token');
+      
+      // 2. PublicLayout uses --header-height to push main content below fixed header
+      assert.ok(publicLayout.includes('var(--header-height'), 'PublicLayout must use --header-height for main paddingTop');
+
+      // 3. Header component sets explicit header height matching token
+      assert.ok(headerTsx.includes('var(--header-height'), 'Header must set height referencing --header-height');
+
+      // 4. Hero section provides proper top clearance without overlap
+      assert.ok(heroTsx.includes('paddingTop: "clamp(2.5rem'), 'Hero section must have sufficient top padding');
+
+      // 5. Hero badges have safe vertical clearance to never collide with header
+      assert.ok(!heroTsx.includes('top: "-3.25rem"'), 'Hero badges must not use -3.25rem which collided with header');
+      assert.ok(heroTsx.includes('hero-grid-layout'), 'Hero must use responsive grid layout');
+
+      // 6. Global CSS overflow protection prevents Windows scrollbar blowout
+      assert.ok(!globalCss.includes('max-width: 100vw;\n  overflow-x: hidden'), 'Global CSS must avoid 100vw scrollbar blowout');
+    });
+  });
 });

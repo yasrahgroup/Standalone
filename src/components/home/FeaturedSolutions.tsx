@@ -161,21 +161,21 @@ const styles = `
     display: grid;
     grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
     align-items: start;
-    gap: clamp(38px, 5vw, 76px);
-    width: min(100%, 1440px);
+    gap: clamp(32px, 4vw, 56px);
+    width: min(100%, 1280px);
     margin: 0 auto;
-    padding: clamp(52px, 5.5vw, 82px) clamp(28px, 5vw, 72px);
+    padding: clamp(40px, 4.5vw, 64px) clamp(20px, 4vw, 48px);
   }
   .ath-services .ath-intro { min-width: 0; padding: 0; }
   .ath-services .ath-heading {
     max-width: 620px;
-    margin: 0 0 22px;
+    margin: 0 0 20px;
     color: var(--ath-plum-dark);
     font-family: 'DM Sans', Arial, sans-serif;
-    font-size: clamp(34px, 3.55vw, 52px);
+    font-size: clamp(28px, 2.75vw, 38px);
     font-weight: 700;
-    letter-spacing: -.035em;
-    line-height: 1.12;
+    letter-spacing: -.03em;
+    line-height: 1.15;
     text-wrap: balance;
   }
   .ath-services .ath-heading .ath-gold { color: #a76519; }
@@ -363,27 +363,27 @@ const styles = `
     .ath-services .ath-card-description { font-size: 13.5px; }
   }
   @media (max-width: 1099px) {
-    .ath-services .ath-layout { grid-template-columns: minmax(0, 1fr); gap: 38px; width: min(100%, 850px); padding: 48px 5% 54px; }
+    .ath-services .ath-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; width: min(100%, 850px); padding: 36px 4% 42px; }
     .ath-services .ath-intro { max-width: 760px; }
-    .ath-services .ath-heading { max-width: 700px; font-size: clamp(36px, 5.5vw, 50px); }
-    .ath-services .ath-description { max-width: 720px; font-size: 16px; }
-    .ath-services .ath-logo { margin-top: 28px; max-width: 460px; }
-    .ath-services .ath-logo-mark { width: 42%; }
-    .ath-services .ath-brand-name { font-size: clamp(27px, 4.2vw, 39px); }
-    .ath-services .ath-brand-subname { font-size: clamp(25px, 4vw, 37px); }
+    .ath-services .ath-heading { max-width: 700px; font-size: clamp(26px, 4vw, 34px); }
+    .ath-services .ath-description { max-width: 720px; font-size: 15px; }
+    .ath-services .ath-logo { margin-top: 24px; max-width: 420px; }
+    .ath-services .ath-logo-mark { width: 38%; }
+    .ath-services .ath-brand-name { font-size: clamp(22px, 3.5vw, 30px); }
+    .ath-services .ath-brand-subname { font-size: clamp(20px, 3.2vw, 28px); }
     .ath-services .ath-timeline { margin-left: 18px; padding-left: 62px; }
     .ath-services .ath-timeline::before { display: none; }
-    .ath-services .ath-card-title { font-size: 18px; }
-    .ath-services .ath-card-description { font-size: 15px; }
+    .ath-services .ath-card-title { font-size: 17px; }
+    .ath-services .ath-card-description { font-size: 14px; }
   }
   @media (max-width: 620px) {
-    .ath-services .ath-layout { padding: 38px 18px 42px; gap: 30px; }
-    .ath-services .ath-heading { margin: 0 0 17px; font-size: clamp(30px, 8vw, 40px); line-height: 1.13; }
-    .ath-services .ath-description { font-size: 14px; line-height: 1.65; }
-    .ath-services .ath-logo { width: min(100%, 370px); margin: 24px 0 0 -3px; gap: 2px; }
-    .ath-services .ath-logo-mark { width: 42%; }
-    .ath-services .ath-brand-name { font-size: clamp(22px, 6vw, 30px); }
-    .ath-services .ath-brand-subname { font-size: clamp(21px, 5.8vw, 29px); }
+    .ath-services .ath-layout { padding: 28px 14px 34px; gap: 24px; }
+    .ath-services .ath-heading { margin: 0 0 14px; font-size: clamp(22px, 5.5vw, 28px); line-height: 1.15; }
+    .ath-services .ath-description { font-size: 13.5px; line-height: 1.6; }
+    .ath-services .ath-logo { width: min(100%, 340px); margin: 20px 0 0 -3px; gap: 2px; }
+    .ath-services .ath-logo-mark { width: 38%; }
+    .ath-services .ath-brand-name { font-size: clamp(18px, 5vw, 24px); }
+    .ath-services .ath-brand-subname { font-size: clamp(17px, 4.8vw, 23px); }
     .ath-services .ath-timeline { margin-left: 13px; padding: 0 0 0 34px; }
     .ath-services .ath-timeline::before { left: 0; top: 23px; bottom: 68px; }
     .ath-services .ath-list { gap: 14px; }

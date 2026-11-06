@@ -322,8 +322,8 @@ export const StrategicSolutions: React.FC = () => {
       id="projects"
       style={{
         backgroundColor: "#F8FAFC",
-        paddingTop: "5.5rem",
-        paddingBottom: "5.5rem",
+        paddingTop: "clamp(3rem, 5vw, 4.5rem)",
+        paddingBottom: "clamp(3rem, 5vw, 4.5rem)",
         position: "relative",
         overflow: "hidden",
       }}
